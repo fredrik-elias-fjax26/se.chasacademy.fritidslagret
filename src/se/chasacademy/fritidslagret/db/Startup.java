@@ -1,13 +1,13 @@
 package se.chasacademy.fritidslagret.db;
 
-import se.chasacademy.fritidslagret.model.Bike;
-import se.chasacademy.fritidslagret.model.EquipmentTypes;
-import se.chasacademy.fritidslagret.model.InventoryHandler;
+import static se.chasacademy.fritidslagret.model.EquipmentTypes.*;
+
+import se.chasacademy.fritidslagret.model.EquipmentHandler;
 
 public class Startup {
-    public void Startup() {
-        InventoryHandler.addEquipment(EquipmentTypes.BIKE, "Bicycle", true, 30);
-        InventoryHandler.addEquipment(EquipmentTypes.TENT, "8-people-tent", false, 90);
-        InventoryHandler.addEquipment(EquipmentTypes.SKI_SET, "SkiSet-for-Children", true, 3);
+    public static void startUp() {
+        EquipmentHandler.addEquipment("Bicycle", true, 30, BIKE);
+        EquipmentHandler.addEquipment("8-people-tent", false, 90, TENT);
+        EquipmentHandler.addEquipment("SkiSet-for-Children", true, 3, SKISET);
     }
 }

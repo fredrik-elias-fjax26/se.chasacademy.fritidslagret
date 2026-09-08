@@ -1,6 +1,6 @@
 package se.chasacademy.fritidslagret.ui;
 
-import se.chasacademy.fritidslagret.model.InventoryHandler;
+import se.chasacademy.fritidslagret.model.EquipmentHandler;
 
 public class SearchEquipment {
     protected static void searchEquipment() {
@@ -8,9 +8,9 @@ public class SearchEquipment {
         String srcStr = IO.readln("(namn)>");
         IO.println("");
         int confirmationFound = 0;
-        for (int i = 0; i < InventoryHandler.getIdCounter(); i++) {
-            if (InventoryHandler.getAllEquipments()[i].getName().equals(srcStr)) {
-                IO.println(InventoryHandler.getAllEquipments()[i]);
+        for (int i = 0; i < EquipmentHandler.getSizeOfInventory(); i++) {
+            if (EquipmentHandler.getAllEquipment().get(i).getName().equals(srcStr)) {
+                IO.println(EquipmentHandler.getAllEquipment().get(i));
                 confirmationFound++;
             }
         }

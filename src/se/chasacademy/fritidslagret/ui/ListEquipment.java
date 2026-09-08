@@ -1,12 +1,12 @@
 package se.chasacademy.fritidslagret.ui;
 
-import se.chasacademy.fritidslagret.model.InventoryHandler;
+import se.chasacademy.fritidslagret.model.EquipmentHandler;
 
 public class ListEquipment {
     public static void listEquipment() {
         IO.println("");
-        for (int i = 0; i < InventoryHandler.getIdCounter(); i++) {
-            IO.println(InventoryHandler.getAllEquipments()[i]);
+        for (int i = 0; i < EquipmentHandler.getAllEquipment().size(); i++) {
+            IO.println(EquipmentHandler.getAllEquipment().get(i));
         }
         IO.println("");
     }

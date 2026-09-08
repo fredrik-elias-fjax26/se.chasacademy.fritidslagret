@@ -1,8 +1,6 @@
 package se.chasacademy.fritidslagret.ui;
 
 // Imports
-import se.chasacademy.fritidslagret.model.InventoryHandler;
-
 import static se.chasacademy.fritidslagret.ui.AddEquipment.addEquipment;
 import static se.chasacademy.fritidslagret.ui.ListEquipment.listEquipment;
 import static se.chasacademy.fritidslagret.ui.SearchEquipment.searchEquipment;

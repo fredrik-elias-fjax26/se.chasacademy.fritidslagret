@@ -2,19 +2,19 @@ package se.chasacademy.fritidslagret.model;
 
 public abstract class Equipment {
     private static int idCounter = 1;
-    private final int id;
     private String name;
     private boolean available;
     private int maxLoanDays;
     private final String type;
+    private final int id;
 
     // Constructor
-    public Equipment(String name, boolean available, int maxLoanDays, String type) {
-        this.id = idCounter;
+    public Equipment(String name, boolean available, int maxLoanDays) {
         this.name = name;
         this.available = available;
         this.maxLoanDays = maxLoanDays;
-        this.type = type;
+        this.type = this.getClass().getSimpleName();
+        this.id = idCounter;
         idCounter++;
     }
 
@@ -27,6 +27,10 @@ public abstract class Equipment {
 
     public String getName() {
         return name;
+    }
+
+    public static int getIdCounter() {
+        return idCounter;
     }
 
     // Setters
