@@ -3,7 +3,7 @@ package se.chasacademy.fritidslagret.model;
 public enum EquipmentTypes {
     BIKE("Bike", Bike::new),
     SKISET("SkiSet", SkiSet::new),
-    TENT("Tent",  Tent::new),;
+    TENT("Tent", Tent::new),;
 
     private final String displayName;
     private final EquipmentCreator creator;
