@@ -1,5 +1,6 @@
 package se.chasacademy.fritidslagret.ui;
 
+import se.chasacademy.fritidslagret.model.Equipment;
 import se.chasacademy.fritidslagret.model.EquipmentHandler;
 
 public class SearchEquipment {
@@ -7,18 +8,13 @@ public class SearchEquipment {
         IO.println("\nVilken inventarie vill du söka efter?:");
         String srcStr = IO.readln("(namn)>");
         IO.println("");
-        int confirmationFound = 0;
-        for (int i = 0; i < EquipmentHandler.getSizeOfInventory(); i++) {
-            if (EquipmentHandler.getAllEquipment().get(i).getName().equals(srcStr)) {
-                IO.println(EquipmentHandler.getAllEquipment().get(i));
-                confirmationFound++;
-            }
-        }
-        if (confirmationFound == 0) {
+
+        Equipment foundEquipment = EquipmentHandler.getEquipmentByName(srcStr);
+        if (foundEquipment == null) {
             IO.println(String.format("Ingen inventarie med namnet %s hittades!!", srcStr));
             IO.println("");
         } else {
-            IO.println("");
+            IO.println(foundEquipment);
         }
     }
 }

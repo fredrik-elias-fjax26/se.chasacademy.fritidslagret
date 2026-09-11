@@ -1,16 +1,23 @@
 package se.chasacademy.fritidslagret.model;
 
 public class Member {
-    // Bör vara final sen!!
-    private int id;
-    //
     private String name;
-    private String memberStatus;
+    private MemberStatus memberStatus;
+    private int activeLoans;
 
     // Constructor
-    public Member(int id, String name, String memberStatus) {
-        this.id = id;
+    public Member(String name, MemberStatus memberStatus) {
         this.name = name;
         this.memberStatus = memberStatus;
+        this.activeLoans = 0;
+    }
+
+    //Getters
+    public String getName() {
+        return name;
+    }
+
+    public int getActiveLoans() {
+        return activeLoans;
     }
 }

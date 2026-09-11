@@ -2,20 +2,22 @@ package se.chasacademy.fritidslagret.db;
 
 import se.chasacademy.fritidslagret.model.Equipment;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EquipmentDB {
-    private static final ArrayList<Equipment> equipmentDatabase = new ArrayList<>();
+    private static final Map<Integer, Equipment> equipmentDatabase = new HashMap<>();
+    private static int uniqueEquipmentId = 0;
 
     //Getters
-    public static ArrayList<Equipment> getEquipmentDatabase() {
+    public static Map<Integer, Equipment> getEquipmentDatabase() {
         return equipmentDatabase;
     }
 
     //Setters
 
     public static void addEquipmentToDB(Equipment equipment) {
-        equipmentDatabase.add(equipment);
+        equipmentDatabase.put(uniqueEquipmentId,  equipment);
+        uniqueEquipmentId++;
     }
 }
