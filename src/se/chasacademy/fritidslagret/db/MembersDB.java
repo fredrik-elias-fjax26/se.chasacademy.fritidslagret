@@ -18,6 +18,7 @@ public class MembersDB {
         Map<Integer, Member> readOnlyDB = Map.copyOf(membersDatabase);
         return readOnlyDB;
     }
+
     // Setters
 
     public static void addMemberToDB(Member member) {

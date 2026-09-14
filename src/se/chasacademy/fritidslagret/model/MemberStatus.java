@@ -10,4 +10,8 @@ public enum MemberStatus {
     MemberStatus(String friendlyname) {
     this.friendlyname = friendlyname;
     }
+
+    public String getFriendlyname() {
+        return friendlyname;
+    }
 }

@@ -2,24 +2,38 @@ package se.chasacademy.fritidslagret.model;
 
 import se.chasacademy.fritidslagret.Exceptions.MaximumLoanLimitException;
 import se.chasacademy.fritidslagret.Exceptions.NotAvailableException;
+import se.chasacademy.fritidslagret.Exceptions.UserRevokedException;
+import se.chasacademy.fritidslagret.db.LoanDB;
 
 import java.time.LocalDate;
 
 public class LoanService {
 
-    public void startLoan(int id, Member member) throws NotAvailableException, MaximumLoanLimitException {
-        if (member.getActiveLoans() >= 3)
-            throw new MaximumLoanLimitException("Maximalt antal lån redan uppnådd");
-        else if (!EquipmentService.getEquipmentById(id).isAvailable()) {
-            throw new NotAvailableException("Produkten inte tillgänglig för utlåning");
+    public static void startLoan(int equipmentId, Member member)
+            throws NotAvailableException, MaximumLoanLimitException, UserRevokedException {
+
+        try {
+            LoanRules.checkLoanRules(equipmentId, member);
+            LoanPolicy.checkLoanPolicy(member);
+
+            Equipment equipmentForLoan = EquipmentService.getEquipmentById(equipmentId);
+
+            LocalDate calculatedReturnDate = LocalDate.now().plusDays(equipmentForLoan.getMaxLoanDays());
+            LocalDate loanDate = LocalDate.now();
+
+            Loan loan = new Loan(
+                    member,
+                    EquipmentService.getEquipmentById(equipmentId),
+                    loanDate,
+                    calculatedReturnDate,
+                    true
+            );
+
+            MemberService.addToActiveLoans(member);
+            LoanDB.addLoanToDB(loan);
+        } catch (MaximumLoanLimitException | NotAvailableException | UserRevokedException e) {
+            IO.println(e.getMessage());
         }
-
-        Equipment equipmentForLoan = EquipmentService.getEquipmentById(id);
-
-        LocalDate calculatedReturnDate = LocalDate.now().plusDays(equipmentForLoan.getMaxLoanDays());
-
-        //TODO Här är vi!!!
-
 
     }
 }

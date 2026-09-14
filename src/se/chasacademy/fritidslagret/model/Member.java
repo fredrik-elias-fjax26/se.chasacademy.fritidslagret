@@ -20,4 +20,22 @@ public class Member {
     public int getActiveLoans() {
         return activeLoans;
     }
+
+    public MemberStatus getMemberStatus() {
+        return memberStatus;
+    }
+
+    // Setters
+
+    public void setMemberStatus(MemberStatus memberStatus) {
+        this.memberStatus = memberStatus;
+    }
+
+    public void addOneActiveLoan() {
+        this.activeLoans++;
+    }
+
+    public void removeOneActiveLoan() {
+        this.activeLoans--;
+    }
 }
