@@ -4,7 +4,7 @@ import se.chasacademy.fritidslagret.db.EquipmentDB;
 
 import java.util.Map;
 
-public class EquipmentHandler {
+public class EquipmentService {
 
     //Setters
     public static void addEquipment(String name,  boolean available, int maxLoanDays, EquipmentTypes type) {
@@ -23,8 +23,8 @@ public class EquipmentHandler {
     }
 
     public static Equipment getEquipmentByName(String name) {
-        Map<Integer, Equipment> searchMap = EquipmentHandler.getAllEquipment();
-        for (Integer id : EquipmentHandler.getAllEquipment().keySet()) {
+        Map<Integer, Equipment> searchMap = EquipmentService.getAllEquipment();
+        for (Integer id : EquipmentService.getAllEquipment().keySet()) {
             if (searchMap.get(id).getName().contains(name)) {
                 return searchMap.get(id);
             }
@@ -32,7 +32,7 @@ public class EquipmentHandler {
     }
 
     public static boolean getEquipmentLoanableStatus(int id) {
-        Equipment equipment = EquipmentHandler.getEquipmentById(id);
+        Equipment equipment = EquipmentService.getEquipmentById(id);
         boolean loanable = equipment.isAvailable();
         return loanable;
     }

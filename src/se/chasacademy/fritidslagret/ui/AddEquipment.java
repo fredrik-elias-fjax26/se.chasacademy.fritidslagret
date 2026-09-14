@@ -1,6 +1,6 @@
 package se.chasacademy.fritidslagret.ui;
 
-import se.chasacademy.fritidslagret.model.EquipmentHandler;
+import se.chasacademy.fritidslagret.model.EquipmentService;
 import se.chasacademy.fritidslagret.model.EquipmentTypes;
 
 public class AddEquipment {
@@ -15,6 +15,6 @@ public class AddEquipment {
         int maxLoanDays = Integer.parseInt(IO.readln("Hur många dagar kan man max låna i sträck?: "));
         boolean available = true;
 
-        EquipmentHandler.addEquipment(name, available, maxLoanDays, type);
+        EquipmentService.addEquipment(name, available, maxLoanDays, type);
     }
 }

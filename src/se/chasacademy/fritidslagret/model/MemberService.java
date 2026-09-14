@@ -4,7 +4,7 @@ import se.chasacademy.fritidslagret.db.MembersDB;
 
 import java.util.Map;
 
-public class MemberHandler {
+public class MemberService {
 
     //Metoder
     public static void addMember(String name, MemberStatus memberStatus) {

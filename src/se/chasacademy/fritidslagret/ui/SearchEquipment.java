@@ -1,7 +1,7 @@
 package se.chasacademy.fritidslagret.ui;
 
 import se.chasacademy.fritidslagret.model.Equipment;
-import se.chasacademy.fritidslagret.model.EquipmentHandler;
+import se.chasacademy.fritidslagret.model.EquipmentService;
 
 public class SearchEquipment {
     protected static void searchEquipment() {
@@ -9,7 +9,7 @@ public class SearchEquipment {
         String srcStr = IO.readln("(namn)>");
         IO.println("");
 
-        Equipment foundEquipment = EquipmentHandler.getEquipmentByName(srcStr);
+        Equipment foundEquipment = EquipmentService.getEquipmentByName(srcStr);
         if (foundEquipment == null) {
             IO.println(String.format("Ingen inventarie med namnet %s hittades!!", srcStr));
             IO.println("");
