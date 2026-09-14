@@ -15,8 +15,7 @@ public class MembersDB {
     }
 
     public static Map<Integer, Member> getMembers() {
-        Map<Integer, Member> readOnlyDB = Map.copyOf(membersDatabase);
-        return readOnlyDB;
+        return Map.copyOf(membersDatabase);
     }
 
     // Setters
