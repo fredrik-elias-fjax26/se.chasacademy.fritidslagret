@@ -5,7 +5,7 @@ import se.chasacademy.fritidslagret.Exceptions.NotAvailableException;
 
 import java.time.LocalDate;
 
-public class LoanHandler {
+public class LoanService {
 
     public void startLoan(int id, Member member) throws NotAvailableException, MaximumLoanLimitException {
         if (member.getActiveLoans() >= 3)
@@ -19,7 +19,6 @@ public class LoanHandler {
         LocalDate calculatedReturnDate = LocalDate.now().plusDays(equipmentForLoan.getMaxLoanDays());
 
         //TODO Här är vi!!!
-
 
 
     }
