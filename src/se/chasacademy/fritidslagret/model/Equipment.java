@@ -39,6 +39,11 @@ public abstract class Equipment {
         return type.getSimpleName() ;
     }
 
+    public int getEquipmentId() {
+        return equipmentId;
+    }
     // Setters
-    // No Setters Needed //
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
 }
