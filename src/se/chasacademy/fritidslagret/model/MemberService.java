@@ -12,6 +12,7 @@ public class MemberService {
     public static void addMember(String name, MemberStatus memberStatus) {
         Member newMember = new Member(name, memberStatus);
         membersDatabase.put(uniqueMemberId, newMember);
+        uniqueMemberId++;
     }
 
     public static Map<Integer, Member> getMembers() {
