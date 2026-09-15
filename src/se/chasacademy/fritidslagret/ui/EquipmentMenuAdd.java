@@ -1,5 +1,6 @@
 package se.chasacademy.fritidslagret.ui;
 
+import se.chasacademy.fritidslagret.model.Equipment;
 import se.chasacademy.fritidslagret.model.EquipmentService;
 import se.chasacademy.fritidslagret.model.EquipmentTypes;
 
@@ -9,10 +10,27 @@ public class EquipmentMenuAdd {
         for (int i = 0; i < EquipmentTypes.values().length; i++) {
             IO.println("\t" + (i + 1) +". " + EquipmentTypes.values()[i].getDisplayName());
         }
-        int typeid = Integer.parseInt(IO.readln("Vilken typ ska den ha(Välj siffra): ")) - 1;
-        EquipmentTypes type = EquipmentTypes.values()[typeid];
+        EquipmentTypes type;
+        while (true) {
+            try {
+                int typeid = Integer.parseInt(IO.readln("Vilken typ ska den ha(Välj siffra): ")) - 1;
+                type = EquipmentTypes.values()[typeid];
+                break;
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+                IO.println("Felaktigt val!");
+            }
+        }
         String name = IO.readln("Vilket namn ska den ha: ");
-        int maxLoanDays = Integer.parseInt(IO.readln("Hur många dagar kan man max låna i sträck?: "));
+        int maxLoanDays = 0;
+        while (true) {
+            try {
+                maxLoanDays = Integer.parseInt(IO.readln("Hur många dagar kan man max låna i sträck?: "));
+                break;
+            } catch (NumberFormatException e) {
+                IO.println("Antal dagar måste vara en siffra!");
+            }
+        }
+
         boolean available = true;
 
         EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), name, available, maxLoanDays, type);

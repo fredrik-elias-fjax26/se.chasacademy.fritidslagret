@@ -7,7 +7,7 @@ public class MemberMenu {
             IO.println("Välkommen till Fritidslagret\n-----------------");
             IO.println("""
                 Blank menu än så länge
-                6. Avsluta""");
+                6. Tillbaka""");
             // Input main-menu-choice
             int choice = Integer.parseInt(IO.readln(">"));
 
