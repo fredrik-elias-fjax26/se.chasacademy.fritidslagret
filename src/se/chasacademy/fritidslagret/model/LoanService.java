@@ -3,11 +3,14 @@ package se.chasacademy.fritidslagret.model;
 import se.chasacademy.fritidslagret.Exceptions.MaximumLoanLimitException;
 import se.chasacademy.fritidslagret.Exceptions.NotAvailableException;
 import se.chasacademy.fritidslagret.Exceptions.UserRevokedException;
-import se.chasacademy.fritidslagret.db.LoanDB;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoanService {
+    private static Map<Integer, Loan> loanDatabase = new HashMap<>();
+    private static int uniqueLoanId = 1000;
 
     public static void startLoan(int equipmentId, Member member)
             throws NotAvailableException, MaximumLoanLimitException, UserRevokedException {
@@ -30,7 +33,8 @@ public class LoanService {
             );
 
             MemberService.addToActiveLoans(member);
-            LoanDB.addLoanToDB(loan);
+            loanDatabase.put(uniqueLoanId, loan);
+            uniqueLoanId++;
         } catch (MaximumLoanLimitException | NotAvailableException | UserRevokedException e) {
             IO.println(e.getMessage());
         }

@@ -1,7 +1,7 @@
 package se.chasacademy.fritidslagret.model;
 
 public class Bike extends Equipment {
-    public Bike(String name, boolean available, int maxLoanDays) {
-        super(name, available, maxLoanDays);
+    public Bike(int equipmentId, String name, boolean available, int maxLoanDays) {
+        super(equipmentId, name, available, maxLoanDays);
     }
 }

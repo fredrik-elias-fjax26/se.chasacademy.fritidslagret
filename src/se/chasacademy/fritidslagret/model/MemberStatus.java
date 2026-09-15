@@ -5,13 +5,13 @@ public enum MemberStatus {
     INACTIVE("Inaktiv"),
     REVOKED("Återkallat");
 
-    private String friendlyname;
+    private String friendlyName;
 
-    MemberStatus(String friendlyname) {
-    this.friendlyname = friendlyname;
+    MemberStatus(String friendlyName) {
+    this.friendlyName = friendlyName;
     }
 
-    public String getFriendlyname() {
-        return friendlyname;
+    public String getFriendlyName() {
+        return friendlyName;
     }
 }

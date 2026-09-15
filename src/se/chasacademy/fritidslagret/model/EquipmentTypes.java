@@ -14,13 +14,12 @@ public enum EquipmentTypes {
         this.creator = creator;
     }
 
-    //Methods
-    Equipment create(String name, boolean available, int maxLoanDays) {
-        return creator.create(name, available, maxLoanDays);
-    }
-
     //Getters
     public String getDisplayName() {
         return displayName;
+    }
+
+    public EquipmentCreator getCreator() {
+        return creator;
     }
 }

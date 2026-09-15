@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.db;
+package se.chasacademy.fritidslagret;
 
 import static se.chasacademy.fritidslagret.model.EquipmentTypes.*;
 
@@ -10,12 +10,14 @@ import static se.chasacademy.fritidslagret.model.MemberStatus.*;
 
 public class Startup {
     public static void startUp() {
+
+
         // Equipment start
-        EquipmentService.addEquipment("Bicycle", true, 30, BIKE);
-        EquipmentService.addEquipment("8-people-tent", false, 90, TENT);
-        EquipmentService.addEquipment("SkiSet-for-Children", true, 3, SKISET);
-        EquipmentService.addEquipment("SkiSet-for-Small-Children", true, 10, SKISET);
-        EquipmentService.addEquipment("Motorcycle", true, 180, BIKE);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Bicycle", true, 30, BIKE);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "8-people-tent", false, 90, TENT);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "SkiSet-for-Children", true, 3, SKISET);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "SkiSet-for-Small-Children", true, 10, SKISET);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Motorcycle", true, 180, BIKE);
         // Users start
 
         MemberService.addMember("Ylva", ACTIVE);
@@ -26,6 +28,6 @@ public class Startup {
         LoanService.startLoan(4, MemberService.getMember(1000));
         LoanService.startLoan(2, MemberService.getMember(1000));
         LoanService.startLoan(3, MemberService.getMember(1000));
-        LoanService.startLoan(0, MemberService.getMember(1000));
+        //LoanService.startLoan(0, MemberService.getMember(1000));
     }
 }

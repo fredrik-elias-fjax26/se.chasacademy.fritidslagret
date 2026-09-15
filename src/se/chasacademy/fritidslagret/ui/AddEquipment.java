@@ -15,6 +15,6 @@ public class AddEquipment {
         int maxLoanDays = Integer.parseInt(IO.readln("Hur många dagar kan man max låna i sträck?: "));
         boolean available = true;
 
-        EquipmentService.addEquipment(name, available, maxLoanDays, type);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), name, available, maxLoanDays, type);
     }
 }

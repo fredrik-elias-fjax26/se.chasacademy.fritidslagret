@@ -1,28 +1,29 @@
 package se.chasacademy.fritidslagret.model;
 
 public abstract class Equipment {
+    private final int equipmentId;
     private String name;
     private boolean available;
     private int maxLoanDays;
-    private final String type;
+    private final Class<? extends Equipment> type;
 
     // Constructor
-    public Equipment(String name, boolean available, int maxLoanDays) {
+    public Equipment(int assignedEquipmentId, String name, boolean available, int maxLoanDays) {
         this.name = name;
+        this.equipmentId = assignedEquipmentId;
         this.available = available;
         this.maxLoanDays = maxLoanDays;
-        this.type = this.getClass().getSimpleName();
-
+        this.type = this.getClass();
     }
 
     @Override
     public String toString() {
-        return "Equipment{" + "name=" + name + ",type=" + type + ",available=" + available + ",maxLoanDays=" + maxLoanDays + "}";
+        return "Equipment{" + "name=" + name + ",type=" + type.getSimpleName() + ",available=" + available + ",maxLoanDays=" + maxLoanDays + "}";
     }
 
     //Getters
 
-    public String getName() {
+    public String getEquipmentName() {
         return name;
     }
 
@@ -33,6 +34,11 @@ public abstract class Equipment {
     public int getMaxLoanDays() {
         return maxLoanDays;
     }
+
+    public String getType() {
+        return type.getSimpleName() ;
+    }
+
     // Setters
     // No Setters Needed //
 }
