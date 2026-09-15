@@ -12,7 +12,7 @@ public class EquipmentMenu {
         while (true) {
             try {
                 // Main-menu
-                IO.println("Välkommen till Fritidslagret\n-----------------");
+                IO.println("Utrustningsmeny\n-----------------");
                 IO.println("""
                         1. Lägg till utrustning
                         2. Lista utrusning

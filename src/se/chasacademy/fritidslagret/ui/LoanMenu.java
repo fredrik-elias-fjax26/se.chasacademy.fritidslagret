@@ -12,7 +12,7 @@ public class LoanMenu {
             while (true) {
                 try {
                     // Main-menu
-                    IO.println("Välkommen till Fritidslagret\n-----------------");
+                    IO.println("Lånealternativ\n-----------------");
                     IO.println("""
                         1. Lägg till Lån
                         2. Lista Aktiva Lån
