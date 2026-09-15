@@ -3,7 +3,7 @@ package se.chasacademy.fritidslagret.ui;
 import se.chasacademy.fritidslagret.model.Equipment;
 import se.chasacademy.fritidslagret.model.EquipmentService;
 
-public class SearchEquipment {
+public class EquipmentMenuSearch {
     protected static void searchEquipment() {
         IO.println("\nVilken inventarie vill du söka efter?:");
         String srcStr = IO.readln("(namn)>");

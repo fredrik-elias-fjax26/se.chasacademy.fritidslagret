@@ -3,7 +3,7 @@ package se.chasacademy.fritidslagret.ui;
 import se.chasacademy.fritidslagret.model.EquipmentService;
 import se.chasacademy.fritidslagret.model.EquipmentTypes;
 
-public class AddEquipment {
+public class EquipmentMenuAdd {
     protected static void addEquipment() {
         IO.println("\nNu lägger vi till inventarie:");
         for (int i = 0; i < EquipmentTypes.values().length; i++) {

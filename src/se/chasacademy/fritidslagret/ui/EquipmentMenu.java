@@ -1,14 +1,14 @@
 package se.chasacademy.fritidslagret.ui;
 
 // Imports
-import static se.chasacademy.fritidslagret.ui.AddEquipment.addEquipment;
-import static se.chasacademy.fritidslagret.ui.ListEquipment.listEquipment;
-import static se.chasacademy.fritidslagret.ui.SearchEquipment.searchEquipment;
+import static se.chasacademy.fritidslagret.ui.EquipmentMenuAdd.addEquipment;
+import static se.chasacademy.fritidslagret.ui.EquipmentList.listEquipment;
+import static se.chasacademy.fritidslagret.ui.EquipmentMenuSearch.searchEquipment;
 
-// Menu
-public class Menu {
-    //Main-Menu-loop
-    public static void mainMenu() {
+// EquipmentMenu
+public class EquipmentMenu {
+    //Main-EquipmentMenu-loop
+    public static void equipmentMenu() {
         while (true) {
             // Main-menu
             IO.println("Välkommen till Fritidslagret\n-----------------");
