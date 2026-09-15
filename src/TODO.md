@@ -2,11 +2,11 @@
 
 Fritidslagret
 
-* [ ] Kolla så alla fält sätts korrekt på lånen
+* Kolla så alla fält sätts korrekt på lånen
   - [ ] lån datum YYYY-MM-DD
-    - [ ] förfallodatum YYYY-MM-DD och korrekt uträkning
+  - [ ] förfallodatum YYYY-MM-DD och korrekt uträkning
 
-* [ ] Skapa getters för
+* Skapa getters för
   - [ ] Hämta id från
       - [ ] Lån
       - [ ] Medlem
