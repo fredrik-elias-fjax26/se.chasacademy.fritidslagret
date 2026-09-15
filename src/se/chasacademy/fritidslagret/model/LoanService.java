@@ -46,4 +46,8 @@ public class LoanService {
         return loanDatabase.get(id);
     }
 
+    public static int getUniqueLoanId() {
+        return  uniqueLoanId;
+    }
+
 }
