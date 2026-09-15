@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class EquipmentService {
     private static final Map<Integer, Equipment> equipmentDatabase = new HashMap<>();
-    private static int uniqueEquipmentId;
+    private static int uniqueEquipmentId = 0;
 
     //Setters
     public static int addEquipment(int equipmentId, String name,  boolean available, int maxLoanDays, EquipmentTypes type) {

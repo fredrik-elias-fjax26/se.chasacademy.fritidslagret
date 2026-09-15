@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoanService {
-    private static Map<Integer, Loan> loanDatabase = new HashMap<>();
+    private final static Map<Integer, Loan> loanDatabase = new HashMap<>();
     private static int uniqueLoanId = 1000;
 
     public static void startLoan(int equipmentId, Member member)
@@ -25,6 +25,7 @@ public class LoanService {
             LocalDate loanDate = LocalDate.now();
 
             Loan loan = new Loan(
+                    uniqueLoanId,
                     member,
                     EquipmentService.getEquipmentById(equipmentId),
                     loanDate,
@@ -40,4 +41,9 @@ public class LoanService {
         }
 
     }
+
+    public static Loan getLoanById(int id) {
+        return loanDatabase.get(id);
+    }
+
 }
