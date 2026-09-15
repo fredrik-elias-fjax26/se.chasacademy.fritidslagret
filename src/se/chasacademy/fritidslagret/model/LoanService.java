@@ -1,7 +1,7 @@
 package se.chasacademy.fritidslagret.model;
 
-import se.chasacademy.fritidslagret.Exceptions.MaximumLoanLimitException;
-import se.chasacademy.fritidslagret.Exceptions.NotAvailableException;
+import se.chasacademy.fritidslagret.Exceptions.LoanMaximumLimitException;
+import se.chasacademy.fritidslagret.Exceptions.EquipmentNotAvailableException;
 import se.chasacademy.fritidslagret.Exceptions.UserRevokedException;
 
 import java.time.LocalDate;
@@ -13,33 +13,30 @@ public class LoanService {
     private static int uniqueLoanId = 1000;
 
     public static void startLoan(int equipmentId, Member member)
-            throws NotAvailableException, MaximumLoanLimitException, UserRevokedException {
+            throws EquipmentNotAvailableException, LoanMaximumLimitException, UserRevokedException {
 
-        try {
-            LoanRules.checkLoanRules(equipmentId, member);
-            LoanPolicy.checkLoanPolicy(member);
+        LoanPolicy.checkLoanPolicy(member);
+        LoanRules.checkLoanRules(equipmentId, member);
 
-            Equipment equipmentForLoan = EquipmentService.getEquipmentById(equipmentId);
 
-            LocalDate calculatedReturnDate = LocalDate.now().plusDays(equipmentForLoan.getMaxLoanDays());
-            LocalDate loanDate = LocalDate.now();
+        Equipment equipmentForLoan = EquipmentService.getEquipmentById(equipmentId);
 
-            Loan loan = new Loan(
-                    uniqueLoanId,
-                    member,
-                    EquipmentService.getEquipmentById(equipmentId),
-                    loanDate,
-                    calculatedReturnDate,
-                    true
-            );
+        LocalDate calculatedReturnDate = LocalDate.now().plusDays(equipmentForLoan.getMaxLoanDays());
+        LocalDate loanDate = LocalDate.now();
 
-            MemberService.addToActiveLoans(member);
-            loanDatabase.put(uniqueLoanId, loan);
-            uniqueLoanId++;
-        } catch (MaximumLoanLimitException | NotAvailableException | UserRevokedException e) {
-            IO.println(e.getMessage());
-        }
+        Loan loan = new Loan(
+                uniqueLoanId,
+                member,
+                EquipmentService.getEquipmentById(equipmentId),
+                loanDate,
+                calculatedReturnDate,
+                true
+        );
 
+        MemberService.addToActiveLoans(member);
+        loanDatabase.put(uniqueLoanId, loan);
+        EquipmentService.getEquipmentById(equipmentId).setAvailable(false);
+        uniqueLoanId++;
     }
 
     public static Loan getLoanById(int id) {

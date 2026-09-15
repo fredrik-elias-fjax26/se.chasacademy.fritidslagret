@@ -1,16 +1,20 @@
 package se.chasacademy.fritidslagret.model;
 
-import se.chasacademy.fritidslagret.Exceptions.MaximumLoanLimitException;
-import se.chasacademy.fritidslagret.Exceptions.NotAvailableException;
+import se.chasacademy.fritidslagret.Exceptions.LoanMaximumLimitException;
+import se.chasacademy.fritidslagret.Exceptions.EquipmentNotAvailableException;
+import se.chasacademy.fritidslagret.Exceptions.UserInactiveException;
 
 public class LoanRules {
 
     public static void checkLoanRules(int equipmentId, Member member)
-            throws NotAvailableException, MaximumLoanLimitException {
+            throws EquipmentNotAvailableException, LoanMaximumLimitException {
         if (MemberService.getActiveLoans(member) >= 3)
-            throw new MaximumLoanLimitException("Maximalt antal lån redan uppnådd");
+            throw new LoanMaximumLimitException("Maximalt antal lån redan uppnådd");
         if (!EquipmentService.getEquipmentById(equipmentId).isAvailable()) {
-            throw new NotAvailableException("Produkten inte tillgänglig för utlåning");
+            throw new EquipmentNotAvailableException("Produkten inte tillgänglig för utlåning");
+        }
+        if (member.getMemberStatus() !=  MemberStatus.ACTIVE) {
+            throw new UserInactiveException("Medlemmen har ett inaktivt medlemskap!");
         }
     }
 }
