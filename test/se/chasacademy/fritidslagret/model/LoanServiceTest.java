@@ -22,7 +22,7 @@ public class LoanServiceTest {
         EquipmentTypes equipmentType = EquipmentTypes.SKISET;
 
         // Act
-        Member member = new Member("Nisse", MemberStatus.ACTIVE);
+        Member member = new Member(1,"Nisse", MemberStatus.ACTIVE);
         EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), equipmentName, true, maxLoanDays, equipmentType);
 
         int equipmentId = EquipmentService.getEquipmentByNameToId(equipmentName);

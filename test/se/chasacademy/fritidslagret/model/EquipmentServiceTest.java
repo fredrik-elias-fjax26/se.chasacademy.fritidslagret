@@ -14,7 +14,7 @@ public class EquipmentServiceTest {
             int maxLoanDays = 3;
             EquipmentTypes equipmentType = EquipmentTypes.SKISET;
 
-            Member member = new Member("Nisse", MemberStatus.ACTIVE);
+            Member member = new Member(1,"Nisse", MemberStatus.ACTIVE);
 
             // Act
             int id = EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), equipmentName, available, maxLoanDays, equipmentType);
