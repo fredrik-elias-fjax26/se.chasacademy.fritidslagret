@@ -24,5 +24,10 @@ public class Loan {
     public int getLoanId() {
         return loanId;
     }
+
+    public LocalDate getDateOfReturn() {
+        return dateOfReturn;
+    }
 }
+
 
