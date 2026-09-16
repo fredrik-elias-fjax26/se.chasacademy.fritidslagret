@@ -10,7 +10,7 @@ public class MemberService {
 
     //Metoder
     public static void addMember(String name, MemberStatus memberStatus) {
-        Member newMember = new Member(name, memberStatus);
+        Member newMember = new Member(uniqueMemberId, name, memberStatus);
         membersDatabase.put(uniqueMemberId, newMember);
         uniqueMemberId++;
     }

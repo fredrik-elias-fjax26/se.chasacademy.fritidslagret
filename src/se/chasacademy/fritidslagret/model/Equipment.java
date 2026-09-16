@@ -42,6 +42,7 @@ public abstract class Equipment {
     public int getEquipmentId() {
         return equipmentId;
     }
+
     // Setters
     public void setAvailable(boolean available) {
         this.available = available;

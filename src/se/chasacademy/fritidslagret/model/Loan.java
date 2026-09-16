@@ -20,5 +20,9 @@ public class Loan {
         this.dateOfReturn = dateOfReturn;
         this.loanActive = loanActive;
     }
+
+    public int getLoanId() {
+        return loanId;
+    }
 }
 
