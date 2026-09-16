@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import se.chasacademy.fritidslagret.service.LoanService;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class LoanExpiredTest {
         //Act
 
         when(loan1.getDateOfReturn()).thenReturn(LocalDate.now());
-        when(clock).thenReturn(clock.);
+        when(clock).thenReturn(Clock.offset(clock, Duration.ofDays(1)));
         when(LocalDate.now()).thenReturn(LocalDate.now(clock));
 
 
