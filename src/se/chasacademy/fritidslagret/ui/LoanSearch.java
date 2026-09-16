@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.ui.loan;
+package se.chasacademy.fritidslagret.ui;
 
 public class LoanSearch {
     public static void searchLoanById(){

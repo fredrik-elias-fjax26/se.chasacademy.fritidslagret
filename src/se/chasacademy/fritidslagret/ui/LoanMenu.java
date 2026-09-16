@@ -1,16 +1,12 @@
-package se.chasacademy.fritidslagret.ui.loan;
+package se.chasacademy.fritidslagret.ui;
 
-import se.chasacademy.fritidslagret.service.EquipmentService;
-import se.chasacademy.fritidslagret.service.MemberService;
-
-import static se.chasacademy.fritidslagret.ui.loan.LoanAdd.addLoan;
-import static se.chasacademy.fritidslagret.ui.loan.LoanDelete.deleteLoan;
-import static se.chasacademy.fritidslagret.ui.loan.LoanList.listLoans;
-import static se.chasacademy.fritidslagret.ui.loan.LoanSearch.searchLoanById;
-import static se.chasacademy.fritidslagret.ui.loan.LoanSearch.searchLoansByName;
+import static se.chasacademy.fritidslagret.ui.LoanAdd.addLoan;
+import static se.chasacademy.fritidslagret.ui.LoanDelete.deleteLoan;
+import static se.chasacademy.fritidslagret.ui.LoanList.listLoans;
+import static se.chasacademy.fritidslagret.ui.LoanSearch.searchLoanById;
+import static se.chasacademy.fritidslagret.ui.LoanSearch.searchLoansByName;
 
 public class LoanMenu {
-
     // EquipmentMenu
         public static void loanMenu() {
             while (true) {

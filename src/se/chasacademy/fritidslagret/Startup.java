@@ -1,26 +1,23 @@
 package se.chasacademy.fritidslagret;
 
-import static se.chasacademy.fritidslagret.model.equipment.EquipmentTypes.*;
+import static se.chasacademy.fritidslagret.model.EquipmentTypes.*;
 
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
 
-import static se.chasacademy.fritidslagret.model.member.MemberStatus.*;
+import static se.chasacademy.fritidslagret.model.MemberStatus.*;
 
 public class Startup {
-    static MemberService memberService =  new MemberService();
-    static LoanService loanService =  new LoanService();
-    static EquipmentService equipmentService =  new EquipmentService();
-
     public static void startUp() {
 
+
         // Equipment start
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Bicycle", true, 30, BIKE);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "8-people-tent", false, 90, TENT);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "SkiSet-for-Children", true, 3, SKISET);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "SkiSet-for-Small-Children", true, 10, SKISET);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Motorcycle", true, 180, BIKE);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Bicycle", true, 30, BIKE);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "8-people-tent", false, 90, TENT);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "SkiSet-for-Children", true, 3, SKISET);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "SkiSet-for-Small-Children", true, 10, SKISET);
+        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Motorcycle", true, 180, BIKE);
         // Users start
 
         MemberService.addMember("Ylva", ACTIVE);

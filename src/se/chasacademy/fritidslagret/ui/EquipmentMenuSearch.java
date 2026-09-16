@@ -1,6 +1,6 @@
-package se.chasacademy.fritidslagret.ui.equipment;
+package se.chasacademy.fritidslagret.ui;
 
-import se.chasacademy.fritidslagret.model.equipment.Equipment;
+import se.chasacademy.fritidslagret.model.Equipment;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 
 public class EquipmentMenuSearch {

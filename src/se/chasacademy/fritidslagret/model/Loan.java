@@ -1,8 +1,5 @@
-package se.chasacademy.fritidslagret.model.loan;
+package se.chasacademy.fritidslagret.model;
 
-
-import se.chasacademy.fritidslagret.model.member.Member;
-import se.chasacademy.fritidslagret.model.equipment.Equipment;
 
 import java.time.LocalDate;
 

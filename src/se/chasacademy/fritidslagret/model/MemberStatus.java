@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.model.member;
+package se.chasacademy.fritidslagret.model;
 
 public enum MemberStatus {
     ACTIVE("Aktiv"),

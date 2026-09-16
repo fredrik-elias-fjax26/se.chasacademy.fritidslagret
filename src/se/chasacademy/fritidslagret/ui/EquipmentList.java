@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.ui.equipment;
+package se.chasacademy.fritidslagret.ui;
 
 import se.chasacademy.fritidslagret.service.EquipmentService;
 

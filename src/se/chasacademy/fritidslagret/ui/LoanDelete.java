@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.ui.loan;
+package se.chasacademy.fritidslagret.ui;
 
 public class LoanDelete {
     public static void deleteLoan(){

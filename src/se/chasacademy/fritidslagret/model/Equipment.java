@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.model.equipment;
+package se.chasacademy.fritidslagret.model;
 
 public abstract class Equipment {
     private final int equipmentId;
