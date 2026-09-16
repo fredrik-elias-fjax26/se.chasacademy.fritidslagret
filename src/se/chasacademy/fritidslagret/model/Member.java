@@ -2,12 +2,14 @@ package se.chasacademy.fritidslagret.model;
 
 public class Member {
     private String memberName;
+    private int memberId;
     private MemberStatus memberStatus;
     private int activeLoans;
 
     // Constructor
-    public Member(String memberName, MemberStatus memberStatus) {
+    public Member(int memberId, String memberName, MemberStatus memberStatus) {
         this.memberName = memberName;
+        this.memberId = memberId;
         this.memberStatus = memberStatus;
         this.activeLoans = 0;
     }
@@ -25,12 +27,17 @@ public class Member {
         return memberStatus;
     }
 
+    public int getMemberId() {
+        return memberId;
+    }
+
     // Setters
 
     public void setMemberStatus(MemberStatus memberStatus) {
         this.memberStatus = memberStatus;
     }
 
+    // Methods
     public void addOneActiveLoan() {
         this.activeLoans++;
     }

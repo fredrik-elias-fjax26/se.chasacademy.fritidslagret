@@ -1,9 +1,11 @@
-package se.chasacademy.fritidslagret.model;
+package se.chasacademy.fritidslagret.service;
 
-import se.chasacademy.fritidslagret.Exceptions.LoanMaximumLimitException;
-import se.chasacademy.fritidslagret.Exceptions.EquipmentNotAvailableException;
-import se.chasacademy.fritidslagret.Exceptions.UserRevokedException;
+import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
+import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
+import se.chasacademy.fritidslagret.exception.UserRevokedException;
+import se.chasacademy.fritidslagret.model.*;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +46,26 @@ public class LoanService {
     }
 
     public static int getUniqueLoanId() {
-        return  uniqueLoanId;
+        return uniqueLoanId;
+    }
+
+    public static boolean isDelayed(int id){
+        if (loanDatabase.get(id).getDateOfReturn().isBefore(LocalDate.now())){
+            return true;
+        }
+        return false;
+    }
+
+    public static Map<Integer, Loan> getExpiredLoans() {
+        Map<Integer, Loan> expiredLoanList = new HashMap<>();
+
+        for (Loan loan : loanDatabase.values()) {
+            if (loan.getDateOfReturn().isAfter(LocalDate.now() )){
+                int id = loan.getLoanId();
+                expiredLoanList.put(id , loan);
+            }
+        }
+        return expiredLoanList;
     }
 
 }

@@ -1,4 +1,7 @@
-package se.chasacademy.fritidslagret.model;
+package se.chasacademy.fritidslagret.service;
+
+import se.chasacademy.fritidslagret.model.Member;
+import se.chasacademy.fritidslagret.model.MemberStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +13,7 @@ public class MemberService {
 
     //Metoder
     public static void addMember(String name, MemberStatus memberStatus) {
-        Member newMember = new Member(name, memberStatus);
+        Member newMember = new Member(uniqueMemberId, name, memberStatus);
         membersDatabase.put(uniqueMemberId, newMember);
         uniqueMemberId++;
     }

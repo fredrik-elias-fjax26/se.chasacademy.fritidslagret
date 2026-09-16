@@ -1,8 +1,8 @@
 package se.chasacademy.fritidslagret.ui;
 
-import se.chasacademy.fritidslagret.Exceptions.LoanMaximumLimitException;
-import se.chasacademy.fritidslagret.Exceptions.EquipmentNotAvailableException;
-import se.chasacademy.fritidslagret.Exceptions.UserRevokedException;
+import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
+import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
+import se.chasacademy.fritidslagret.exception.UserRevokedException;
 
 public class LoanAdd {
     public static void addLoan() {

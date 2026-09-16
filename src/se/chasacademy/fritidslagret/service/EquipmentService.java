@@ -1,4 +1,7 @@
-package se.chasacademy.fritidslagret.model;
+package se.chasacademy.fritidslagret.service;
+
+import se.chasacademy.fritidslagret.model.Equipment;
+import se.chasacademy.fritidslagret.model.EquipmentTypes;
 
 import java.util.HashMap;
 import java.util.Map;

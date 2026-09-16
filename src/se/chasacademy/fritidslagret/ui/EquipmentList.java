@@ -1,6 +1,6 @@
 package se.chasacademy.fritidslagret.ui;
 
-import se.chasacademy.fritidslagret.model.EquipmentService;
+import se.chasacademy.fritidslagret.service.EquipmentService;
 
 public class EquipmentList {
     public static void listEquipment() {
