@@ -7,10 +7,10 @@ Fritidslagret
   - [ ] förfallodatum YYYY-MM-DD och korrekt uträkning
 
 * Skapa getters för
-  - [ ] Hämta id från
-      - [ ] Lån
-      - [ ] Medlem
-      - [ ] Inventarie
+  - [x] Hämta id från
+      - [x] Lån
+      - [x] Medlem
+      - [x] Inventarie
     
 * Bygga tester för diverse, hade varit enklare om man hade utgått från TDD när man börja skrev
   - [ ] Services
