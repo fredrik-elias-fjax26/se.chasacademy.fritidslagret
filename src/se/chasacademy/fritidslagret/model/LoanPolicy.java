@@ -1,6 +1,6 @@
 package se.chasacademy.fritidslagret.model;
 
-import se.chasacademy.fritidslagret.Exceptions.UserRevokedException;
+import se.chasacademy.fritidslagret.exception.UserRevokedException;
 
 public class LoanPolicy {
 

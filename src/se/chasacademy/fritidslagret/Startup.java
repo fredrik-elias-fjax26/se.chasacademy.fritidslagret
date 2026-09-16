@@ -2,9 +2,9 @@ package se.chasacademy.fritidslagret;
 
 import static se.chasacademy.fritidslagret.model.EquipmentTypes.*;
 
-import se.chasacademy.fritidslagret.model.EquipmentService;
-import se.chasacademy.fritidslagret.model.LoanService;
-import se.chasacademy.fritidslagret.model.MemberService;
+import se.chasacademy.fritidslagret.service.EquipmentService;
+import se.chasacademy.fritidslagret.service.LoanService;
+import se.chasacademy.fritidslagret.service.MemberService;
 
 import static se.chasacademy.fritidslagret.model.MemberStatus.*;
 

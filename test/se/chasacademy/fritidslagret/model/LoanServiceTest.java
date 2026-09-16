@@ -2,10 +2,12 @@ package se.chasacademy.fritidslagret.model;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import se.chasacademy.fritidslagret.Exceptions.LoanMaximumLimitException;
-import se.chasacademy.fritidslagret.Exceptions.EquipmentNotAvailableException;
-import se.chasacademy.fritidslagret.Exceptions.UserInactiveException;
-import se.chasacademy.fritidslagret.Exceptions.UserRevokedException;
+import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
+import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
+import se.chasacademy.fritidslagret.exception.UserInactiveException;
+import se.chasacademy.fritidslagret.exception.UserRevokedException;
+import se.chasacademy.fritidslagret.service.EquipmentService;
+import se.chasacademy.fritidslagret.service.LoanService;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

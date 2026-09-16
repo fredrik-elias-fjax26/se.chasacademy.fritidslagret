@@ -1,4 +1,7 @@
-package se.chasacademy.fritidslagret.model;
+package se.chasacademy.fritidslagret.service;
+
+import se.chasacademy.fritidslagret.model.Member;
+import se.chasacademy.fritidslagret.model.MemberStatus;
 
 import java.util.HashMap;
 import java.util.Map;

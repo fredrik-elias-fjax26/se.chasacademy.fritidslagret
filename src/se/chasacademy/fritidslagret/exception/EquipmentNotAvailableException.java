@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.Exceptions;
+package se.chasacademy.fritidslagret.exception;
 
 public class EquipmentNotAvailableException extends RuntimeException {
     public EquipmentNotAvailableException(String message) {

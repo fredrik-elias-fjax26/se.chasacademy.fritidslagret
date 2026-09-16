@@ -1,6 +1,7 @@
 package se.chasacademy.fritidslagret.model;
 
 import org.junit.jupiter.api.Test;
+import se.chasacademy.fritidslagret.service.EquipmentService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

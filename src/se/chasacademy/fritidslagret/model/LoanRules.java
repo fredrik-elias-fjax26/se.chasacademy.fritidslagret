@@ -1,8 +1,10 @@
 package se.chasacademy.fritidslagret.model;
 
-import se.chasacademy.fritidslagret.Exceptions.LoanMaximumLimitException;
-import se.chasacademy.fritidslagret.Exceptions.EquipmentNotAvailableException;
-import se.chasacademy.fritidslagret.Exceptions.UserInactiveException;
+import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
+import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
+import se.chasacademy.fritidslagret.exception.UserInactiveException;
+import se.chasacademy.fritidslagret.service.EquipmentService;
+import se.chasacademy.fritidslagret.service.MemberService;
 
 public class LoanRules {
 
