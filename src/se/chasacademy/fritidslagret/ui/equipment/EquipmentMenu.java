@@ -1,9 +1,9 @@
-package se.chasacademy.fritidslagret.ui;
+package se.chasacademy.fritidslagret.ui.equipment;
 
 // Imports
-import static se.chasacademy.fritidslagret.ui.EquipmentMenuAdd.addEquipment;
-import static se.chasacademy.fritidslagret.ui.EquipmentList.listEquipment;
-import static se.chasacademy.fritidslagret.ui.EquipmentMenuSearch.searchEquipment;
+import static se.chasacademy.fritidslagret.ui.equipment.EquipmentMenuAdd.addEquipment;
+import static se.chasacademy.fritidslagret.ui.equipment.EquipmentList.listEquipment;
+import static se.chasacademy.fritidslagret.ui.equipment.EquipmentMenuSearch.searchEquipment;
 
 // EquipmentMenu
 public class EquipmentMenu {

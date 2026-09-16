@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.model;
+package se.chasacademy.fritidslagret.model.member;
 
 public class Member {
     private String memberName;

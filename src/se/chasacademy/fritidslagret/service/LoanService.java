@@ -3,17 +3,21 @@ package se.chasacademy.fritidslagret.service;
 import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
 import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
 import se.chasacademy.fritidslagret.exception.UserRevokedException;
-import se.chasacademy.fritidslagret.model.*;
+import se.chasacademy.fritidslagret.model.equipment.Equipment;
+import se.chasacademy.fritidslagret.model.loan.Loan;
+import se.chasacademy.fritidslagret.model.loan.LoanPolicy;
+import se.chasacademy.fritidslagret.model.loan.LoanRules;
+import se.chasacademy.fritidslagret.model.member.Member;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoanService {
-    private final static Map<Integer, Loan> loanDatabase = new HashMap<>();
+    private static final Map<Integer, Loan> loanDatabase = new HashMap<>();
     private static int uniqueLoanId = 1000;
 
-    public static void startLoan(int equipmentId, Member member)
+    public void startLoan(int equipmentId, Member member)
             throws EquipmentNotAvailableException, LoanMaximumLimitException, UserRevokedException {
 
         LoanPolicy.checkLoanPolicy(member);
@@ -40,12 +44,12 @@ public class LoanService {
         uniqueLoanId++;
     }
 
-    public static Loan getLoanById(int id) {
+    public Loan getLoanById(int id) {
         return loanDatabase.get(id);
     }
 
-    public static int getUniqueLoanId() {
-        return  uniqueLoanId;
+    public int getUniqueLoanId() {
+        return uniqueLoanId;
     }
 
 }

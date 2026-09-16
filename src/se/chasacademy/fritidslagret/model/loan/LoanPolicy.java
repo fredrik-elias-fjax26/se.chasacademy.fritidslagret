@@ -1,6 +1,8 @@
-package se.chasacademy.fritidslagret.model;
+package se.chasacademy.fritidslagret.model.loan;
 
 import se.chasacademy.fritidslagret.exception.UserRevokedException;
+import se.chasacademy.fritidslagret.model.member.Member;
+import se.chasacademy.fritidslagret.model.member.MemberStatus;
 
 public class LoanPolicy {
 

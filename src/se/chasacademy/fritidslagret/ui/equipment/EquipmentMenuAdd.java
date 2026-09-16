@@ -1,9 +1,14 @@
-package se.chasacademy.fritidslagret.ui;
+package se.chasacademy.fritidslagret.ui.equipment;
 
 import se.chasacademy.fritidslagret.service.EquipmentService;
-import se.chasacademy.fritidslagret.model.EquipmentTypes;
+import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
 
 public class EquipmentMenuAdd {
+    static EquipmentService equipmentService =  new EquipmentService();
+    private EquipmentMenuAdd () {
+
+    }
+    public static void addLoan() {}
     protected static void addEquipment() {
         IO.println("\nNu lägger vi till inventarie:");
         for (int i = 0; i < EquipmentTypes.values().length; i++) {
@@ -32,6 +37,6 @@ public class EquipmentMenuAdd {
 
         boolean available = true;
 
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), name, available, maxLoanDays, type);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), name, available, maxLoanDays, type);
     }
 }

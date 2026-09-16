@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.ui;
+package se.chasacademy.fritidslagret.ui.member;
 
 public class MemberMenu {
     public static void memberMenu() {
