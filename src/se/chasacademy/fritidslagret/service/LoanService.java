@@ -77,7 +77,7 @@ public class LoanService {
         Map<Integer, Loan> expiredLoanList = new HashMap<>();
 
         for (Loan loan : loanDatabase.values()) {
-            if (loan.getDateOfReturn().isAfter(LocalDate.now(clock) )){
+            if (loan.getDateOfReturn().isBefore(LocalDate.now(clock) )){
                 int id = loan.getLoanId();
                 expiredLoanList.put(id , loan);
             }
