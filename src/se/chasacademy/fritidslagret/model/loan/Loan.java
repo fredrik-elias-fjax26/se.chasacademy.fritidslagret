@@ -1,5 +1,8 @@
-package se.chasacademy.fritidslagret.model;
+package se.chasacademy.fritidslagret.model.loan;
 
+
+import se.chasacademy.fritidslagret.model.equipment.Equipment;
+import se.chasacademy.fritidslagret.model.member.Member;
 
 import java.time.LocalDate;
 
@@ -28,6 +31,7 @@ public class Loan {
     public LocalDate getDateOfReturn() {
         return dateOfReturn;
     }
+
 }
 
 

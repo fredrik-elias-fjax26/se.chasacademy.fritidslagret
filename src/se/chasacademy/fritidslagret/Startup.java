@@ -1,33 +1,42 @@
 package se.chasacademy.fritidslagret;
 
-import static se.chasacademy.fritidslagret.model.EquipmentTypes.*;
+import static se.chasacademy.fritidslagret.model.equipment.EquipmentTypes.*;
 
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
 
-import static se.chasacademy.fritidslagret.model.MemberStatus.*;
+import static se.chasacademy.fritidslagret.model.member.MemberStatus.*;
 
 public class Startup {
-    public static void startUp() {
+    private final EquipmentService equipmentService;
+    private final MemberService memberService;
+    private final LoanService loanService;
+
+    public Startup(EquipmentService equipmentService, MemberService memberService, LoanService loanService) {
+        this.equipmentService = equipmentService;
+        this.memberService = memberService;
+        this.loanService = loanService;
+    }
+    public void startUp() {
 
 
         // Equipment start
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Bicycle", true, 30, BIKE);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "8-people-tent", false, 90, TENT);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "SkiSet-for-Children", true, 3, SKISET);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "SkiSet-for-Small-Children", true, 10, SKISET);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Motorcycle", true, 180, BIKE);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Bicycle", true, 30, BIKE);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "8-people-tent", false, 90, TENT);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "SkiSet-for-Children", true, 3, SKISET);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "SkiSet-for-Small-Children", true, 10, SKISET);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Motorcycle", true, 180, BIKE);
         // Users start
 
-        MemberService.addMember("Ylva", ACTIVE);
-        MemberService.addMember("Nisse", REVOKED);
-        MemberService.addMember("Bosse", INACTIVE);
+        memberService.addMember("Ylva", ACTIVE);
+        memberService.addMember("Nisse", REVOKED);
+        memberService.addMember("Bosse", INACTIVE);
 
         // Loans start
-        LoanService.startLoan(4, MemberService.getMember(1000));
-        LoanService.startLoan(2, MemberService.getMember(1000));
-        LoanService.startLoan(3, MemberService.getMember(1000));
+        loanService.startLoan(4, memberService.getMember(1000));
+        loanService.startLoan(2, memberService.getMember(1000));
+        loanService.startLoan(3, memberService.getMember(1000));
         //LoanService.startLoan(0, MemberService.getMember(1000));
     }
 }

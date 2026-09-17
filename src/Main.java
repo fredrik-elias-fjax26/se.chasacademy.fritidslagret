@@ -1,41 +1,23 @@
 // Pre-settings //
 import se.chasacademy.fritidslagret.Startup;
-import se.chasacademy.fritidslagret.ui.EquipmentMenu;
-import se.chasacademy.fritidslagret.ui.LoanMenu;
-import se.chasacademy.fritidslagret.ui.MemberMenu;
+import se.chasacademy.fritidslagret.service.EquipmentService;
+import se.chasacademy.fritidslagret.service.LoanService;
+import se.chasacademy.fritidslagret.service.MemberService;
+import se.chasacademy.fritidslagret.ui.MainMenu;
 
 // MAIN //
 void main() {
+    MemberService memberService = new MemberService();
+    EquipmentService equipmentService = new EquipmentService();
+    LoanService loanService = new LoanService(memberService, equipmentService, Clock.systemUTC());
+
     // Startup
-    Startup.startUp();
+    Startup startup = new Startup(equipmentService, memberService, loanService);
+    startup.startUp();
     //Main-Menu-loop
-        while (true) {
-            try {
-                // Main-menu
-                IO.println("Välkommen till Fritidslagret\n-----------------");
-                IO.println("""
-                        1. Utrustning
-                        2. Medlemmar
-                        3. Lån
-                        4. Avsluta""");
-
-                // Input main-menu-choice
-                int choice = Integer.parseInt(IO.readln(">"));
-
-                // Main-menu-switch
-                switch (choice) {
-                    case 1 -> EquipmentMenu.equipmentMenu();
-                    case 2 -> MemberMenu.memberMenu();
-                    case 3 -> LoanMenu.loanMenu();
-                    case 4 -> {
-                        return;
-                    }
-                }
-            } catch (NumberFormatException e) {
-                IO.println("Menyvalet måste vara en siffra");
-            }
-        }
-    }
+    MainMenu mainMenu = new MainMenu(loanService, memberService, equipmentService);
+    mainMenu.mainMenu();
+}
 
 
 

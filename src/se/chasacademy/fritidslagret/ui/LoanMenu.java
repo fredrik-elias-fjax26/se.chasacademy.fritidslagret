@@ -1,14 +1,25 @@
 package se.chasacademy.fritidslagret.ui;
 
-import static se.chasacademy.fritidslagret.ui.LoanAdd.addLoan;
-import static se.chasacademy.fritidslagret.ui.LoanDelete.deleteLoan;
-import static se.chasacademy.fritidslagret.ui.LoanList.listLoans;
-import static se.chasacademy.fritidslagret.ui.LoanSearch.searchLoanById;
-import static se.chasacademy.fritidslagret.ui.LoanSearch.searchLoansByName;
+import se.chasacademy.fritidslagret.service.EquipmentService;
+import se.chasacademy.fritidslagret.service.LoanService;
+import se.chasacademy.fritidslagret.service.MemberService;
 
 public class LoanMenu {
+    LoanMenuList loanMenuList;
+    LoanMenuAdd loanMenuAdd;
+    LoanMenuSearch loanMenuSearch;
+    LoanMenuDelete loanMenuDelete;
+    LoanService loanService;
+
+    protected LoanMenu(LoanService loanService) {
+        this.loanMenuList = new LoanMenuList(loanService);
+        this.loanMenuAdd = new LoanMenuAdd(loanService);
+        this.loanMenuSearch = new LoanMenuSearch(loanService);
+        this.loanMenuDelete = new LoanMenuDelete(loanService);
+        this.loanService = loanService;
+    }
     // EquipmentMenu
-        public static void loanMenu() {
+        protected void loanMenu() {
             while (true) {
                 try {
                     // Main-menu
@@ -26,11 +37,11 @@ public class LoanMenu {
 
                     // Main-menu-switch
                     switch (choice) {
-                        case 1 -> addLoan();
-                        case 2 -> listLoans();
-                        case 3 -> searchLoanById();
-                        case 4 -> searchLoansByName();
-                        case 5 -> deleteLoan();
+                        case 1 -> loanMenuAdd.addLoan();
+                        case 2 -> loanMenuList.listLoans();
+                        case 3 -> loanMenuSearch.searchLoanById();
+                        case 4 -> loanMenuSearch.searchLoansByName();
+                        case 5 -> loanMenuDelete.deleteLoan();
                         case 6 -> {
                             return;
                         }

@@ -1,14 +1,22 @@
 package se.chasacademy.fritidslagret.ui;
 
-// Imports
-import static se.chasacademy.fritidslagret.ui.EquipmentMenuAdd.addEquipment;
-import static se.chasacademy.fritidslagret.ui.EquipmentList.listEquipment;
-import static se.chasacademy.fritidslagret.ui.EquipmentMenuSearch.searchEquipment;
+import se.chasacademy.fritidslagret.service.EquipmentService;
+import se.chasacademy.fritidslagret.service.LoanService;
+import se.chasacademy.fritidslagret.service.MemberService;
 
 // EquipmentMenu
 public class EquipmentMenu {
+    private final EquipmentMenuAdd equipmentMenuAdd;
+    private final EquipmentMenuSearch equipmentMenuSearch;
+    private final EquipmentMenuList equipmentMenuList;
+
+    public EquipmentMenu(EquipmentService equipmentService) {
+        this.equipmentMenuAdd = new EquipmentMenuAdd(equipmentService);
+        this.equipmentMenuSearch = new EquipmentMenuSearch(equipmentService);
+        this.equipmentMenuList = new EquipmentMenuList(equipmentService);
+    }
     //Main-EquipmentMenu-loop
-    public static void equipmentMenu() {
+    protected void equipmentMenu() {
         while (true) {
             try {
                 // Main-menu
@@ -24,9 +32,9 @@ public class EquipmentMenu {
 
                 // Main-menu-switch
                 switch (choice) {
-                    case 1 -> addEquipment();
-                    case 2 -> listEquipment();
-                    case 3 -> searchEquipment();
+                    case 1 -> equipmentMenuAdd.addEquipment();
+                    case 2 -> equipmentMenuList.listEquipment();
+                    case 3 -> equipmentMenuSearch.searchEquipment();
                     case 4 -> {
                         return;
                     }

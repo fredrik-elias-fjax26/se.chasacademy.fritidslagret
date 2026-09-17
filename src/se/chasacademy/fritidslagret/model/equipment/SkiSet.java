@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.model;
+package se.chasacademy.fritidslagret.model.equipment;
 
 public class SkiSet extends Equipment {
 

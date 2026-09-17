@@ -1,17 +1,17 @@
 package se.chasacademy.fritidslagret.service;
 
-import se.chasacademy.fritidslagret.model.Equipment;
-import se.chasacademy.fritidslagret.model.EquipmentTypes;
+import se.chasacademy.fritidslagret.model.equipment.Equipment;
+import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class EquipmentService {
-    private static final Map<Integer, Equipment> equipmentDatabase = new HashMap<>();
+    private final Map<Integer, Equipment> equipmentDatabase = new HashMap<>();
     private static int uniqueEquipmentId = 0;
 
     //Setters
-    public static int addEquipment(int equipmentId, String name,  boolean available, int maxLoanDays, EquipmentTypes type) {
+    public int addEquipment(int equipmentId, String name,  boolean available, int maxLoanDays, EquipmentTypes type) {
         equipmentDatabase.put(uniqueEquipmentId, type.getCreator().create(equipmentId, name, available, maxLoanDays));
         int assignedEquipmentId = uniqueEquipmentId;
         uniqueEquipmentId++;
@@ -20,34 +20,34 @@ public class EquipmentService {
 
 
     // Getters
-    public static int getUniqueEquipmentId() {
+    public int getUniqueEquipmentId() {
         return uniqueEquipmentId;
     }
-    public static Equipment getEquipmentById(int id) {
+    public Equipment getEquipmentById(int id) {
         return getAllEquipment().get(id);
     }
 
-    public static Map<Integer, Equipment> getAllEquipment() {
+    public Map<Integer, Equipment> getAllEquipment() {
         return equipmentDatabase;
     }
 
-    public static Equipment getEquipmentByName(String name) {
-        for (Integer id : EquipmentService.getAllEquipment().keySet()) {
+    public Equipment getEquipmentByName(String name) {
+        for (Integer id : getAllEquipment().keySet()) {
             if (equipmentDatabase.get(id).getEquipmentName().contains(name)) {
                 return equipmentDatabase.get(id);
             }
         } return null;
     }
 
-    public static int getEquipmentByNameToId(String name) {
-        for (Integer id : EquipmentService.getAllEquipment().keySet()) {
+    public int getEquipmentByNameToId(String name) {
+        for (Integer id : getAllEquipment().keySet()) {
             if (equipmentDatabase.get(id).getEquipmentName().contains(name)) {
                 return id;
             }
         } return 0;
     }
 
-    public static boolean getEquipmentLoanableStatus(int id) {
+    public boolean getEquipmentLoanableStatus(int id) {
         Equipment equipment = equipmentDatabase.get(id);
         return equipment.isAvailable();
     }

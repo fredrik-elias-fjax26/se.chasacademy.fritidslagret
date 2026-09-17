@@ -1,7 +1,12 @@
 package se.chasacademy.fritidslagret.ui;
 
+import se.chasacademy.fritidslagret.service.MemberService;
+
 public class MemberMenu {
-    public static void memberMenu() {
+
+    protected MemberMenu(MemberService memberService) {}
+
+    protected void memberMenu() {
         while (true) {
             // Main-menu
             IO.println("Medlemskap\n-----------------");

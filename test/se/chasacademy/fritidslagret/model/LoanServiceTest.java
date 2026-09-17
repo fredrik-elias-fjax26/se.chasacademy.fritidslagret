@@ -6,8 +6,14 @@ import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
 import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
 import se.chasacademy.fritidslagret.exception.UserInactiveException;
 import se.chasacademy.fritidslagret.exception.UserRevokedException;
+import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
+import se.chasacademy.fritidslagret.model.member.Member;
+import se.chasacademy.fritidslagret.model.member.MemberStatus;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
+import se.chasacademy.fritidslagret.service.MemberService;
+
+import java.time.Clock;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,26 +23,32 @@ public class LoanServiceTest {
     @Test
     public void verifyLoanCreation() {
         // Arrange
+        EquipmentService equipmentService = new EquipmentService();
+        MemberService memberService = new MemberService();
+        LoanService loanService = new LoanService(memberService, equipmentService, Clock.systemUTC());
         String equipmentName = "Hjälm";
         int maxLoanDays = 3;
         EquipmentTypes equipmentType = EquipmentTypes.SKISET;
 
         // Act
         Member member = new Member(1,"Nisse", MemberStatus.ACTIVE);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), equipmentName, true, maxLoanDays, equipmentType);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), equipmentName, true, maxLoanDays, equipmentType);
 
-        int equipmentId = EquipmentService.getEquipmentByNameToId(equipmentName);
-        LoanService.startLoan(equipmentId, member);
+        int equipmentId = equipmentService.getEquipmentByNameToId(equipmentName);
+        loanService.startLoan(equipmentId, member);
 
         // Assert
-        assertEquals(equipmentId, EquipmentService.getUniqueEquipmentId() - 1);
-        assertEquals(false, EquipmentService.getEquipmentById(equipmentId).isAvailable());
+        assertEquals(equipmentId, equipmentService.getUniqueEquipmentId() - 1);
+        assertEquals(false, equipmentService.getEquipmentById(equipmentId).isAvailable());
 
     }
 
     @Test
     public void loanRulesAndPolicysCheckedBeforeLoanCreation() {
         // Arrange
+        EquipmentService equipmentService = new EquipmentService();
+        MemberService memberService = new MemberService();
+        LoanService loanService = new LoanService(memberService, equipmentService, Clock.systemUTC());
         Member member = mock(Member.class);
         Member member1 = mock(Member.class);
         Member memberLastAvailableLoan = mock(Member.class);
@@ -44,12 +56,12 @@ public class LoanServiceTest {
         Member memberInactive = mock(Member.class);
         Member memberRevoked = mock(Member.class);
 
-        int startTestUniqueLoanId = LoanService.getUniqueLoanId();
+        int startTestUniqueLoanId = loanService.getUniqueLoanId();
 
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
 
         // Act
         when(memberLastAvailableLoan.getActiveLoans()).thenReturn(2);
@@ -60,17 +72,17 @@ public class LoanServiceTest {
         when(memberRevoked.getMemberStatus()).thenReturn(MemberStatus.REVOKED);
 
         // Valid Loans
-        LoanService.startLoan(0, member);
-        LoanService.startLoan(3, memberLastAvailableLoan);
+        loanService.startLoan(0, member);
+        loanService.startLoan(3, memberLastAvailableLoan);
         int countValidLoansAbove = 2;
         // Invalid Loans
-        Executable equipmentNotAvailableAct = () -> LoanService.startLoan(0, member1);
-        Executable tooManyLoansAct = () -> LoanService.startLoan(1 , memberTooManyLoans);
-        Executable notActiveAct = () -> LoanService.startLoan(2, memberInactive);
-        Executable areRevokedAct = () -> LoanService.startLoan(2, memberRevoked);
+        Executable equipmentNotAvailableAct = () -> loanService.startLoan(0, member1);
+        Executable tooManyLoansAct = () -> loanService.startLoan(1 , memberTooManyLoans);
+        Executable notActiveAct = () -> loanService.startLoan(2, memberInactive);
+        Executable areRevokedAct = () -> loanService.startLoan(2, memberRevoked);
 
         // Assert
-        assertEquals(LoanService.getUniqueLoanId(), startTestUniqueLoanId + countValidLoansAbove);
+        assertEquals(loanService.getUniqueLoanId(), startTestUniqueLoanId + countValidLoansAbove);
         assertThrows(EquipmentNotAvailableException.class, equipmentNotAvailableAct);
         assertThrows(LoanMaximumLimitException.class, tooManyLoansAct);
         assertThrows(UserInactiveException.class, notActiveAct);
@@ -79,11 +91,12 @@ public class LoanServiceTest {
     }
 
     public void testReturnDateExpired() {
+        EquipmentService equipmentService = new EquipmentService();
         // Arrange
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Sko", true, 50, EquipmentTypes.SKISET);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Sko", true, 90, EquipmentTypes.SKISET);
-        EquipmentService.addEquipment(EquipmentService.getUniqueEquipmentId(), "Sko", true, 365, EquipmentTypes.SKISET);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 50, EquipmentTypes.SKISET);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 90, EquipmentTypes.SKISET);
+        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 365, EquipmentTypes.SKISET);
 
         //LoanService.getExpiredLoans();
 
