@@ -41,7 +41,7 @@ public class LoanService {
         Equipment equipmentForLoan = equipmentService.getEquipmentById(equipmentId);
 
         LocalDate calculatedReturnDate = LocalDate.now(clock).plusDays(equipmentForLoan.getMaxLoanDays());
-        LocalDate loanDate = LocalDate.now();
+        LocalDate loanDate = LocalDate.now(clock);
 
         Loan loan = new Loan(
                 uniqueLoanId,
@@ -67,10 +67,7 @@ public class LoanService {
     }
 
     public boolean isDelayed(Loan loan){
-        if (loan.getDateOfReturn().isBefore(LocalDate.now(clock))){
-            return true;
-        }
-        return false;
+        return loan.getDateOfReturn().isBefore(LocalDate.now(clock));
     }
 
     public Map<Integer, Loan> getExpiredLoans() {

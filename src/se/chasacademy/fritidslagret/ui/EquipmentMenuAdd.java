@@ -38,6 +38,6 @@ public class EquipmentMenuAdd {
 
         boolean available = true;
 
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), name, available, maxLoanDays, type);
+        equipmentService.addEquipment(name, available, maxLoanDays, type);
     }
 }

@@ -6,14 +6,18 @@ import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
 import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
 import se.chasacademy.fritidslagret.exception.UserInactiveException;
 import se.chasacademy.fritidslagret.exception.UserRevokedException;
+import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
+import se.chasacademy.fritidslagret.model.equipment.SkiSet;
+import se.chasacademy.fritidslagret.model.loan.Loan;
 import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.model.member.MemberStatus;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
-
 import java.time.Clock;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -29,17 +33,14 @@ public class LoanServiceTest {
         String equipmentName = "Hjälm";
         int maxLoanDays = 3;
         EquipmentTypes equipmentType = EquipmentTypes.SKISET;
+        Member member = new Member(1,"Nisse", MemberStatus.ACTIVE);
+        int equipmentId = equipmentService.addEquipment(equipmentName, true, maxLoanDays, equipmentType);
 
         // Act
-        Member member = new Member(1,"Nisse", MemberStatus.ACTIVE);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), equipmentName, true, maxLoanDays, equipmentType);
-
-        int equipmentId = equipmentService.getEquipmentByNameToId(equipmentName);
         loanService.startLoan(equipmentId, member);
 
         // Assert
-        assertEquals(equipmentId, equipmentService.getUniqueEquipmentId() - 1);
-        assertEquals(false, equipmentService.getEquipmentById(equipmentId).isAvailable());
+        assertFalse(equipmentService.getEquipmentById(equipmentId).isAvailable());
 
     }
 
@@ -57,11 +58,12 @@ public class LoanServiceTest {
         Member memberRevoked = mock(Member.class);
 
         int startTestUniqueLoanId = loanService.getUniqueLoanId();
+        int startTestUniqueEquipmentId = equipmentService.getUniqueEquipmentId();
 
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
+        equipmentService.addEquipment("Sko", true, 30, EquipmentTypes.SKISET);
+        equipmentService.addEquipment("Sko", true, 30, EquipmentTypes.SKISET);
+        equipmentService.addEquipment("Sko", true, 30, EquipmentTypes.SKISET);
+        equipmentService.addEquipment("Sko", true, 30, EquipmentTypes.SKISET);
 
         // Act
         when(memberLastAvailableLoan.getActiveLoans()).thenReturn(2);
@@ -76,13 +78,13 @@ public class LoanServiceTest {
         loanService.startLoan(3, memberLastAvailableLoan);
         int countValidLoansAbove = 2;
         // Invalid Loans
-        Executable equipmentNotAvailableAct = () -> loanService.startLoan(0, member1);
-        Executable tooManyLoansAct = () -> loanService.startLoan(1 , memberTooManyLoans);
-        Executable notActiveAct = () -> loanService.startLoan(2, memberInactive);
-        Executable areRevokedAct = () -> loanService.startLoan(2, memberRevoked);
+        Executable equipmentNotAvailableAct = () -> loanService.startLoan(startTestUniqueEquipmentId, member1);
+        Executable tooManyLoansAct = () -> loanService.startLoan(startTestUniqueEquipmentId + 1 , memberTooManyLoans);
+        Executable notActiveAct = () -> loanService.startLoan(startTestUniqueEquipmentId + 2, memberInactive);
+        Executable areRevokedAct = () -> loanService.startLoan(startTestUniqueEquipmentId + 2, memberRevoked);
 
         // Assert
-        assertEquals(loanService.getUniqueLoanId(), startTestUniqueLoanId + countValidLoansAbove);
+        assertEquals(startTestUniqueLoanId + countValidLoansAbove, loanService.getUniqueLoanId());
         assertThrows(EquipmentNotAvailableException.class, equipmentNotAvailableAct);
         assertThrows(LoanMaximumLimitException.class, tooManyLoansAct);
         assertThrows(UserInactiveException.class, notActiveAct);
@@ -90,20 +92,60 @@ public class LoanServiceTest {
 
     }
 
-    public void testReturnDateExpired() {
-        EquipmentService equipmentService = new EquipmentService();
-        // Arrange
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 30, EquipmentTypes.SKISET);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 50, EquipmentTypes.SKISET);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 90, EquipmentTypes.SKISET);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Sko", true, 365, EquipmentTypes.SKISET);
+    @Test
+    public void checkLoanServiceReportsLoanExpiredWhenReturnDatePassesTest(){
+        //Arrange
+        int maxLoanDays = 3;
+        int fakeId = 1;
+        String fakeName = "fakeName";
 
-        //LoanService.getExpiredLoans();
+        Member member = new Member(fakeId,fakeName, MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet(fakeId, fakeName, true, maxLoanDays);
+        LocalDate acquiredDate = LocalDate.now();
 
+        MemberService memberService = mock(MemberService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        Clock clock = mock(Clock.class);
 
-        // Act
+        Loan loan1 = new Loan(fakeId, member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
 
-        // Assert
+        //Act
+        when(clock.instant()).thenReturn(acquiredDate.plusDays(maxLoanDays + 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
+        LoanService loanService = new LoanService(memberService, equipmentService, clock);
+
+        //Assert
+        assertTrue(loanService.isDelayed(loan1));
+        verify(clock).instant();
     }
+
+    @Test
+    public void checkLoanServiceNotReportsLoanExpiredWhenOnSameDateAsReturnDateTest(){
+        int maxLoanDays = 3;
+        int fakeId = 1;
+        LocalDate acquiredDate = LocalDate.now();
+        String fakeName = "fakeName";
+
+        Member member = new Member(fakeId,fakeName, MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet(fakeId, fakeName, true, maxLoanDays);
+        MemberService memberService = mock(MemberService.class);
+
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        Clock clock = mock(Clock.class);
+
+        Loan loan1 = new Loan(fakeId, member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
+
+        //Act
+        when(clock.instant()).thenReturn(acquiredDate.plusDays(maxLoanDays).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+
+        LoanService loanService = new LoanService(memberService, equipmentService, clock);
+
+        //Assert
+        assertFalse(loanService.isDelayed(loan1));
+        verify(clock).instant();
+    }
+
+
 }

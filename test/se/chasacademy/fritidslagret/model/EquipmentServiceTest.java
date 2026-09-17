@@ -2,8 +2,6 @@ package se.chasacademy.fritidslagret.model;
 
 import org.junit.jupiter.api.Test;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
-import se.chasacademy.fritidslagret.model.member.Member;
-import se.chasacademy.fritidslagret.model.member.MemberStatus;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,16 +16,14 @@ public class EquipmentServiceTest {
             int maxLoanDays = 3;
             EquipmentTypes equipmentType = EquipmentTypes.SKISET;
 
-            Member member = new Member(1,"Nisse", MemberStatus.ACTIVE);
-
             // Act
-            int id = equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), equipmentName, available, maxLoanDays, equipmentType);
+            int id = equipmentService.addEquipment(equipmentName, available, maxLoanDays, equipmentType);
 
             // Assert
-            assertEquals(equipmentService.getEquipmentById(id).getEquipmentName(), equipmentName);
-            assertEquals(equipmentService.getEquipmentById(id).isAvailable(), available);
-            assertEquals(equipmentService.getEquipmentById(id).getMaxLoanDays(), maxLoanDays);
-            assertEquals(equipmentService.getEquipmentById(id).getType(), equipmentType.getDisplayName());
+            assertEquals(equipmentName, equipmentService.getEquipmentById(id).getEquipmentName());
+            assertEquals(available, equipmentService.getEquipmentById(id).isAvailable());
+            assertEquals(maxLoanDays, equipmentService.getEquipmentById(id).getMaxLoanDays());
+            assertEquals(equipmentType.getDisplayName(), equipmentService.getEquipmentById(id).getType());
 
         }
 }

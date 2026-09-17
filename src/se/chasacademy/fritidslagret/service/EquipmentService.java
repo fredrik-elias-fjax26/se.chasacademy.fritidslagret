@@ -11,9 +11,10 @@ public class EquipmentService {
     private static int uniqueEquipmentId = 0;
 
     //Setters
-    public int addEquipment(int equipmentId, String name,  boolean available, int maxLoanDays, EquipmentTypes type) {
-        equipmentDatabase.put(uniqueEquipmentId, type.getCreator().create(equipmentId, name, available, maxLoanDays));
+    public int addEquipment(String name, boolean available, int maxLoanDays, EquipmentTypes type) {
         int assignedEquipmentId = uniqueEquipmentId;
+
+        equipmentDatabase.put(uniqueEquipmentId, type.getCreator().create(assignedEquipmentId, name, available, maxLoanDays));
         uniqueEquipmentId++;
         return assignedEquipmentId;
     }

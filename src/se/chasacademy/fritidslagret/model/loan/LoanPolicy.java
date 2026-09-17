@@ -6,13 +6,9 @@ import se.chasacademy.fritidslagret.model.member.MemberStatus;
 
 public class LoanPolicy {
 
-    public boolean checkLoanPolicy(Member member) throws UserRevokedException {
+    public void checkLoanPolicy(Member member) throws UserRevokedException {
         if (member.getMemberStatus() == MemberStatus.REVOKED) {
             throw new UserRevokedException("Användaren har brytit mot policy och blivit av med medlemskap");
-        } else if (member.getMemberStatus() == MemberStatus.ACTIVE) {
-            return true;
-        } else {
-            return false;
         }
     }
 }

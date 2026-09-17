@@ -22,11 +22,11 @@ public class Startup {
 
 
         // Equipment start
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Bicycle", true, 30, BIKE);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "8-people-tent", false, 90, TENT);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "SkiSet-for-Children", true, 3, SKISET);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "SkiSet-for-Small-Children", true, 10, SKISET);
-        equipmentService.addEquipment(equipmentService.getUniqueEquipmentId(), "Motorcycle", true, 180, BIKE);
+        equipmentService.addEquipment("Bicycle", true, 30, BIKE);
+        equipmentService.addEquipment("8-people-tent", false, 90, TENT);
+        equipmentService.addEquipment("SkiSet-for-Children", true, 3, SKISET);
+        equipmentService.addEquipment("SkiSet-for-Small-Children", true, 10, SKISET);
+        equipmentService.addEquipment("Motorcycle", true, 180, BIKE);
         // Users start
 
         memberService.addMember("Ylva", ACTIVE);
