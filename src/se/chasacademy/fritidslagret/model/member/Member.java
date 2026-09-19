@@ -5,13 +5,16 @@ public class Member {
     private int memberId;
     private MemberStatus memberStatus;
     private int activeLoans;
+    private static int uniqueMemberId = 1000;
+
 
     // Constructor
-    public Member(int memberId, String memberName, MemberStatus memberStatus) {
+    public Member(String memberName, MemberStatus memberStatus) {
         this.memberName = memberName;
-        this.memberId = memberId;
+        this.memberId = uniqueMemberId;
         this.memberStatus = memberStatus;
         this.activeLoans = 0;
+        uniqueMemberId++;
     }
 
     //Getters

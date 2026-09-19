@@ -33,7 +33,7 @@ public class LoanServiceTest {
         String equipmentName = "Hjälm";
         int maxLoanDays = 3;
         EquipmentTypes equipmentType = EquipmentTypes.SKISET;
-        Member member = new Member(1,"Nisse", MemberStatus.ACTIVE);
+        Member member = new Member("Nisse", MemberStatus.ACTIVE);
         int equipmentId = equipmentService.addEquipment(equipmentName, true, maxLoanDays, equipmentType);
 
         // Act
@@ -96,10 +96,9 @@ public class LoanServiceTest {
     public void checkLoanServiceReportsLoanExpiredWhenReturnDatePassesTest(){
         //Arrange
         int maxLoanDays = 3;
-        int fakeId = 1;
         String fakeName = "fakeName";
 
-        Member member = new Member(fakeId,fakeName, MemberStatus.ACTIVE);
+        Member member = new Member(fakeName, MemberStatus.ACTIVE);
         Equipment equipment = new SkiSet(fakeName, true, maxLoanDays);
         LocalDate acquiredDate = LocalDate.now();
 
@@ -123,11 +122,10 @@ public class LoanServiceTest {
     @Test
     public void checkLoanServiceNotReportsLoanExpiredWhenOnSameDateAsReturnDateTest(){
         int maxLoanDays = 3;
-        int fakeId = 1;
         LocalDate acquiredDate = LocalDate.now();
         String fakeName = "fakeName";
 
-        Member member = new Member(fakeId,fakeName, MemberStatus.ACTIVE);
+        Member member = new Member(fakeName, MemberStatus.ACTIVE);
         Equipment equipment = new SkiSet(fakeName, true, maxLoanDays);
         MemberService memberService = mock(MemberService.class);
 

@@ -2,36 +2,36 @@ package se.chasacademy.fritidslagret.service;
 
 import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.model.member.MemberStatus;
+import se.chasacademy.fritidslagret.repository.MemberRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MemberService {
-    private final Map<Integer, Member> membersDatabase = new HashMap<>();
-    private static int uniqueMemberId = 1000;
+    private final MemberRepository memberRepository = MemberRepository.getInstance();
 
 
     //Metoder
-    public void addMember(String name, MemberStatus memberStatus) {
-        Member newMember = new Member(uniqueMemberId, name, memberStatus);
-        membersDatabase.put(uniqueMemberId, newMember);
-        uniqueMemberId++;
+    public Member addMember(String name, MemberStatus memberStatus) {
+        Member newMember = new Member(name, memberStatus);
+        memberRepository.addMember(newMember);
+        return newMember;
     }
 
     public Map<Integer, Member> getMembers() {
-        return Map.copyOf(membersDatabase);
+        return memberRepository.getDatabaseMembers();
     }
 
     public MemberStatus getMemberStatus(int id) {
-        return membersDatabase.get(id).getMemberStatus();
+        return memberRepository.getDatabaseMembers().get(id).getMemberStatus();
     }
 
     public String getMemberStatusFriendlyName(int id) {
-        return membersDatabase.get(id).getMemberStatus().getFriendlyName();
+        return memberRepository.getDatabaseMembers().get(id).getMemberStatus().getFriendlyName();
     }
 
     public Member getMember(int memberId) {
-        return membersDatabase.get(memberId);
+        return memberRepository.getDatabaseMembers().get(memberId);
     }
 
     public void addToActiveLoans(Member member) {
