@@ -8,6 +8,7 @@ import se.chasacademy.fritidslagret.model.loan.Loan;
 import se.chasacademy.fritidslagret.model.loan.LoanPolicy;
 import se.chasacademy.fritidslagret.model.loan.LoanRules;
 import se.chasacademy.fritidslagret.model.member.Member;
+import se.chasacademy.fritidslagret.repository.LoanRepository;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -16,8 +17,7 @@ import java.util.Map;
 
 public class LoanService {
     private final Clock clock;
-    private final Map<Integer, Loan> loanDatabase = new HashMap<>();
-    private static int uniqueLoanId = 1000;
+    private final LoanRepository loanRepository;
     private final MemberService memberService;
     private final EquipmentService equipmentService;
     private final LoanRules loanRules;
@@ -27,6 +27,7 @@ public class LoanService {
         this.clock = clock;
         this.memberService = memberService;
         this.equipmentService = equipmentService;
+        this.loanRepository = LoanRepository.getInstance();
         loanPolicy = new LoanPolicy();
         loanRules = new LoanRules(memberService, equipmentService);
     }
@@ -44,7 +45,6 @@ public class LoanService {
         LocalDate loanDate = LocalDate.now(clock);
 
         Loan loan = new Loan(
-                uniqueLoanId,
                 member,
                 equipmentService.getEquipmentById(equipmentId),
                 loanDate,
@@ -53,17 +53,12 @@ public class LoanService {
         );
 
         memberService.addToActiveLoans(member);
-        loanDatabase.put(uniqueLoanId, loan);
+        loanRepository.addLoan(loan);
         equipmentService.getEquipmentById(equipmentId).setAvailable(false);
-        uniqueLoanId++;
     }
 
     public Loan getLoanById(int id) {
-        return loanDatabase.get(id);
-    }
-
-    public int getUniqueLoanId() {
-        return uniqueLoanId;
+        return loanRepository.getLoanDatabase().get(id);
     }
 
     public boolean isDelayed(Loan loan){
@@ -73,7 +68,7 @@ public class LoanService {
     public Map<Integer, Loan> getExpiredLoans() {
         Map<Integer, Loan> expiredLoanList = new HashMap<>();
 
-        for (Loan loan : loanDatabase.values()) {
+        for (Loan loan : loanRepository.getLoanDatabase().values()) {
             if (loan.getDateOfReturn().isBefore(LocalDate.now(clock) )){
                 int id = loan.getLoanId();
                 expiredLoanList.put(id , loan);

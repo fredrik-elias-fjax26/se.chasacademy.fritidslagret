@@ -13,19 +13,25 @@ public class Loan {
     private LocalDate dateOfLoan;
     private LocalDate dateOfReturn;
     private boolean loanActive;
+    private static int uniqueLoanId = 1000;
 
     //Constructor
-    public Loan(int assignedLoanId, Member member, Equipment equipment, LocalDate dateOfLoan, LocalDate dateOfReturn, boolean loanActive) {
+    public Loan(Member member, Equipment equipment, LocalDate dateOfLoan, LocalDate dateOfReturn, boolean loanActive) {
         this.member = member;
-        this.loanId = assignedLoanId;
+        this.loanId = uniqueLoanId;
         this.equipment = equipment;
         this.dateOfLoan = dateOfLoan;
         this.dateOfReturn = dateOfReturn;
         this.loanActive = loanActive;
+        uniqueLoanId++;
     }
 
     public int getLoanId() {
         return loanId;
+    }
+
+    public static int  getUniqueLoanId() {
+        return uniqueLoanId;
     }
 
     public LocalDate getDateOfReturn() {

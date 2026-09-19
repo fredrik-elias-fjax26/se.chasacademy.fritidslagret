@@ -57,7 +57,7 @@ public class LoanServiceTest {
         Member memberInactive = mock(Member.class);
         Member memberRevoked = mock(Member.class);
 
-        int startTestUniqueLoanId = loanService.getUniqueLoanId();
+        int startTestUniqueLoanId = Loan.getUniqueLoanId();
         int startTestUniqueEquipmentId = equipmentService.getUniqueEquipmentId();
 
         equipmentService.addEquipment("Sko", true, 30, EquipmentTypes.SKISET);
@@ -84,7 +84,7 @@ public class LoanServiceTest {
         Executable areRevokedAct = () -> loanService.startLoan(startTestUniqueEquipmentId + 2, memberRevoked);
 
         // Assert
-        assertEquals(startTestUniqueLoanId + countValidLoansAbove, loanService.getUniqueLoanId());
+        assertEquals(startTestUniqueLoanId + countValidLoansAbove, Loan.getUniqueLoanId());
         assertThrows(EquipmentNotAvailableException.class, equipmentNotAvailableAct);
         assertThrows(LoanMaximumLimitException.class, tooManyLoansAct);
         assertThrows(UserInactiveException.class, notActiveAct);
@@ -107,7 +107,7 @@ public class LoanServiceTest {
         EquipmentService equipmentService = mock(EquipmentService.class);
         Clock clock = mock(Clock.class);
 
-        Loan loan1 = new Loan(fakeId, member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
+        Loan loan1 = new Loan(member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
 
         //Act
         when(clock.instant()).thenReturn(acquiredDate.plusDays(maxLoanDays + 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -134,7 +134,7 @@ public class LoanServiceTest {
         EquipmentService equipmentService = mock(EquipmentService.class);
         Clock clock = mock(Clock.class);
 
-        Loan loan1 = new Loan(fakeId, member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
+        Loan loan1 = new Loan(member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
 
         //Act
         when(clock.instant()).thenReturn(acquiredDate.plusDays(maxLoanDays).atStartOfDay(ZoneId.systemDefault()).toInstant());
