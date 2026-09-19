@@ -1,7 +1,7 @@
-package se.chasacademy.fritidslagret.model;
+package se.chasacademy.fritidslagret.model.equipment;
 
 import org.junit.jupiter.api.Test;
-import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
+import se.chasacademy.fritidslagret.repository.EquipmentRepository;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class EquipmentServiceTest {
         @Test
         public void verifyEquipmentCreation() {
-            EquipmentService equipmentService = new EquipmentService();
+            EquipmentService equipmentService = new EquipmentService(EquipmentRepository.getInstance());
             // Arrange
             String equipmentName = "Hjälm";
             boolean available = true;

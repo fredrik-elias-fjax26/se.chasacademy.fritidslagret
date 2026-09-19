@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.model;
+package se.chasacademy.fritidslagret.model.loan;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -9,9 +9,9 @@ import se.chasacademy.fritidslagret.exception.UserRevokedException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
 import se.chasacademy.fritidslagret.model.equipment.SkiSet;
-import se.chasacademy.fritidslagret.model.loan.Loan;
 import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.model.member.MemberStatus;
+import se.chasacademy.fritidslagret.repository.EquipmentRepository;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
@@ -27,7 +27,7 @@ public class LoanServiceTest {
     @Test
     public void verifyLoanCreation() {
         // Arrange
-        EquipmentService equipmentService = new EquipmentService();
+        EquipmentService equipmentService = new EquipmentService(EquipmentRepository.getInstance());
         MemberService memberService = new MemberService();
         LoanService loanService = new LoanService(memberService, equipmentService, Clock.systemUTC());
         String equipmentName = "Hjälm";
@@ -47,7 +47,7 @@ public class LoanServiceTest {
     @Test
     public void loanRulesAndPolicysCheckedBeforeLoanCreation() {
         // Arrange
-        EquipmentService equipmentService = new EquipmentService();
+        EquipmentService equipmentService = new EquipmentService(EquipmentRepository.getInstance());
         MemberService memberService = new MemberService();
         LoanService loanService = new LoanService(memberService, equipmentService, Clock.systemUTC());
         Member member = mock(Member.class);
@@ -74,8 +74,8 @@ public class LoanServiceTest {
         when(memberRevoked.getMemberStatus()).thenReturn(MemberStatus.REVOKED);
 
         // Valid Loans
-        loanService.startLoan(0, member);
-        loanService.startLoan(3, memberLastAvailableLoan);
+        loanService.startLoan(startTestUniqueEquipmentId, member);
+        loanService.startLoan(startTestUniqueEquipmentId + 3, memberLastAvailableLoan);
         int countValidLoansAbove = 2;
         // Invalid Loans
         Executable equipmentNotAvailableAct = () -> loanService.startLoan(startTestUniqueEquipmentId, member1);
@@ -100,7 +100,7 @@ public class LoanServiceTest {
         String fakeName = "fakeName";
 
         Member member = new Member(fakeId,fakeName, MemberStatus.ACTIVE);
-        Equipment equipment = new SkiSet(fakeId, fakeName, true, maxLoanDays);
+        Equipment equipment = new SkiSet(fakeName, true, maxLoanDays);
         LocalDate acquiredDate = LocalDate.now();
 
         MemberService memberService = mock(MemberService.class);
@@ -128,7 +128,7 @@ public class LoanServiceTest {
         String fakeName = "fakeName";
 
         Member member = new Member(fakeId,fakeName, MemberStatus.ACTIVE);
-        Equipment equipment = new SkiSet(fakeId, fakeName, true, maxLoanDays);
+        Equipment equipment = new SkiSet(fakeName, true, maxLoanDays);
         MemberService memberService = mock(MemberService.class);
 
         EquipmentService equipmentService = mock(EquipmentService.class);

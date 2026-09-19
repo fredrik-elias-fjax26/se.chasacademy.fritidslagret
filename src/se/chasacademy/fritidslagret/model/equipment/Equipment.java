@@ -1,6 +1,7 @@
 package se.chasacademy.fritidslagret.model.equipment;
 
 public abstract class Equipment {
+    private static int uniqueEquipmentId = 0;
     private final int equipmentId;
     private String name;
     private boolean available;
@@ -8,12 +9,13 @@ public abstract class Equipment {
     private final Class<? extends Equipment> type;
 
     // Constructor
-    public Equipment(int assignedEquipmentId, String name, boolean available, int maxLoanDays) {
+    public Equipment(String name, boolean available, int maxLoanDays) {
         this.name = name;
-        this.equipmentId = assignedEquipmentId;
+        this.equipmentId = uniqueEquipmentId;
         this.available = available;
         this.maxLoanDays = maxLoanDays;
         this.type = this.getClass();
+        uniqueEquipmentId++;
     }
 
     @Override
@@ -22,6 +24,10 @@ public abstract class Equipment {
     }
 
     //Getters
+
+    public static int getUniqueEquipmentId() {
+        return uniqueEquipmentId;
+    }
 
     public String getEquipmentName() {
         return name;

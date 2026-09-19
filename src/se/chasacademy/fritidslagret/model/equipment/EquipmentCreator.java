@@ -1,5 +1,5 @@
 package se.chasacademy.fritidslagret.model.equipment;
 
 public interface EquipmentCreator {
-    Equipment create(int equipmentId, String name, boolean available, int maxLoanDays);
+    Equipment create(String name, boolean available, int maxLoanDays);
 }
