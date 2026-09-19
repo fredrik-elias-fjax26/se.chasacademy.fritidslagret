@@ -2,7 +2,7 @@ package se.chasacademy.fritidslagret.model.member;
 
 public class Member {
     private String memberName;
-    private int memberId;
+    private final int memberId;
     private MemberStatus memberStatus;
     private int activeLoans;
     private static int uniqueMemberId = 1000;

@@ -5,7 +5,7 @@ public enum MemberStatus {
     INACTIVE("Inaktiv"),
     REVOKED("Återkallat");
 
-    private String friendlyName;
+    private final String friendlyName;
 
     MemberStatus(String friendlyName) {
     this.friendlyName = friendlyName;

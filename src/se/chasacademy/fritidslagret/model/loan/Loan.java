@@ -7,9 +7,9 @@ import se.chasacademy.fritidslagret.model.member.Member;
 import java.time.LocalDate;
 
 public class Loan {
-    private Member member;
-    private int loanId;
-    private Equipment equipment;
+    private final Member member;
+    private final int loanId;
+    private final Equipment equipment;
     private final LocalDate dateOfLoan;
     private LocalDate dateOfReturn;
     private boolean loanActive;
