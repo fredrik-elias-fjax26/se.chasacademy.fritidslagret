@@ -1,6 +1,5 @@
 package se.chasacademy.fritidslagret.repository;
 
-import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.loan.Loan;
 
 import java.util.HashMap;
@@ -20,7 +19,7 @@ public class LoanRepository {
     }
 
     public Map<Integer, Loan> getLoanDatabase() {
-        return loanDatabase;
+        return Map.copyOf(loanDatabase);
     }
 
     public Loan addLoan(Loan loan) {

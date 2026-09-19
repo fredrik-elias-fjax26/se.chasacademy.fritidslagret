@@ -20,7 +20,7 @@ public class EquipmentRepository {
     }
 
     public Map<Integer, Equipment> getEquipmentDatabase() {
-        return equipmentDatabase;
+        return Map.copyOf(equipmentDatabase);
     }
 
     public Equipment addEquipment(Equipment equipment) {
