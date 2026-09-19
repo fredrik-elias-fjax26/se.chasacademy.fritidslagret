@@ -4,7 +4,6 @@ import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.model.member.MemberStatus;
 import se.chasacademy.fritidslagret.repository.MemberRepository;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class MemberService {

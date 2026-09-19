@@ -1,7 +1,7 @@
 package se.chasacademy.fritidslagret.model.loan;
 
-import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
 import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
+import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
 import se.chasacademy.fritidslagret.exception.UserInactiveException;
 import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.model.member.MemberStatus;

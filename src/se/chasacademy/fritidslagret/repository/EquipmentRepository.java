@@ -1,7 +1,6 @@
 package se.chasacademy.fritidslagret.repository;
 
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
-import se.chasacademy.fritidslagret.service.EquipmentService;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package se.chasacademy.fritidslagret.service;
 
-import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
 import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
+import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
 import se.chasacademy.fritidslagret.exception.UserRevokedException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.loan.Loan;

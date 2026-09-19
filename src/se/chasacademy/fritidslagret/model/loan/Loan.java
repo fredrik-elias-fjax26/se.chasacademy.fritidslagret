@@ -10,7 +10,7 @@ public class Loan {
     private Member member;
     private int loanId;
     private Equipment equipment;
-    private LocalDate dateOfLoan;
+    private final LocalDate dateOfLoan;
     private LocalDate dateOfReturn;
     private boolean loanActive;
     private static int uniqueLoanId = 1000;
@@ -28,6 +28,29 @@ public class Loan {
 
     public int getLoanId() {
         return loanId;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Equipment getEquipment() {
+        return equipment;
+    }
+
+    public LocalDate getDateOfLoan() {
+        return dateOfLoan;
+    }
+
+    public LocalDate getLocalDateOfReturn() {
+        return dateOfReturn;
+    }
+    public boolean isLoanActive() {
+        return loanActive;
+    }
+
+    public void setLoanActive(boolean loanActive) {
+        this.loanActive = loanActive;
     }
 
     public static int  getUniqueLoanId() {

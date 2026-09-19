@@ -4,7 +4,6 @@ import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
 import se.chasacademy.fritidslagret.repository.EquipmentRepository;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class EquipmentService {

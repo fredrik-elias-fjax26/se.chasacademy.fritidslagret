@@ -4,8 +4,6 @@ import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
 
-import java.awt.*;
-
 public class MainMenu {
     private final LoanMenu loanMenu;
     private final EquipmentMenu equipmentMenu;

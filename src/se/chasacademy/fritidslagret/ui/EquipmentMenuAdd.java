@@ -1,7 +1,7 @@
 package se.chasacademy.fritidslagret.ui;
 
-import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
+import se.chasacademy.fritidslagret.service.EquipmentService;
 
 public class EquipmentMenuAdd {
     private final EquipmentService equipmentService;

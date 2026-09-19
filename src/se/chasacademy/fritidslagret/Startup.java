@@ -1,11 +1,10 @@
 package se.chasacademy.fritidslagret;
 
-import static se.chasacademy.fritidslagret.model.equipment.EquipmentTypes.*;
-
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
 
+import static se.chasacademy.fritidslagret.model.equipment.EquipmentTypes.*;
 import static se.chasacademy.fritidslagret.model.member.MemberStatus.*;
 
 public class Startup {

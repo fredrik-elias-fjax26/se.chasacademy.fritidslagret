@@ -1,8 +1,6 @@
 package se.chasacademy.fritidslagret.ui;
 
-import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
-import se.chasacademy.fritidslagret.service.MemberService;
 
 public class LoanMenu {
     LoanMenuList loanMenuList;
