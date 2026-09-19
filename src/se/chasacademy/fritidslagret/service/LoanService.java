@@ -32,7 +32,7 @@ public class LoanService {
         loanRules = new LoanRules(memberService, equipmentService);
     }
 
-    public void startLoan(int equipmentId, Member member)
+    public Loan startLoan(int equipmentId, Member member)
             throws EquipmentNotAvailableException, LoanMaximumLimitException, UserRevokedException {
 
         loanPolicy.checkLoanPolicy(member);
@@ -55,6 +55,7 @@ public class LoanService {
         memberService.addToActiveLoans(member);
         loanRepository.addLoan(loan);
         equipmentService.getEquipmentById(equipmentId).setAvailable(false);
+        return loan;
     }
 
     public Loan getLoanById(int id) {

@@ -34,13 +34,13 @@ public class LoanServiceTest {
         int maxLoanDays = 3;
         EquipmentTypes equipmentType = EquipmentTypes.SKISET;
         Member member = new Member("Nisse", MemberStatus.ACTIVE);
-        int equipmentId = equipmentService.addEquipment(equipmentName, true, maxLoanDays, equipmentType);
+        Equipment equipment = equipmentService.addEquipment(equipmentName, true, maxLoanDays, equipmentType);
 
         // Act
-        loanService.startLoan(equipmentId, member);
+        loanService.startLoan(equipment.getEquipmentId(), member);
 
         // Assert
-        assertFalse(equipmentService.getEquipmentById(equipmentId).isAvailable());
+        assertFalse(equipment.isAvailable());
 
     }
 

@@ -13,9 +13,9 @@ public class EquipmentService {
         this.equipmentRepository = equipmentRepository;
     }
     //Setters
-    public int addEquipment(String name, boolean available, int maxLoanDays, EquipmentTypes type) {
+    public Equipment addEquipment(String name, boolean available, int maxLoanDays, EquipmentTypes type) {
         Equipment createdEquipment =  equipmentRepository.addEquipment(type.getCreator().create(name, available, maxLoanDays));
-        return createdEquipment.getEquipmentId();
+        return createdEquipment;
     }
 
 

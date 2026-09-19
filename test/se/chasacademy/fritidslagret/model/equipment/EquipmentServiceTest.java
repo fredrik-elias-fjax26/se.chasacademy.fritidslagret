@@ -17,13 +17,13 @@ public class EquipmentServiceTest {
             EquipmentTypes equipmentType = EquipmentTypes.SKISET;
 
             // Act
-            int id = equipmentService.addEquipment(equipmentName, available, maxLoanDays, equipmentType);
+            Equipment equipment = equipmentService.addEquipment(equipmentName, available, maxLoanDays, equipmentType);
 
             // Assert
-            assertEquals(equipmentName, equipmentService.getEquipmentById(id).getEquipmentName());
-            assertEquals(available, equipmentService.getEquipmentById(id).isAvailable());
-            assertEquals(maxLoanDays, equipmentService.getEquipmentById(id).getMaxLoanDays());
-            assertEquals(equipmentType.getDisplayName(), equipmentService.getEquipmentById(id).getType());
+            assertEquals(equipmentName, equipment.getEquipmentName());
+            assertEquals(available, equipment.isAvailable());
+            assertEquals(maxLoanDays, equipment.getMaxLoanDays());
+            assertEquals(equipmentType.getDisplayName(), equipment.getType());
 
         }
 }
