@@ -23,11 +23,11 @@ public class LoanService {
     private final LoanRules loanRules;
     private final LoanPolicy loanPolicy;
 
-    public LoanService(MemberService memberService, EquipmentService equipmentService, Clock clock) {
+    public LoanService(LoanRepository loanRepository ,MemberService memberService, EquipmentService equipmentService, Clock clock) {
         this.clock = clock;
         this.memberService = memberService;
         this.equipmentService = equipmentService;
-        this.loanRepository = LoanRepository.getInstance();
+        this.loanRepository = loanRepository;
         loanPolicy = new LoanPolicy();
         loanRules = new LoanRules(memberService, equipmentService);
     }

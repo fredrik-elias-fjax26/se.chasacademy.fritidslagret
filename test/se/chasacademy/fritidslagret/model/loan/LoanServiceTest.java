@@ -12,6 +12,8 @@ import se.chasacademy.fritidslagret.model.equipment.SkiSet;
 import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.model.member.MemberStatus;
 import se.chasacademy.fritidslagret.repository.EquipmentRepository;
+import se.chasacademy.fritidslagret.repository.LoanRepository;
+import se.chasacademy.fritidslagret.repository.MemberRepository;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
@@ -27,29 +29,41 @@ public class LoanServiceTest {
     @Test
     public void verifyLoanCreation() {
         // Arrange
-        EquipmentService equipmentService = new EquipmentService(EquipmentRepository.getInstance());
-        MemberService memberService = new MemberService();
-        LoanService loanService = new LoanService(memberService, equipmentService, Clock.systemUTC());
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        MemberRepository memberRepository = mock(MemberRepository.class);
+        EquipmentRepository equipmentRepository = EquipmentRepository.getInstance();
+
+        EquipmentService equipmentService = new EquipmentService(equipmentRepository);
+        MemberService memberService = new MemberService(memberRepository);
+        LoanService loanService = new LoanService(loanRepository ,memberService, equipmentService, Clock.systemUTC());
+
         String equipmentName = "Hjälm";
         int maxLoanDays = 3;
+
         EquipmentTypes equipmentType = EquipmentTypes.SKISET;
         Member member = new Member("Nisse", MemberStatus.ACTIVE);
         Equipment equipment = equipmentService.addEquipment(equipmentName, true, maxLoanDays, equipmentType);
 
         // Act
-        loanService.startLoan(equipment.getEquipmentId(), member);
+        Loan loan = loanService.startLoan(equipment.getEquipmentId(), member);
 
         // Assert
         assertFalse(equipment.isAvailable());
+        verify(loanRepository).addLoan(loan);
 
     }
 
     @Test
     public void loanRulesAndPolicysCheckedBeforeLoanCreation() {
         // Arrange
+        EquipmentRepository equipmentRepository = mock(EquipmentRepository.class);
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        MemberRepository memberRepository = mock(MemberRepository.class);
+
         EquipmentService equipmentService = new EquipmentService(EquipmentRepository.getInstance());
-        MemberService memberService = new MemberService();
-        LoanService loanService = new LoanService(memberService, equipmentService, Clock.systemUTC());
+        MemberService memberService = new MemberService(memberRepository);
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, Clock.systemUTC());
+
         Member member = mock(Member.class);
         Member member1 = mock(Member.class);
         Member memberLastAvailableLoan = mock(Member.class);
@@ -77,6 +91,7 @@ public class LoanServiceTest {
         loanService.startLoan(startTestUniqueEquipmentId, member);
         loanService.startLoan(startTestUniqueEquipmentId + 3, memberLastAvailableLoan);
         int countValidLoansAbove = 2;
+
         // Invalid Loans
         Executable equipmentNotAvailableAct = () -> loanService.startLoan(startTestUniqueEquipmentId, member1);
         Executable tooManyLoansAct = () -> loanService.startLoan(startTestUniqueEquipmentId + 1 , memberTooManyLoans);
@@ -98,24 +113,25 @@ public class LoanServiceTest {
         int maxLoanDays = 3;
         String fakeName = "fakeName";
 
-        Member member = new Member(fakeName, MemberStatus.ACTIVE);
-        Equipment equipment = new SkiSet(fakeName, true, maxLoanDays);
-        LocalDate acquiredDate = LocalDate.now();
-
+        LoanRepository loanRepository = mock(LoanRepository.class);
         MemberService memberService = mock(MemberService.class);
         EquipmentService equipmentService = mock(EquipmentService.class);
         Clock clock = mock(Clock.class);
 
-        Loan loan1 = new Loan(member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
+        Member member = new Member(fakeName, MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet(fakeName, true, maxLoanDays);
+        LocalDate acquiredDate = LocalDate.now();
+
+        Loan loan = new Loan(member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
 
         //Act
         when(clock.instant()).thenReturn(acquiredDate.plusDays(maxLoanDays + 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
-        LoanService loanService = new LoanService(memberService, equipmentService, clock);
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, clock);
 
         //Assert
-        assertTrue(loanService.isDelayed(loan1));
+        assertTrue(loanService.isDelayed(loan));
         verify(clock).instant();
     }
 
@@ -124,6 +140,8 @@ public class LoanServiceTest {
         int maxLoanDays = 3;
         LocalDate acquiredDate = LocalDate.now();
         String fakeName = "fakeName";
+
+        LoanRepository loanRepository = mock(LoanRepository.class);
 
         Member member = new Member(fakeName, MemberStatus.ACTIVE);
         Equipment equipment = new SkiSet(fakeName, true, maxLoanDays);
@@ -138,7 +156,7 @@ public class LoanServiceTest {
         when(clock.instant()).thenReturn(acquiredDate.plusDays(maxLoanDays).atStartOfDay(ZoneId.systemDefault()).toInstant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
-        LoanService loanService = new LoanService(memberService, equipmentService, clock);
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, clock);
 
         //Assert
         assertFalse(loanService.isDelayed(loan1));

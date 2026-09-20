@@ -7,8 +7,11 @@ import se.chasacademy.fritidslagret.repository.MemberRepository;
 import java.util.Map;
 
 public class MemberService {
-    private final MemberRepository memberRepository = MemberRepository.getInstance();
+    private MemberRepository memberRepository;
 
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     //Metoder
     public Member addMember(String name, MemberStatus memberStatus) {
