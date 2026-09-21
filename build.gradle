@@ -1,0 +1,46 @@
+plugins {
+    id("java")
+    id("application")
+}
+
+group = "se.chasacademy"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    mockitoAgent
+}
+
+dependencies {
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.mockito)
+    mockitoAgent(libs.mockito) { transitive = false }
+
+    testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+application {
+    mainClass = "Main"
+}
+tasks.test {
+    useJUnitPlatform()
+    jvmArgs("-javaagent:${configurations.mockitoAgent.asPath}")
+}
+
+tasks.named("jar") {
+    dependsOn "test"
+    manifest {
+        attributes "Main-Class": "Main"
+    }
+    doFirst { println("Tester Godkända, Bygger jar")}
+}
+
+tasks.named("run") {
+    dependsOn("test")
+    standardInput = System.in
+    doFirst {println("\nTester Godkända, Startar Main\n")}
+}

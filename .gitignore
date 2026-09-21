@@ -1,30 +1,22 @@
-### IntelliJ IDEA ###
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ – delade run-konfigurationer ligger i .run/
+.idea/
+*.iml
+*.iws
+*.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-.kotlin
 
-### Eclipse ###
-.apt_generated
+# Eclipse / VS Code
 .classpath
-.factorypath
 .project
-.settings
-.springBeans
-.sts4-cache
+.settings/
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
 .vscode/
 
-### Mac OS ###
+# OS
 .DS_Store
+Thumbs.db

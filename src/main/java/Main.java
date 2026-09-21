@@ -8,6 +8,7 @@ import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
 import se.chasacademy.fritidslagret.ui.MainMenu;
 
+
 // MAIN //
 void main() {
     EquipmentRepository equipmentRepository = EquipmentRepository.getInstance();
@@ -21,7 +22,7 @@ void main() {
     // Startup
     Startup startup = new Startup(equipmentService, memberService, loanService);
     startup.startUp();
-    //Main-Menu-loop
+    //fritidslagret.Main-Menu-loop
     MainMenu mainMenu = new MainMenu(loanService, memberService, equipmentService);
     mainMenu.mainMenu();
 }
