@@ -33,9 +33,4 @@ public class WaitingListRepository {
         membersWaitingForEquipment.get(equipment).add(member);
         return member;
     }
-
-    public Member removeMemberFromWaitingList(Equipment equipment, Member member) {
-        membersWaitingForEquipment.get(equipment).remove(member);
-        return member;
-    }
 }
