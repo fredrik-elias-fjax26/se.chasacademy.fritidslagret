@@ -2,13 +2,12 @@ package se.chasacademy.fritidslagret.model.waitinglist;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import se.chasacademy.fritidslagret.exception.NoMemberInputException;
+import se.chasacademy.fritidslagret.exception.MemberIsNullException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.SkiSet;
 import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.model.member.MemberStatus;
 import se.chasacademy.fritidslagret.repository.WaitingListRepository;
-import se.chasacademy.fritidslagret.service.WaitingListService;
 
 import java.util.Queue;
 
@@ -55,7 +54,7 @@ public class WaitingListRepositoryTest {
         Executable assertThrowAct = () -> waitingListRepository.addMemberToWaitingList(equipment, member);
 
         //Assert
-        assertThrows(NoMemberInputException.class, assertThrowAct);
+        assertThrows(MemberIsNullException.class, assertThrowAct);
     }
 
     @Test
