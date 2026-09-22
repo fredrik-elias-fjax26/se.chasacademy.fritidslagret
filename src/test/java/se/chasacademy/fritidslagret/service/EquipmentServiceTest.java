@@ -1,8 +1,9 @@
-package se.chasacademy.fritidslagret.model.equipment;
+package se.chasacademy.fritidslagret.service;
 
 import org.junit.jupiter.api.Test;
+import se.chasacademy.fritidslagret.model.equipment.Equipment;
+import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
 import se.chasacademy.fritidslagret.repository.EquipmentRepository;
-import se.chasacademy.fritidslagret.service.EquipmentService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

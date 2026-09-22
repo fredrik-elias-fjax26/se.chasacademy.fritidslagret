@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.model.loan;
+package se.chasacademy.fritidslagret.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -9,14 +9,13 @@ import se.chasacademy.fritidslagret.exception.UserRevokedException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
 import se.chasacademy.fritidslagret.model.equipment.SkiSet;
+import se.chasacademy.fritidslagret.model.loan.Loan;
 import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.model.member.MemberStatus;
 import se.chasacademy.fritidslagret.repository.EquipmentRepository;
 import se.chasacademy.fritidslagret.repository.LoanRepository;
 import se.chasacademy.fritidslagret.repository.MemberRepository;
-import se.chasacademy.fritidslagret.service.EquipmentService;
-import se.chasacademy.fritidslagret.service.LoanService;
-import se.chasacademy.fritidslagret.service.MemberService;
+
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -56,7 +55,6 @@ public class LoanServiceTest {
     @Test
     public void loanRulesAndPolicysCheckedBeforeLoanCreation() {
         // Arrange
-        EquipmentRepository equipmentRepository = mock(EquipmentRepository.class);
         LoanRepository loanRepository = mock(LoanRepository.class);
         MemberRepository memberRepository = mock(MemberRepository.class);
 
