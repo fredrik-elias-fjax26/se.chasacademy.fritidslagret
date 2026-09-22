@@ -11,7 +11,7 @@ public class WaitingListRepository {
 
     private WaitingListRepository() {
     }
-    
+
     public static WaitingListRepository getInstance() {
         if (instance == null) {
             instance = new WaitingListRepository();
