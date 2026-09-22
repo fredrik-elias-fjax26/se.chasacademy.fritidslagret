@@ -1,4 +1,4 @@
-package se.chasacademy.fritidslagret.model.waitinglist;
+package se.chasacademy.fritidslagret.repository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -8,7 +8,6 @@ import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.SkiSet;
 import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.model.member.MemberStatus;
-import se.chasacademy.fritidslagret.repository.WaitingListRepository;
 
 import java.util.Queue;
 
