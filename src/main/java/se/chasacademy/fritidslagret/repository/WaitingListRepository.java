@@ -1,5 +1,6 @@
 package se.chasacademy.fritidslagret.repository;
 
+import se.chasacademy.fritidslagret.exception.EquipmentIsNullException;
 import se.chasacademy.fritidslagret.exception.MemberIsNullException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.member.Member;
@@ -21,10 +22,16 @@ public class WaitingListRepository {
     }
 
     public Queue<Member> getWaitingListForEquipment(Equipment equipment) {
+        if (equipment == null) {
+            throw new EquipmentIsNullException("Equipment är null");
+        }
         return membersWaitingForEquipment.get(equipment);
     }
 
     public Member getNextMemberInQueue(Equipment equipment) {
+        if (equipment == null) {
+            throw new EquipmentIsNullException("Equipment är null");
+        }
         return getWaitingListForEquipment(equipment).poll();
     }
 
@@ -32,12 +39,17 @@ public class WaitingListRepository {
         if (!membersWaitingForEquipment.containsKey(equipment)) {
             membersWaitingForEquipment.put(equipment, new LinkedList<>());
         }
-        if (member != null) {
-            membersWaitingForEquipment.get(equipment).add(member);
-            return member;
-        } else {
+
+        if (equipment == null) {
+            throw new EquipmentIsNullException("Equipment är null");
+        }
+
+        if (member == null) {
             throw new MemberIsNullException("Medlemmen är null");
         }
-    }
 
+        membersWaitingForEquipment.get(equipment).add(member);
+        return member;
+
+    }
 }

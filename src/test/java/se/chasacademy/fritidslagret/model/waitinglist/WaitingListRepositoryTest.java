@@ -2,6 +2,7 @@ package se.chasacademy.fritidslagret.model.waitinglist;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import se.chasacademy.fritidslagret.exception.EquipmentIsNullException;
 import se.chasacademy.fritidslagret.exception.MemberIsNullException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.SkiSet;
@@ -28,6 +29,24 @@ public class WaitingListRepositoryTest {
         // Assert
         assertNotNull(queuedWaitingList);
     }
+
+    @Test
+    public void shouldThrowEquipmentIsNullExceptionIfEquipmentIsNull() {
+        // Arrange
+        WaitingListRepository waitingListRepository = WaitingListRepository.getInstance();
+        Member member = new Member("Fake", MemberStatus.ACTIVE);
+        // Act
+        Executable assertThrowAct = () -> waitingListRepository.getWaitingListForEquipment(null);
+        Executable assertThrowAct2 = () -> waitingListRepository.addMemberToWaitingList(null, member);
+        Executable assertThrowAct3 = () -> waitingListRepository.getNextMemberInQueue(null);
+
+        // Assert
+        assertThrows(EquipmentIsNullException.class, assertThrowAct);
+        assertThrows(EquipmentIsNullException.class, assertThrowAct2);
+        assertThrows(EquipmentIsNullException.class, assertThrowAct3);
+    }
+
+
     @Test
     public void shouldAddMemberToWaitingList() {
         // Arrange
@@ -67,7 +86,12 @@ public class WaitingListRepositoryTest {
         waitingListRepository.addMemberToWaitingList(equipment, member);
 
         //Act
-        Member nullMember = waitingListRepository.getNextMemberInQueue(equipment);
+        Member nullMember = member;
+        while(!waitingListRepository.getWaitingListForEquipment(equipment).isEmpty()){
+            nullMember = waitingListRepository.getNextMemberInQueue(equipment);
+        }
+
+        nullMember = waitingListRepository.getNextMemberInQueue(equipment);
 
         //Assert
         assertNull(nullMember);
