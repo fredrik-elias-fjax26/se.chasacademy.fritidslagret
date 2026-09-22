@@ -1,5 +1,6 @@
 package se.chasacademy.fritidslagret.repository;
 
+import se.chasacademy.fritidslagret.exception.NoMemberInputException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.member.Member;
 
@@ -31,7 +32,12 @@ public class WaitingListRepository {
         if (!membersWaitingForEquipment.containsKey(equipment)) {
             membersWaitingForEquipment.put(equipment, new LinkedList<>());
         }
-        membersWaitingForEquipment.get(equipment).add(member);
-        return member;
+        if (member != null) {
+            membersWaitingForEquipment.get(equipment).add(member);
+            return member;
+        } else {
+            throw new NoMemberInputException("Medlemmen är null");
+        }
     }
+
 }
