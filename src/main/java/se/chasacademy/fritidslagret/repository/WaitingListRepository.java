@@ -48,8 +48,10 @@ public class WaitingListRepository {
             throw new MemberIsNullException("Medlemmen är null");
         }
 
-        membersWaitingForEquipment.get(equipment).add(member);
-        return member;
+        if (membersWaitingForEquipment.get(equipment).add(member)) {
+            return member;
+        }
 
+        return null;
     }
 }

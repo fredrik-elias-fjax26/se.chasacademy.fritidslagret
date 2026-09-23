@@ -1,5 +1,6 @@
 package se.chasacademy.fritidslagret.service;
 
+import se.chasacademy.fritidslagret.exception.EquipmentIsNullException;
 import se.chasacademy.fritidslagret.exception.QueueIsNullException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.member.Member;
@@ -14,19 +15,23 @@ public class WaitingListService {
         this.waitingListRepository = waitingListRepository;
     }
 
-    public Member addToWaitingList(Equipment equipment, Member member) {
-        return member;
+    public Member addToWaitingList(Equipment equipment, Member member) throws EquipmentIsNullException {
+        checkForEquipmentIsNullAndThrow(equipment, null);
+        return waitingListRepository.addMemberToWaitingList(equipment, member);
     }
 
-    public Member removeFromWaitingList(Equipment equipment, Member member) {
-        return member;
+    public Member getFromWaitingList(Equipment equipment) throws EquipmentIsNullException {
+        checkForEquipmentIsNullAndThrow(equipment, null);
+        return waitingListRepository.getNextMemberInQueue(equipment);
     }
 
-    public Queue<Member> getWaitingListByEquipment(Equipment equipment) {
+    public Queue<Member> getWaitingListByEquipment(Equipment equipment) throws EquipmentIsNullException {
+        checkForEquipmentIsNullAndThrow(equipment, null);
         return waitingListRepository.getWaitingListForEquipment(equipment);
     }
 
-    public boolean isMembersInQueueForEquipment(Equipment equipment) throws QueueIsNullException {
+    public boolean isMembersInQueueForEquipment(Equipment equipment) throws QueueIsNullException, EquipmentIsNullException {
+        checkForEquipmentIsNullAndThrow(equipment, null);
         try {
             return !getWaitingListByEquipment(equipment).isEmpty();
         } catch (NullPointerException e) {
@@ -35,6 +40,15 @@ public class WaitingListService {
                             e.getMessage()
                     )
             );
+        }
+    }
+
+    private void checkForEquipmentIsNullAndThrow(Equipment equipment, String message) throws EquipmentIsNullException {
+        if (message == null) {
+            message = "Equipment kan inte vara null";
+        }
+        if (equipment == null) {
+            throw new EquipmentIsNullException(message);
         }
     }
 }

@@ -116,12 +116,31 @@ public class WaitingListServiceTest {
         Executable assertThrowsAct =  () -> waitingListService.isMembersInQueueForEquipment(null);
         Executable assertThrowsAct2 = () -> waitingListService.addToWaitingList(null, member);
         Executable assertThrowsAct3 = () -> waitingListService.getWaitingListByEquipment(null);
-        Executable assertThrowsAct4 = () -> waitingListService.removeFromWaitingList(null, member);
+        Executable assertThrowsAct4 = () -> waitingListService.getFromWaitingList(null);
 
         // Assert
         assertThrows(EquipmentIsNullException.class, assertThrowsAct);
         assertThrows(EquipmentIsNullException.class, assertThrowsAct2);
         assertThrows(EquipmentIsNullException.class, assertThrowsAct3);
         assertThrows(EquipmentIsNullException.class, assertThrowsAct4);
+    }
+
+    @Test
+    public void shouldReturnNextMemberFromRepository() {
+        // Arrange
+        WaitingListRepository waitingListRepository = mock(WaitingListRepository.class);
+
+        WaitingListService waitingListService = new WaitingListService(waitingListRepository);
+
+        Equipment equipment = new SkiSet("Fake", true, 30);
+        Member member = new Member("Fake", MemberStatus.ACTIVE);
+
+        // Act
+        when(waitingListRepository.getNextMemberInQueue(equipment)).thenReturn(member);
+
+        Member nextMemberInQueue = waitingListService.getFromWaitingList(equipment);
+
+        // Assert
+        assertEquals(member, nextMemberInQueue);
     }
 }
