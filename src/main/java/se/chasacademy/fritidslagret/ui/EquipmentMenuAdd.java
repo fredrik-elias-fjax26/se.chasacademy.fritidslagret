@@ -10,7 +10,7 @@ public class EquipmentMenuAdd {
         this.equipmentService = equipmentService;
     }
 
-    protected void addEquipment() {
+     void addEquipment() {
         IO.println("\nNu lägger vi till inventarie:");
         for (int i = 0; i < EquipmentTypes.values().length; i++) {
             IO.println("\t" + (i + 1) +". " + EquipmentTypes.values()[i].getDisplayName());

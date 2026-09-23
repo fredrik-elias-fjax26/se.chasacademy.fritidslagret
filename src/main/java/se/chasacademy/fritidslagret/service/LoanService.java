@@ -20,13 +20,15 @@ public class LoanService {
     private final LoanRepository loanRepository;
     private final MemberService memberService;
     private final EquipmentService equipmentService;
+    private final WaitingListService waitingListService;
     private final LoanRules loanRules;
     private final LoanPolicy loanPolicy;
 
-    public LoanService(LoanRepository loanRepository ,MemberService memberService, EquipmentService equipmentService, Clock clock) {
+    public LoanService(LoanRepository loanRepository ,MemberService memberService, EquipmentService equipmentService, WaitingListService waitingListService, Clock clock) {
         this.clock = clock;
         this.memberService = memberService;
         this.equipmentService = equipmentService;
+        this.waitingListService = waitingListService;
         this.loanRepository = loanRepository;
         loanPolicy = new LoanPolicy();
         loanRules = new LoanRules(memberService, equipmentService);
@@ -57,16 +59,18 @@ public class LoanService {
         return loan;
     }
 
-    public boolean returnLoan(Loan loan) {
-        if (!loan.isLoanActive()) {
-            throw new LoanAlreadyReturned("Lånet redan återlämnat!");
-        }
+    public Member returnLoan(Loan loan) {
         Equipment returnedEquipment = loan.getEquipment();
 
         loan.setLoanActive(false);
         memberService.removeFromActiveLoans(loan.getMember());
         returnedEquipment.setAvailable(true);
-        return true;
+
+        if (waitingListService.isMembersInQueueForEquipment(returnedEquipment)) {
+            return waitingListService.getFromWaitingList(returnedEquipment);
+        }
+
+        return null;
     }
 
     public Loan getLoanById(int id) {
@@ -95,6 +99,18 @@ public class LoanService {
             return loan.getDateOfReturn().isBefore(LocalDate.now(clock));
         }
         return false;
+    }
+
+    public Map<Integer, Loan> getExpiredLoans() {
+        Map<Integer, Loan> expiredLoanList = new HashMap<>();
+
+        for (Loan loan : loanRepository.getLoanDatabase().values()) {
+            if (loan.getDateOfReturn().isBefore(LocalDate.now(clock) )){
+                int id = loan.getLoanId();
+                expiredLoanList.put(id , loan);
+            }
+        }
+        return expiredLoanList;
     }
 
 }

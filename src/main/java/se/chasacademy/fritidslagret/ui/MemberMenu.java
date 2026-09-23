@@ -3,10 +3,13 @@ package se.chasacademy.fritidslagret.ui;
 import se.chasacademy.fritidslagret.service.MemberService;
 
 public class MemberMenu {
+    private final MemberService memberService;
+    
+    public MemberMenu(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
-    protected MemberMenu(MemberService memberService) {}
-
-    protected void memberMenu() {
+     void memberMenu() {
         while (true) {
             // Main-menu
             IO.println("Medlemskap\n-----------------");

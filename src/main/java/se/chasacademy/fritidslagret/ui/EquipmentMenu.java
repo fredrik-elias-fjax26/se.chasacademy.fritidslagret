@@ -14,7 +14,7 @@ public class EquipmentMenu {
         this.equipmentMenuList = new EquipmentMenuList(equipmentService);
     }
     //Main-EquipmentMenu-loop
-    protected void equipmentMenu() {
+    void equipmentMenu() {
         while (true) {
             try {
                 // Main-menu
