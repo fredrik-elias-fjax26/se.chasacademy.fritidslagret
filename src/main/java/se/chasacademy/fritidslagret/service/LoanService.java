@@ -59,7 +59,10 @@ public class LoanService {
         return loan;
     }
 
-    public Member returnLoan(Loan loan) {
+    public Loan returnLoan(Loan loan) {
+        if (!loan.isLoanActive()) {
+            throw new LoanAlreadyReturned("Lånet redan återlämnat!");
+        }
         Equipment returnedEquipment = loan.getEquipment();
 
         loan.setLoanActive(false);
@@ -67,7 +70,18 @@ public class LoanService {
         returnedEquipment.setAvailable(true);
 
         if (waitingListService.isMembersInQueueForEquipment(returnedEquipment)) {
-            return waitingListService.getFromWaitingList(returnedEquipment);
+            int equipmentId = loan.getEquipment().getEquipmentId();
+            Loan newLoan;
+            while (returnedEquipment.isAvailable() && waitingListService.isMembersInQueueForEquipment(returnedEquipment)) {
+                Member nextMemberInQueue = waitingListService.getFromWaitingList(returnedEquipment);
+                try {
+                    newLoan = startLoan(equipmentId, nextMemberInQueue);
+                } catch (UserRevokedException | LoanMaximumLimitException e) {
+                    //Don't do anything if thrown as we are iterating through members in quuee until a member can loan
+                    continue;
+                }
+                return newLoan;
+            }
         }
 
         return null;
@@ -99,18 +113,6 @@ public class LoanService {
             return loan.getDateOfReturn().isBefore(LocalDate.now(clock));
         }
         return false;
-    }
-
-    public Map<Integer, Loan> getExpiredLoans() {
-        Map<Integer, Loan> expiredLoanList = new HashMap<>();
-
-        for (Loan loan : loanRepository.getLoanDatabase().values()) {
-            if (loan.getDateOfReturn().isBefore(LocalDate.now(clock) )){
-                int id = loan.getLoanId();
-                expiredLoanList.put(id , loan);
-            }
-        }
-        return expiredLoanList;
     }
 
 }

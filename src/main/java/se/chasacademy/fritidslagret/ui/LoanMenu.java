@@ -40,10 +40,11 @@ public class LoanMenu {
                     switch (choice) {
                         case 1 -> loanMenuAdd.addLoan();
                         case 2 -> loanMenuList.listLoans();
-                        case 3 -> loanMenuSearch.searchLoanByLoanId();
-                        case 4 -> loanMenuSearch.searchLoansByMemberName();
-                        case 5 -> loanMenuReturn.returnLoan();
-                        case 6 -> {
+                        case 3 -> loanMenuList.listDelayedLoans();
+                        case 4 -> loanMenuSearch.searchLoanByLoanId();
+                        case 5 -> loanMenuSearch.searchLoansByMemberName();
+                        case 6 -> loanMenuReturn.returnLoan();
+                        case 7 -> {
                             return;
                         }
                     }

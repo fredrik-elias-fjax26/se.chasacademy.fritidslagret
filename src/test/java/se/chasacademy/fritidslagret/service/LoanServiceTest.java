@@ -34,7 +34,9 @@ public class LoanServiceTest {
 
         EquipmentService equipmentService = new EquipmentService(equipmentRepository);
         MemberService memberService = new MemberService(memberRepository);
-        LoanService loanService = new LoanService(loanRepository ,memberService, equipmentService, Clock.systemUTC());
+        WaitingListService waitingListService = mock(WaitingListService.class);
+
+        LoanService loanService = new LoanService(loanRepository ,memberService, equipmentService, waitingListService, Clock.systemUTC());
 
         String equipmentName = "Hjälm";
         int maxLoanDays = 3;
@@ -60,7 +62,9 @@ public class LoanServiceTest {
 
         EquipmentService equipmentService = new EquipmentService(EquipmentRepository.getInstance());
         MemberService memberService = new MemberService(memberRepository);
-        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, Clock.systemUTC());
+        WaitingListService waitingListService = mock(WaitingListService.class);
+
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, Clock.systemUTC());
 
         Member member = mock(Member.class);
         Member member1 = mock(Member.class);
@@ -114,6 +118,7 @@ public class LoanServiceTest {
         LoanRepository loanRepository = mock(LoanRepository.class);
         MemberService memberService = mock(MemberService.class);
         EquipmentService equipmentService = mock(EquipmentService.class);
+        WaitingListService waitingListService = mock(WaitingListService.class);
         Clock clock = mock(Clock.class);
 
         Member member = new Member(fakeName, MemberStatus.ACTIVE);
@@ -126,7 +131,7 @@ public class LoanServiceTest {
         when(clock.instant()).thenReturn(acquiredDate.plusDays(maxLoanDays + 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
-        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, clock);
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
 
         //Assert
         assertTrue(loanService.isDelayed(loan));
@@ -143,9 +148,11 @@ public class LoanServiceTest {
 
         Member member = new Member(fakeName, MemberStatus.ACTIVE);
         Equipment equipment = new SkiSet(fakeName, true, maxLoanDays);
-        MemberService memberService = mock(MemberService.class);
 
+        MemberService memberService = mock(MemberService.class);
         EquipmentService equipmentService = mock(EquipmentService.class);
+        WaitingListService waitingListService = mock(WaitingListService.class);
+
         Clock clock = mock(Clock.class);
 
         Loan loan1 = new Loan(member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
@@ -154,12 +161,115 @@ public class LoanServiceTest {
         when(clock.instant()).thenReturn(acquiredDate.plusDays(maxLoanDays).atStartOfDay(ZoneId.systemDefault()).toInstant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
-        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, clock);
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
 
         //Assert
         assertFalse(loanService.isDelayed(loan1));
         verify(clock).instant();
     }
 
+    @Test
+    public void shouldReturnALoanWhenEquipmentHasQueue() {
+        // Arrange
+        WaitingListService waitingListService = mock(WaitingListService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        MemberService memberService = mock(MemberService.class);
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        Clock clock = mock(Clock.class);
+
+        Member member = new Member("Member", MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet("fakeName", true, 3);
+        Loan loanToReturn = new Loan(member, equipment, LocalDate.now(), LocalDate.now().plusDays(3), true);
+        Member nextMemberInQueue = new Member("Next Member", MemberStatus.ACTIVE);
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
+
+        // Act
+        when(waitingListService.isMembersInQueueForEquipment(equipment)).thenReturn(true);
+        when(waitingListService.getFromWaitingList(equipment)).thenReturn(nextMemberInQueue);
+        when(equipmentService.getEquipmentById(equipment.getEquipmentId())).thenReturn(equipment);
+        when(clock.instant()).thenReturn(Clock.systemUTC().instant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+
+        Loan loanFromQueue = loanService.returnLoan(loanToReturn);
+        Member memberFromQueue = loanFromQueue.getMember();
+
+        // Assert
+        assertEquals(nextMemberInQueue, memberFromQueue);
+    }
+
+    @Test
+    public void shouldReturnNullIfQueueIsEmpty() {
+        //Arrange
+        WaitingListService waitingListService = mock(WaitingListService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        MemberService memberService = mock(MemberService.class);
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        Clock clock = mock(Clock.class);
+
+        Member member = new Member("fakeName", MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet("fakeName", true, 3);
+        Loan loan = new Loan(member, equipment, LocalDate.now(), LocalDate.now().plusDays(3), true);
+
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
+
+        // Act
+        when(waitingListService.isMembersInQueueForEquipment(equipment)).thenReturn(false);
+
+        Loan nullableAct = loanService.returnLoan(loan);
+
+        // Assert
+        assertNull(nullableAct);
+
+    }
+
+    @Test
+    public void shouldIncreaseMemberActiveLoans() {
+        // Arrange
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        MemberService memberService = mock(MemberService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        WaitingListService waitingListService = mock(WaitingListService.class);
+        Clock clock = Clock.systemUTC();
+
+        Member member = new Member("fakeName", MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet("fakeName", true, 3);
+        Loan loan = new Loan(member, equipment, LocalDate.now(), LocalDate.now().plusDays(1), true);
+        int equipmentId = equipment.getEquipmentId();
+
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
+
+        // Act
+        when(equipmentService.getEquipmentById(equipmentId)).thenReturn(equipment);
+        when(loanRepository.addLoan(loan)).thenReturn(loan);
+        loanService.startLoan(equipmentId, member);
+
+        // Assert
+        verify(memberService).addToActiveLoans(member);
+
+    }
+
+    @Test
+    public void shouldDecreaseMembersActiveLoansWhenLoanIsReturned() {
+        // Arrange
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        MemberService memberService = mock(MemberService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        WaitingListService waitingListService = mock(WaitingListService.class);
+        Clock clock = mock(Clock.class);
+
+        Member member = new Member("fakeName", MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet("fakeName", true, 3);
+        Loan loan = new Loan(member, equipment, LocalDate.now(), LocalDate.now().plusDays(1), true);
+
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
+
+        // Act
+
+        loanService.returnLoan(loan);
+
+        // Assert
+        verify(memberService).removeFromActiveLoans(member);
+
+    }
 
 }

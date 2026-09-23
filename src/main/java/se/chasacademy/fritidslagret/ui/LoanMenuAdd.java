@@ -13,7 +13,7 @@ public class LoanMenuAdd {
     private final EquipmentService equipmentService;
     private final MemberService memberService;
 
-    protected LoanMenuAdd(LoanService loanService,  EquipmentService equipmentService, MemberService memberService) {
+    LoanMenuAdd(LoanService loanService, EquipmentService equipmentService, MemberService memberService) {
         this.loanService = loanService;
         this.equipmentService = equipmentService;
         this.memberService = memberService;
