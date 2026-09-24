@@ -1,23 +1,25 @@
 package se.chasacademy.fritidslagret.ui;
 
+import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
+import se.chasacademy.fritidslagret.service.MemberService;
 
 public class LoanMenu {
     LoanMenuList loanMenuList;
     LoanMenuAdd loanMenuAdd;
     LoanMenuSearch loanMenuSearch;
-    LoanMenuDelete loanMenuDelete;
+    LoanMenuReturn loanMenuReturn;
     LoanService loanService;
 
-    protected LoanMenu(LoanService loanService) {
+     LoanMenu(LoanService loanService, EquipmentService equipmentService, MemberService memberService) {
         this.loanMenuList = new LoanMenuList(loanService);
-        this.loanMenuAdd = new LoanMenuAdd(loanService);
+        this.loanMenuAdd = new LoanMenuAdd(loanService, equipmentService, memberService);
         this.loanMenuSearch = new LoanMenuSearch(loanService);
-        this.loanMenuDelete = new LoanMenuDelete(loanService);
+        this.loanMenuReturn = new LoanMenuReturn(loanService);
         this.loanService = loanService;
     }
     // EquipmentMenu
-        protected void loanMenu() {
+         void loanMenu() {
             while (true) {
                 try {
                     // Main-menu
@@ -26,9 +28,10 @@ public class LoanMenu {
                         1. Lägg till Lån
                         2. Lista Aktiva Lån
                         3. Lista Försenade Lån
-                        4. Sök Lån
-                        5. Återlämna Lån
-                        6. Tillbaka""");
+                        4. Sök Lån efter Låne-Id
+                        5. Sök Lån efter Medlemsnamn
+                        6. Återlämna Lån
+                        7. Tillbaka""");
 
                     // Input main-menu-choice
                     int choice = Integer.parseInt(IO.readln(">"));
@@ -37,9 +40,9 @@ public class LoanMenu {
                     switch (choice) {
                         case 1 -> loanMenuAdd.addLoan();
                         case 2 -> loanMenuList.listLoans();
-                        case 3 -> loanMenuSearch.searchLoanById();
-                        case 4 -> loanMenuSearch.searchLoansByName();
-                        case 5 -> loanMenuDelete.deleteLoan();
+                        case 3 -> loanMenuSearch.searchLoanByLoanId();
+                        case 4 -> loanMenuSearch.searchLoansByMemberName();
+                        case 5 -> loanMenuReturn.returnLoan();
                         case 6 -> {
                             return;
                         }

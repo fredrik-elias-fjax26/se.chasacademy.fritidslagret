@@ -4,7 +4,7 @@ import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
 import se.chasacademy.fritidslagret.repository.EquipmentRepository;
 
-import java.util.Map;
+import java.util.*;
 
 public class EquipmentService {
     private final EquipmentRepository equipmentRepository;
@@ -14,8 +14,7 @@ public class EquipmentService {
     }
     //Setters
     public Equipment addEquipment(String name, boolean available, int maxLoanDays, EquipmentTypes type) {
-        Equipment createdEquipment =  equipmentRepository.addEquipment(type.getCreator().create(name, available, maxLoanDays));
-        return createdEquipment;
+        return equipmentRepository.addEquipment(type.getCreator().create(name, available, maxLoanDays));
     }
 
 
@@ -29,6 +28,10 @@ public class EquipmentService {
 
     public Map<Integer, Equipment> getAllEquipment() {
         return equipmentRepository.getEquipmentDatabase();
+    }
+
+    public SortedMap<Integer, Equipment> getAllEquipmentsSortedById() {
+        return new TreeMap<>(getAllEquipment());
     }
 
     public Equipment getEquipmentByName(String name) {
@@ -52,5 +55,16 @@ public class EquipmentService {
     public boolean getEquipmentLoanableStatus(int id) {
         Equipment equipment = getEquipmentById(id);
         return equipment.isAvailable();
+    }
+
+    public Map<Integer, Equipment> searchForEquipmentByName(String srcStr) {
+        SortedMap<Integer, Equipment> equipmentMap = new TreeMap<>();
+
+        for (Equipment equipment : getAllEquipment().values()) {
+            if (equipment.getEquipmentName().toLowerCase().contains(srcStr.toLowerCase())) {
+                equipmentMap.put(equipment.getEquipmentId(), equipment);
+            }
+        }
+        return equipmentMap;
     }
 }

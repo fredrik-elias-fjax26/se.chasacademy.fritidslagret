@@ -12,7 +12,7 @@ public class MainMenu {
     public MainMenu(LoanService loanService, MemberService memberService, EquipmentService equipmentService) {
         this.equipmentMenu = new EquipmentMenu(equipmentService);
         this.memberMenu = new MemberMenu(memberService);
-        this.loanMenu = new LoanMenu(loanService);
+        this.loanMenu = new LoanMenu(loanService, equipmentService, memberService);
     }
 
     public void mainMenu() {

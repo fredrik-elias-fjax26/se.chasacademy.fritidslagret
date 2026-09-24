@@ -3,15 +3,15 @@ package se.chasacademy.fritidslagret.ui;
 import se.chasacademy.fritidslagret.service.LoanService;
 
 public class LoanMenuSearch {
-    protected LoanService loanService;
+    private final LoanService loanService;
 
-    protected LoanMenuSearch(LoanService loanService) {
+    LoanMenuSearch(LoanService loanService) {
         this.loanService = loanService;
     }
 
-    protected void searchLoanById(){
+    void searchLoanByLoanId(){
     }
 
-    protected void searchLoansByName(){
+    void searchLoansByMemberName(){
     }
 }

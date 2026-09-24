@@ -7,17 +7,16 @@ import se.chasacademy.fritidslagret.repository.MemberRepository;
 import java.util.Map;
 
 public class MemberService {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
     //Metoder
-    public Member addMember(String name, MemberStatus memberStatus) {
+    public void addMember(String name, MemberStatus memberStatus) {
         Member newMember = new Member(name, memberStatus);
         memberRepository.addMember(newMember);
-        return newMember;
     }
 
     public Map<Integer, Member> getMembers() {
@@ -45,7 +44,7 @@ public class MemberService {
     }
 
     public int getActiveLoans(Member member) {
-        return member.getActiveLoans();
+            return member.getActiveLoans();
     }
 
 }

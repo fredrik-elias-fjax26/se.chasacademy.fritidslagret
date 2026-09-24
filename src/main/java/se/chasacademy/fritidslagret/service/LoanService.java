@@ -1,6 +1,7 @@
 package se.chasacademy.fritidslagret.service;
 
 import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
+import se.chasacademy.fritidslagret.exception.LoanAlreadyReturned;
 import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
 import se.chasacademy.fritidslagret.exception.UserRevokedException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
@@ -12,8 +13,7 @@ import se.chasacademy.fritidslagret.repository.LoanRepository;
 
 import java.time.Clock;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class LoanService {
     private final Clock clock;
@@ -38,7 +38,6 @@ public class LoanService {
         loanPolicy.checkLoanPolicy(member);
         loanRules.checkLoanRules(equipmentId, member);
 
-
         Equipment equipmentForLoan = equipmentService.getEquipmentById(equipmentId);
 
         LocalDate calculatedReturnDate = LocalDate.now(clock).plusDays(equipmentForLoan.getMaxLoanDays());
@@ -46,7 +45,7 @@ public class LoanService {
 
         Loan loan = new Loan(
                 member,
-                equipmentService.getEquipmentById(equipmentId),
+                equipmentForLoan,
                 loanDate,
                 calculatedReturnDate,
                 true
@@ -54,28 +53,48 @@ public class LoanService {
 
         memberService.addToActiveLoans(member);
         loanRepository.addLoan(loan);
-        equipmentService.getEquipmentById(equipmentId).setAvailable(false);
+        equipmentForLoan.setAvailable(false);
         return loan;
+    }
+
+    public boolean returnLoan(Loan loan) {
+        if (!loan.isLoanActive()) {
+            throw new LoanAlreadyReturned("Lånet redan återlämnat!");
+        }
+        Equipment returnedEquipment = loan.getEquipment();
+
+        loan.setLoanActive(false);
+        memberService.removeFromActiveLoans(loan.getMember());
+        returnedEquipment.setAvailable(true);
+        return true;
     }
 
     public Loan getLoanById(int id) {
         return loanRepository.getLoanDatabase().get(id);
     }
 
-    public boolean isDelayed(Loan loan){
-        return loan.getDateOfReturn().isBefore(LocalDate.now(clock));
-    }
+    public List<Loan> getDelayedLoansSortedByDate() {
+        return loanRepository.getLoanDatabase().values().stream()
+                .filter(this::isDelayed)
+                .sorted(Comparator.comparing(Loan::getDateOfReturn))
+                .toList();
+        }
 
-    public Map<Integer, Loan> getExpiredLoans() {
-        Map<Integer, Loan> expiredLoanList = new HashMap<>();
-
+    public SortedMap<Integer, Loan> getAllActiveLoansSortedById() {
+        SortedMap<Integer, Loan> allActiveLoans = new TreeMap<>();
         for (Loan loan : loanRepository.getLoanDatabase().values()) {
-            if (loan.getDateOfReturn().isBefore(LocalDate.now(clock) )){
-                int id = loan.getLoanId();
-                expiredLoanList.put(id , loan);
+            if (loan.isLoanActive()) {
+                allActiveLoans.put(loan.getLoanId(), loan);
             }
         }
-        return expiredLoanList;
+        return allActiveLoans;
+    }
+
+    public boolean isDelayed(Loan loan){
+        if (loan.isLoanActive()) {
+            return loan.getDateOfReturn().isBefore(LocalDate.now(clock));
+        }
+        return false;
     }
 
 }
