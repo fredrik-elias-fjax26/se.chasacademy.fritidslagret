@@ -20,12 +20,12 @@ public class LoanRules {
     public void checkLoanRules(int equipmentId, Member member)
             throws EquipmentNotAvailableException, LoanMaximumLimitException {
         if (memberService.getActiveLoans(member) >= 3)
-            throw new LoanMaximumLimitException("Maximalt antal lån redan uppnådd");
+            throw new LoanMaximumLimitException();
         if (!equipmentService.getEquipmentById(equipmentId).isAvailable()) {
-            throw new EquipmentNotAvailableException("Produkten inte tillgänglig för utlåning");
+            throw new EquipmentNotAvailableException();
         }
         if (member.getMemberStatus() !=  MemberStatus.ACTIVE) {
-            throw new UserInactiveException("Medlemmen har ett inaktivt medlemskap!");
+            throw new UserInactiveException();
         }
     }
 }

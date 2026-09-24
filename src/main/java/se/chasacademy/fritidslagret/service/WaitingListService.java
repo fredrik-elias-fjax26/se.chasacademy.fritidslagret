@@ -30,25 +30,14 @@ public class WaitingListService {
         return waitingListRepository.getWaitingListForEquipment(equipment);
     }
 
-    public boolean isMembersInQueueForEquipment(Equipment equipment) throws QueueIsNullException, EquipmentIsNullException {
-        checkForEquipmentIsNullAndThrow(equipment, null);
-        try {
-            return !getWaitingListByEquipment(equipment).isEmpty();
-        } catch (NullPointerException e) {
-            throw new QueueIsNullException(
-                    String.format("Kontakta utvecklaren, Queue kan inte vara null. Felmeddelande: %s",
-                            e.getMessage()
-                    )
-            );
-        }
+    public boolean isMembersInQueueForEquipment(Equipment equipment) throws EquipmentIsNullException {
+        checkForEquipmentIsNullAndThrow(equipment);
+        return !getWaitingListByEquipment(equipment).isEmpty();
     }
 
-    private void checkForEquipmentIsNullAndThrow(Equipment equipment, String message) throws EquipmentIsNullException {
-        if (message == null) {
-            message = "Equipment kan inte vara null";
-        }
+    private void checkForEquipmentIsNullAndThrow(Equipment equipment) throws EquipmentIsNullException {
         if (equipment == null) {
-            throw new EquipmentIsNullException(message);
+            throw new EquipmentIsNullException();
         }
     }
 }

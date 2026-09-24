@@ -32,7 +32,7 @@ public class LoanMenuAdd {
 
                     verifiedMember = memberService.getMember(memberIdToCreateLoan);
                     if (verifiedMember == null) {
-                        throw new MemberIsNullException("Användaren finns inte! Försök igen!!");
+                        throw new MemberIsNullException();
                     }
                     break;
 
@@ -61,7 +61,7 @@ public class LoanMenuAdd {
                     try {
                         Equipment verifiedEquipment = equipmentService.getEquipmentById(equipmentId);
                         if (verifiedEquipment == null) {
-                            throw new EquipmentIsNullException("Artikeln finns inte, Försök igen!");
+                            throw new EquipmentIsNullException();
                         }
                         verifiedEquipmentId = equipmentId;
                         break;

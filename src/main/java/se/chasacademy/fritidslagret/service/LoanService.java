@@ -61,7 +61,7 @@ public class LoanService {
 
     public Loan returnLoan(Loan loan) {
         if (!loan.isLoanActive()) {
-            throw new LoanAlreadyReturned("Lånet redan återlämnat!");
+            throw new LoanAlreadyReturned();
         }
         Equipment returnedEquipment = loan.getEquipment();
 
