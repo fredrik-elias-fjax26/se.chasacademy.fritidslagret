@@ -9,20 +9,18 @@ public class LoanMenu {
     LoanMenuAdd loanMenuAdd;
     LoanMenuSearch loanMenuSearch;
     LoanMenuReturn loanMenuReturn;
-    LoanService loanService;
 
      LoanMenu(LoanService loanService, EquipmentService equipmentService, MemberService memberService) {
         this.loanMenuList = new LoanMenuList(loanService);
         this.loanMenuAdd = new LoanMenuAdd(loanService, equipmentService, memberService);
         this.loanMenuSearch = new LoanMenuSearch(loanService);
         this.loanMenuReturn = new LoanMenuReturn(loanService);
-        this.loanService = loanService;
     }
-    // EquipmentMenu
+    // LoanMenu
          void loanMenu() {
             while (true) {
                 try {
-                    // Main-menu
+                    // Lån-menu
                     IO.println("Lånealternativ\n-----------------");
                     IO.println("""
                         1. Lägg till Lån
@@ -36,7 +34,7 @@ public class LoanMenu {
                     // Input main-menu-choice
                     int choice = Integer.parseInt(IO.readln(">"));
 
-                    // Main-menu-switch
+                    // Lån-menu-switch
                     switch (choice) {
                         case 1 -> loanMenuAdd.addLoan();
                         case 2 -> loanMenuList.listLoans();
@@ -49,7 +47,7 @@ public class LoanMenu {
                         }
                     }
                 } catch (NumberFormatException e) {
-                    IO.println("Menynvalet måste vara en siffra");
+                    IO.println("Menyvalet måste vara en siffra");
                 }
             }
         }

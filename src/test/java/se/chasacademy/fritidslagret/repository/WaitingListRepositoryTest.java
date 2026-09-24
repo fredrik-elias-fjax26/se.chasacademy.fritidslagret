@@ -76,6 +76,20 @@ public class WaitingListRepositoryTest {
     }
 
     @Test
+    public void shouldReturnEmptyQueueForEquipmentNobodyHasEverQueuedFor() {
+        // Arrange
+        WaitingListRepository waitingListRepository = WaitingListRepository.getInstance();
+        Equipment equipment = new SkiSet("Fake", true, 30);
+
+        // Act
+        Queue<Member> queue = waitingListRepository.getWaitingListForEquipment(equipment);
+
+        // Assert
+        assertNotNull(queue);
+        assertTrue(queue.isEmpty());
+    }
+
+    @Test
     public void whenNoMembersInQueueAndRunsPollShouldReturnNull () {
         // Arrange
         WaitingListRepository waitingListRepository = WaitingListRepository.getInstance();

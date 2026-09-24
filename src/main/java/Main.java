@@ -17,18 +17,19 @@ void main() {
     MemberRepository memberRepository = MemberRepository.getInstance();
     LoanRepository loanRepository = LoanRepository.getInstance();
     WaitingListRepository waitingListRepository = WaitingListRepository.getInstance();
+    Clock clock = Clock.systemUTC();
 
     MemberService memberService = new MemberService(memberRepository);
     EquipmentService equipmentService = new EquipmentService(equipmentRepository);
     WaitingListService waitingListService = new WaitingListService(waitingListRepository);
 
-    LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, Clock.systemUTC());
+    LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
 
     // Startup
     Startup startup = new Startup(equipmentService, memberService, loanService);
     startup.startUp();
     //fritidslagret.Main-Menu-loop
-    MainMenu mainMenu = new MainMenu(loanService, memberService, equipmentService);
+    MainMenu mainMenu = new MainMenu(loanService, memberService, equipmentService, waitingListService);
     mainMenu.mainMenu();
 }
 

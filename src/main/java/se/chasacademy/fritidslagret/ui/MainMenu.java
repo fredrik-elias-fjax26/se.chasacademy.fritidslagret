@@ -3,6 +3,7 @@ package se.chasacademy.fritidslagret.ui;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
+import se.chasacademy.fritidslagret.service.WaitingListService;
 
 public class MainMenu {
     private final LoanMenu loanMenu;
@@ -10,11 +11,11 @@ public class MainMenu {
     private final MemberMenu memberMenu;
     private final WaitingListMenu waitingListMenu;
 
-    public MainMenu(LoanService loanService, MemberService memberService, EquipmentService equipmentService) {
+    public MainMenu(LoanService loanService, MemberService memberService, EquipmentService equipmentService, WaitingListService waitingListService) {
         this.equipmentMenu = new EquipmentMenu(equipmentService);
         this.memberMenu = new MemberMenu(memberService);
         this.loanMenu = new LoanMenu(loanService, equipmentService, memberService);
-        this.waitingListMenu = new WaitingListMenu();
+        this.waitingListMenu = new WaitingListMenu(waitingListService);
     }
 
     public void mainMenu() {

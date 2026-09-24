@@ -2,10 +2,7 @@ package se.chasacademy.fritidslagret.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
-import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
-import se.chasacademy.fritidslagret.exception.UserInactiveException;
-import se.chasacademy.fritidslagret.exception.UserRevokedException;
+import se.chasacademy.fritidslagret.exception.*;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
 import se.chasacademy.fritidslagret.model.equipment.SkiSet;
@@ -16,9 +13,10 @@ import se.chasacademy.fritidslagret.repository.EquipmentRepository;
 import se.chasacademy.fritidslagret.repository.LoanRepository;
 import se.chasacademy.fritidslagret.repository.MemberRepository;
 
-import java.time.Clock;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -81,7 +79,6 @@ public class LoanServiceTest {
         equipmentService.addEquipment("Sko", true, 30, EquipmentTypes.SKISET);
         equipmentService.addEquipment("Sko", true, 30, EquipmentTypes.SKISET);
 
-        // Act
         when(memberLastAvailableLoan.getActiveLoans()).thenReturn(2);
         when(memberTooManyLoans.getActiveLoans()).thenReturn(3);
         when(member.getMemberStatus()).thenReturn(MemberStatus.ACTIVE);
@@ -89,6 +86,7 @@ public class LoanServiceTest {
         when(memberInactive.getMemberStatus()).thenReturn(MemberStatus.INACTIVE);
         when(memberRevoked.getMemberStatus()).thenReturn(MemberStatus.REVOKED);
 
+        // Act
         // Valid Loans
         loanService.startLoan(startTestUniqueEquipmentId, member);
         loanService.startLoan(startTestUniqueEquipmentId + 3, memberLastAvailableLoan);
@@ -127,19 +125,22 @@ public class LoanServiceTest {
 
         Loan loan = new Loan(member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
 
-        //Act
         when(clock.instant()).thenReturn(acquiredDate.plusDays(maxLoanDays + 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
         LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
 
+        //Act
+        boolean isDelayed = loanService.isDelayed(loan);
+
         //Assert
-        assertTrue(loanService.isDelayed(loan));
+        assertTrue(isDelayed);
         verify(clock).instant();
     }
 
     @Test
     public void checkLoanServiceNotReportsLoanExpiredWhenOnSameDateAsReturnDateTest(){
+        //Arrange
         int maxLoanDays = 3;
         LocalDate acquiredDate = LocalDate.now();
         String fakeName = "fakeName";
@@ -157,14 +158,16 @@ public class LoanServiceTest {
 
         Loan loan1 = new Loan(member, equipment, acquiredDate, acquiredDate.plusDays(maxLoanDays), true);
 
-        //Act
         when(clock.instant()).thenReturn(acquiredDate.plusDays(maxLoanDays).atStartOfDay(ZoneId.systemDefault()).toInstant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
         LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
 
+        //Act
+        boolean isDelayed = loanService.isDelayed(loan1);
+
         //Assert
-        assertFalse(loanService.isDelayed(loan1));
+        assertFalse(isDelayed);
         verify(clock).instant();
     }
 
@@ -183,13 +186,13 @@ public class LoanServiceTest {
         Member nextMemberInQueue = new Member("Next Member", MemberStatus.ACTIVE);
         LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
 
-        // Act
         when(waitingListService.isMembersInQueueForEquipment(equipment)).thenReturn(true);
         when(waitingListService.getFromWaitingList(equipment)).thenReturn(nextMemberInQueue);
         when(equipmentService.getEquipmentById(equipment.getEquipmentId())).thenReturn(equipment);
         when(clock.instant()).thenReturn(Clock.systemUTC().instant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
+        // Act
         Loan loanFromQueue = loanService.returnLoan(loanToReturn);
         Member memberFromQueue = loanFromQueue.getMember();
 
@@ -212,9 +215,9 @@ public class LoanServiceTest {
 
         LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
 
-        // Act
         when(waitingListService.isMembersInQueueForEquipment(equipment)).thenReturn(false);
 
+        // Act
         Loan nullableAct = loanService.returnLoan(loan);
 
         // Assert
@@ -238,9 +241,10 @@ public class LoanServiceTest {
 
         LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
 
-        // Act
         when(equipmentService.getEquipmentById(equipmentId)).thenReturn(equipment);
         when(loanRepository.addLoan(loan)).thenReturn(loan);
+
+        // Act
         loanService.startLoan(equipmentId, member);
 
         // Assert
@@ -272,4 +276,97 @@ public class LoanServiceTest {
 
     }
 
+    @Test
+    public void shouldReturnBothDelayedLoansWhenOnSameDay() {
+        // Arrange
+        Clock clock = mock(Clock.class);
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        MemberService memberService = mock(MemberService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        WaitingListService waitingListService = mock(WaitingListService.class);
+
+        LocalDate fixedReturnDate = LocalDate.of(2021, 1, 10);
+
+        Equipment equipment = new SkiSet("fakeName", true, 3);
+        Equipment equipment2 = new SkiSet("fakeName", true, 3);
+
+        Member member = new Member("fakeName", MemberStatus.ACTIVE);
+        Member member2 = new Member("fakeName", MemberStatus.ACTIVE);
+
+        LoanService loanService = new LoanService(loanRepository,memberService,equipmentService, waitingListService, clock);
+
+        Loan firstLoanDelayed = new Loan(member, equipment, fixedReturnDate.minusDays(7), fixedReturnDate, true);
+        Loan secondLoanDelayed = new Loan(member2, equipment2, fixedReturnDate.minusDays(7), fixedReturnDate, true);
+
+        Map<Integer, Loan> loans = new HashMap<>();
+        loans.put(0, firstLoanDelayed);
+        loans.put(1, secondLoanDelayed);
+
+        when(clock.instant()).thenReturn(fixedReturnDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+
+        when(loanRepository.getLoanDatabase()).thenReturn(loans);
+
+        // Act
+
+        int numberOfLoansInList = loanService.getDelayedLoansSortedByDate().size();
+
+        // Assert
+        assertEquals(2, numberOfLoansInList);
+    }
+
+    @Test
+    public void shouldThrowLoanAlreadyReturnedIfTryingToReturnLoanTwice() {
+        // Arrange
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        MemberService memberService = mock(MemberService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        WaitingListService waitingListService = mock(WaitingListService.class);
+        Clock clock = Clock.systemUTC();
+
+        Member member = new Member("fakeName", MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet("fakeName", true, 3);
+
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
+
+        when(equipmentService.getEquipmentById(equipment.getEquipmentId())).thenReturn(equipment);
+
+        Loan loan = loanService.startLoan(equipment.getEquipmentId(), member);
+
+        loanService.returnLoan(loan);
+
+        // Act
+        Executable dualLoanReturnAct = () -> loanService.returnLoan(loan);
+
+        // Assert
+        assertThrows(LoanAlreadyReturned.class, dualLoanReturnAct);
+    }
+
+    @Test
+    public void shouldReturnCorrectDelayedDaysWhenPassingFromOneMonthToAnother() {
+        // Arrange
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        MemberService memberService = mock(MemberService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        WaitingListService waitingListService = mock(WaitingListService.class);
+        Clock clock = mock(Clock.class);
+
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
+
+        LocalDate fixedReturnDate = LocalDate.of(2021, 1, 31);
+
+        Member member = new Member("fakeName", MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet("fakeName", true, 3);
+
+        Loan loan = new Loan(member, equipment, fixedReturnDate.minusDays(1), fixedReturnDate, true);
+
+        when(clock.instant()).thenReturn(fixedReturnDate.plusDays(5).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+
+        // Act
+        long delayedDays = loanService.getDelayedDays(loan);
+
+        // Assert
+        assertEquals(5, delayedDays);
+    }
 }

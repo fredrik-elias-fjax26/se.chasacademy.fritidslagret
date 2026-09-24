@@ -23,35 +23,36 @@ public class WaitingListRepository {
 
     public Queue<Member> getWaitingListForEquipment(Equipment equipment) {
         if (equipment == null) {
-            throw new EquipmentIsNullException("Equipment är null");
+            throw new EquipmentIsNullException();
         }
-        return membersWaitingForEquipment.get(equipment);
+        return membersWaitingForEquipment.getOrDefault(equipment, new LinkedList<>());
     }
 
     public Member getNextMemberInQueue(Equipment equipment) {
         if (equipment == null) {
-            throw new EquipmentIsNullException("Equipment är null");
+            throw new EquipmentIsNullException();
         }
         return getWaitingListForEquipment(equipment).poll();
     }
 
     public Member addMemberToWaitingList(Equipment equipment, Member member) {
+        if (equipment == null) {
+            throw new EquipmentIsNullException();
+        }
+
+        if (member == null) {
+            throw new MemberIsNullException();
+        }
+
         if (!membersWaitingForEquipment.containsKey(equipment)) {
             membersWaitingForEquipment.put(equipment, new LinkedList<>());
         }
 
-        if (equipment == null) {
-            throw new EquipmentIsNullException("Equipment är null");
-        }
+        membersWaitingForEquipment.get(equipment).add(member);
+        return member;
+    }
 
-        if (member == null) {
-            throw new MemberIsNullException("Medlemmen är null");
-        }
-
-        if (membersWaitingForEquipment.get(equipment).add(member)) {
-            return member;
-        }
-
-        return null;
+    public Map<Equipment, Queue<Member>> getWaitingListMap() {
+            return membersWaitingForEquipment;
     }
 }

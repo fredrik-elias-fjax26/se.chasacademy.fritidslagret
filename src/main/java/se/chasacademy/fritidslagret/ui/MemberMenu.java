@@ -11,15 +11,15 @@ public class MemberMenu {
 
      void memberMenu() {
         while (true) {
-            // Main-menu
+            // Medlems-menu
             IO.println("Medlemskap\n-----------------");
             IO.println("""
                 Blank menu än så länge
                 6. Tillbaka""");
-            // Input main-menu-choice
+            // Input medlems-menu-choice
             int choice = Integer.parseInt(IO.readln(">"));
 
-            // Main-menu-switch
+            // Medlems-menu-switch
             switch (choice) {
                 case 6 -> {
                     return;

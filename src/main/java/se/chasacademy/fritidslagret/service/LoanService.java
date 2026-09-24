@@ -13,6 +13,7 @@ import se.chasacademy.fritidslagret.repository.LoanRepository;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class LoanService {
@@ -115,4 +116,12 @@ public class LoanService {
         return false;
     }
 
+    public Member putMemberInQueueForEquipment(Member member, Equipment equipment) {
+        return waitingListService.addToWaitingList(equipment, member);
+    }
+
+    public long getDelayedDays(Loan loan) {
+        LocalDate runDate = LocalDate.now(clock);
+        return ChronoUnit.DAYS.between(loan.getDateOfReturn() , runDate);
+    }
 }
