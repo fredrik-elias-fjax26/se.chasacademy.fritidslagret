@@ -3,16 +3,20 @@ package se.chasacademy.fritidslagret.ui;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
+import se.chasacademy.fritidslagret.service.StatisticsService;
 
 public class MainMenu {
     private final LoanMenu loanMenu;
     private final EquipmentMenu equipmentMenu;
     private final MemberMenu memberMenu;
+    private final StatisticsMenu statisticsMenu;
 
-    public MainMenu(LoanService loanService, MemberService memberService, EquipmentService equipmentService) {
+
+    public MainMenu(LoanService loanService, MemberService memberService, EquipmentService equipmentService, StatisticsService statisticsService) {
         this.equipmentMenu = new EquipmentMenu(equipmentService);
         this.memberMenu = new MemberMenu(memberService);
         this.loanMenu = new LoanMenu(loanService, equipmentService, memberService);
+        this.statisticsMenu = new StatisticsMenu(statisticsService);
     }
 
     public void mainMenu() {
@@ -24,7 +28,9 @@ public class MainMenu {
                         1. Utrustning
                         2. Medlemmar
                         3. Lån
-                        4. Avsluta""");
+                        4. Statistik
+                        5. Avsluta
+                        """);
 
                 // Input main-menu-choice
                 int choice = Integer.parseInt(IO.readln(">"));
@@ -34,7 +40,8 @@ public class MainMenu {
                     case 1 -> equipmentMenu.equipmentMenu();
                     case 2 -> memberMenu.memberMenu();
                     case 3 -> loanMenu.loanMenu();
-                    case 4 -> {
+                    case 4 -> statisticsMenu.statisticsMenu();
+                    case 5 -> {
                         return;
                     }
                 }

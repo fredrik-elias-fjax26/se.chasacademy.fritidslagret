@@ -23,6 +23,28 @@ public class LoanService {
     private final LoanRules loanRules;
     private final LoanPolicy loanPolicy;
 
+    public int getActiveLoanCount() {
+        return loanRepository.getLoanDatabase().size();
+    }
+    public Equipment getMostBorrowedEquipment() {
+        Map<Equipment, Integer> loanCounts = new HashMap<>();
+
+        for (Loan loan : loanRepository.getLoanDatabase().values()) {
+            Equipment equipment = loan.getEquipment();
+            loanCounts.merge(equipment, 1, Integer::sum);
+        }
+
+        Equipment mostBorrowed = null;
+        int maxCount = 0;
+        for (Map.Entry<Equipment, Integer> entry : loanCounts.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                mostBorrowed = entry.getKey();
+            }
+        }
+
+        return mostBorrowed;
+    }
     public LoanService(LoanRepository loanRepository ,MemberService memberService, EquipmentService equipmentService, Clock clock) {
         this.clock = clock;
         this.memberService = memberService;

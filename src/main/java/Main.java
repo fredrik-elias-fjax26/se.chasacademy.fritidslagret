@@ -6,6 +6,7 @@ import se.chasacademy.fritidslagret.repository.MemberRepository;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
+import se.chasacademy.fritidslagret.service.StatisticsService;
 import se.chasacademy.fritidslagret.ui.MainMenu;
 
 
@@ -18,12 +19,13 @@ void main() {
     MemberService memberService = new MemberService(memberRepository);
     EquipmentService equipmentService = new EquipmentService(equipmentRepository);
     LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, Clock.systemUTC());
+    StatisticsService statisticsService = new StatisticsService(equipmentService, loanService, memberService);
 
     // Startup
     Startup startup = new Startup(equipmentService, memberService, loanService);
     startup.startUp();
     //fritidslagret.Main-Menu-loop
-    MainMenu mainMenu = new MainMenu(loanService, memberService, equipmentService);
+    MainMenu mainMenu = new MainMenu(loanService, memberService, equipmentService, statisticsService);
     mainMenu.mainMenu();
 }
 
