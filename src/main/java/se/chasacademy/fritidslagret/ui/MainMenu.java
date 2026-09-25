@@ -14,7 +14,7 @@ public class MainMenu {
     private final WaitingListMenu waitingListMenu;
 
 
-    public MainMenu(LoanService loanService, MemberService memberService, EquipmentService equipmentService, StatisticsService statisticsService) {
+    public MainMenu(LoanService loanService, MemberService memberService, EquipmentService equipmentService, StatisticsService statisticsService, WaitingListService waitingListService) {
         this.equipmentMenu = new EquipmentMenu(equipmentService);
         this.memberMenu = new MemberMenu(memberService);
         this.loanMenu = new LoanMenu(loanService, equipmentService, memberService);
