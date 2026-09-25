@@ -3,8 +3,6 @@ package se.chasacademy.fritidslagret.ui;
 import se.chasacademy.fritidslagret.model.loan.Loan;
 import se.chasacademy.fritidslagret.service.LoanService;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.SortedMap;
 
@@ -35,10 +33,8 @@ public class LoanMenuList {
             IO.println("Inga lån är försenade :-D");
         } else {
             IO.println("Försenad:\n");
-            LocalDate runDate = LocalDate.now();
             for (Loan loan : delayedLoans) {
-                LocalDate dateOfReturn = loan.getDateOfReturn();
-                IO.println(String.format("Antal dagar försenad: %d, Återlämningsdatum: %s, Lån-ID: %d, Medlem: %s", (ChronoUnit.DAYS.between(dateOfReturn, runDate)), dateOfReturn, loan.getLoanId(), loan.getMember().getName()));
+                IO.println(String.format("Antal dagar försenad: %d, Återlämningsdatum: %s, Lån-ID: %d, Medlem: %s", loanService.getDelayedDays(loan), loan.getDateOfReturn(), loan.getLoanId(), loan.getMember().getName()));
             }
         }
     }

@@ -3,6 +3,7 @@ package se.chasacademy.fritidslagret.ui;
 import se.chasacademy.fritidslagret.service.EquipmentService;
 import se.chasacademy.fritidslagret.service.LoanService;
 import se.chasacademy.fritidslagret.service.MemberService;
+import se.chasacademy.fritidslagret.service.WaitingListService;
 import se.chasacademy.fritidslagret.service.StatisticsService;
 
 public class MainMenu {
@@ -10,6 +11,7 @@ public class MainMenu {
     private final EquipmentMenu equipmentMenu;
     private final MemberMenu memberMenu;
     private final StatisticsMenu statisticsMenu;
+    private final WaitingListMenu waitingListMenu;
 
 
     public MainMenu(LoanService loanService, MemberService memberService, EquipmentService equipmentService, StatisticsService statisticsService) {
@@ -17,6 +19,8 @@ public class MainMenu {
         this.memberMenu = new MemberMenu(memberService);
         this.loanMenu = new LoanMenu(loanService, equipmentService, memberService);
         this.statisticsMenu = new StatisticsMenu(statisticsService);
+        this.waitingListMenu = new WaitingListMenu(waitingListService);
+
     }
 
     public void mainMenu() {
@@ -29,7 +33,8 @@ public class MainMenu {
                         2. Medlemmar
                         3. Lån
                         4. Statistik
-                        5. Avsluta
+                        5. Väntelistor
+                        6. Avsluta
                         """);
 
                 // Input main-menu-choice
@@ -41,7 +46,8 @@ public class MainMenu {
                     case 2 -> memberMenu.memberMenu();
                     case 3 -> loanMenu.loanMenu();
                     case 4 -> statisticsMenu.statisticsMenu();
-                    case 5 -> {
+                    case 5 -> waitingListMenu.waitingListMenu();
+                    case 6 -> {
                         return;
                     }
                 }

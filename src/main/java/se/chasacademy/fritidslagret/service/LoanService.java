@@ -13,6 +13,7 @@ import se.chasacademy.fritidslagret.repository.LoanRepository;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class LoanService {
@@ -20,6 +21,7 @@ public class LoanService {
     private final LoanRepository loanRepository;
     private final MemberService memberService;
     private final EquipmentService equipmentService;
+    private final WaitingListService waitingListService;
     private final LoanRules loanRules;
     private final LoanPolicy loanPolicy;
 
@@ -45,10 +47,11 @@ public class LoanService {
 
         return mostBorrowed;
     }
-    public LoanService(LoanRepository loanRepository ,MemberService memberService, EquipmentService equipmentService, Clock clock) {
+    public LoanService(LoanRepository loanRepository ,MemberService memberService, EquipmentService equipmentService, WaitingListService waitingListService, Clock clock) {
         this.clock = clock;
         this.memberService = memberService;
         this.equipmentService = equipmentService;
+        this.waitingListService = waitingListService;
         this.loanRepository = loanRepository;
         loanPolicy = new LoanPolicy();
         loanRules = new LoanRules(memberService, equipmentService);
@@ -79,16 +82,32 @@ public class LoanService {
         return loan;
     }
 
-    public boolean returnLoan(Loan loan) {
+    public Loan returnLoan(Loan loan) {
         if (!loan.isLoanActive()) {
-            throw new LoanAlreadyReturned("Lånet redan återlämnat!");
+            throw new LoanAlreadyReturned();
         }
         Equipment returnedEquipment = loan.getEquipment();
 
         loan.setLoanActive(false);
         memberService.removeFromActiveLoans(loan.getMember());
         returnedEquipment.setAvailable(true);
-        return true;
+
+        if (waitingListService.isMembersInQueueForEquipment(returnedEquipment)) {
+            int equipmentId = loan.getEquipment().getEquipmentId();
+            Loan newLoan;
+            while (returnedEquipment.isAvailable() && waitingListService.isMembersInQueueForEquipment(returnedEquipment)) {
+                Member nextMemberInQueue = waitingListService.getFromWaitingList(returnedEquipment);
+                try {
+                    newLoan = startLoan(equipmentId, nextMemberInQueue);
+                } catch (UserRevokedException | LoanMaximumLimitException e) {
+                    //Don't do anything if thrown as we are iterating through members in quuee until a member can loan
+                    continue;
+                }
+                return newLoan;
+            }
+        }
+
+        return null;
     }
 
     public Loan getLoanById(int id) {
@@ -119,4 +138,12 @@ public class LoanService {
         return false;
     }
 
+    public Member putMemberInQueueForEquipment(Member member, Equipment equipment) {
+        return waitingListService.addToWaitingList(equipment, member);
+    }
+
+    public long getDelayedDays(Loan loan) {
+        LocalDate runDate = LocalDate.now(clock);
+        return ChronoUnit.DAYS.between(loan.getDateOfReturn() , runDate);
+    }
 }

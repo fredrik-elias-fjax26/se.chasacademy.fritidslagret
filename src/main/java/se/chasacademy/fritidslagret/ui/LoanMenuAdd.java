@@ -13,7 +13,7 @@ public class LoanMenuAdd {
     private final EquipmentService equipmentService;
     private final MemberService memberService;
 
-    protected LoanMenuAdd(LoanService loanService,  EquipmentService equipmentService, MemberService memberService) {
+    LoanMenuAdd(LoanService loanService, EquipmentService equipmentService, MemberService memberService) {
         this.loanService = loanService;
         this.equipmentService = equipmentService;
         this.memberService = memberService;
@@ -21,8 +21,8 @@ public class LoanMenuAdd {
 
     protected void addLoan() {
         String stringToIntFailMsgForLoop = "Inte en giltig siffra, försök igen!";
-        Member verifiedMember;
-        int verifiedEquipmentId;
+        Member verifiedMember = null;
+        int verifiedEquipmentId = -1;
 
         try {
             IO.println("Lägg till Lån");
@@ -32,7 +32,7 @@ public class LoanMenuAdd {
 
                     verifiedMember = memberService.getMember(memberIdToCreateLoan);
                     if (verifiedMember == null) {
-                        throw new MemberIsNullException("Användaren finns inte! Försök igen!!");
+                        throw new MemberIsNullException();
                     }
                     break;
 
@@ -48,6 +48,9 @@ public class LoanMenuAdd {
             while (true) {
                 String requestedEquipmentId = IO.readln("Ange ArtikelId (Enter för lista): ");
 
+                if (requestedEquipmentId == null) {
+                    return;
+                }
                 if (requestedEquipmentId.isEmpty()) {
                     for (Equipment equipment : equipmentService.getAllEquipmentsSortedById().values()) {
                        IO.println(String.format("Id: %d - Namn: %s",
@@ -61,7 +64,7 @@ public class LoanMenuAdd {
                     try {
                         Equipment verifiedEquipment = equipmentService.getEquipmentById(equipmentId);
                         if (verifiedEquipment == null) {
-                            throw new EquipmentIsNullException("Artikeln finns inte, Försök igen!");
+                            throw new EquipmentIsNullException();
                         }
                         verifiedEquipmentId = equipmentId;
                         break;
@@ -74,13 +77,16 @@ public class LoanMenuAdd {
 
             }
 
-            //TODO Fixa köbokning som inte fungerar
             Loan createdLoan = loanService.startLoan(verifiedEquipmentId, verifiedMember);
             IO.println(String.format("Ditt Lån av %s skapades, artikeln skall återlämnas senast %s",
                     createdLoan.getEquipment().getEquipmentName(), createdLoan.getDateOfReturn().toString()));
 
-        } catch (LoanMaximumLimitException | EquipmentNotAvailableException | UserRevokedException e) {
+        } catch (LoanMaximumLimitException | UserRevokedException e) {
             IO.println(e.getMessage());
+
+        } catch (EquipmentNotAvailableException e) {
+            Member addedMemberToQueue = loanService.putMemberInQueueForEquipment(verifiedMember, equipmentService.getEquipmentById(verifiedEquipmentId));
+            IO.println(String.format("Tyvärr var artikeln utlånad redan men %s, du är placerad i kö för %s", addedMemberToQueue.getName(), equipmentService.getEquipmentById(verifiedEquipmentId).getEquipmentName()));
         }
     }
 }
