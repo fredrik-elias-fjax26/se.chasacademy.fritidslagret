@@ -21,47 +21,54 @@ public class LoanMenuSearch {
 
     void searchLoanByLoanId() {
         IO.println("Sök lån efter lån-ID.\n");
-        String searchIdString = IO.readln("Låne-Id: ");
-        try {
-            Loan loan = loanService.searchLoanByIdString(searchIdString);
-            Member member = loan.getMember();
-            IO.println(loan + "\n\t- Lånad av: " + member + "\n\t\t" + "Lånet är: " + loanService.getStatusOfLoan(loan) + "\n");
+        while (true) {
+            String searchIdString = IO.readln("Låne-Id: ");
+            try {
+                Loan loan = loanService.searchLoanByIdString(searchIdString);
+                Member member = loan.getMember();
+                IO.println(loan + "\n\t- Lånad av: " + member + "\n\t\t" + "Lånet är: " + loanService.getStatusOfLoan(loan) + "\n");
 
-        } catch (LoanIdMustBeAnNumberException | LoanDoesNotExistException e) {
-            IO.println(e.getMessage());
+            } catch (LoanIdMustBeAnNumberException | LoanDoesNotExistException e) {
+                IO.println(e.getMessage());
+            }
+            return;
         }
-
-
     }
 
     void searchLoansByMemberName() {
         IO.println("Sök lån efter medlemsnamn");
-        String searchNameString = IO.readln("Medlems-namn: ");
-        try {
-            Map<Member, List<Loan>> searchResultMap = loanService.searchLoansByMemberName(searchNameString);
+        while (true) {
+            String searchNameString = IO.readln("Medlems-namn: ");
+            try {
+                Map<Member, List<Loan>> searchResultMap = loanService.searchLoansByMemberName(searchNameString);
 
-            for (Member memberWithLoans : searchResultMap.keySet()) {
-                IO.println(memberWithLoans + "\n");
-                for (Loan loan : searchResultMap.get(memberWithLoans)) {
-                    IO.println(loan + "\n\t - Lånet är: " + loanService.getStatusOfLoan(loan));
+                for (Member memberWithLoans : searchResultMap.keySet()) {
+                    IO.println(memberWithLoans + "\n");
+                    for (Loan loan : searchResultMap.get(memberWithLoans)) {
+                        IO.println(loan + "\n\t - Lånet är: " + loanService.getStatusOfLoan(loan));
+                    }
                 }
+            } catch (NoLoanExistsForMemberSearchException e) {
+                IO.println(e.getMessage());
             }
-        } catch (NoLoanExistsForMemberSearchException e) {
-            IO.println(e.getMessage());
+            return;
         }
     }
 
     void searchLoansByMemberId() {
-        try {
-            IO.println("Sök lån genom Medlems-Id\n");
-            String searchIdString = IO.readln("Medlems-Id: ");
-            List<Loan> loans = loanService.searchLoansByMemberIdString(searchIdString);
-            for (Loan loan : loans) {
-                IO.println(loan + "\n\t - Lånet är: " + loanService.getStatusOfLoan(loan));
-            }
+        IO.println("Sök lån genom Medlems-Id\n");
+        while (true) {
+            try {
+                String searchIdString = IO.readln("Medlems-Id: ");
+                List<Loan> loans = loanService.searchLoansByMemberIdString(searchIdString);
+                for (Loan loan : loans) {
+                    IO.println(loan + "\n\t - Lånet är: " + loanService.getStatusOfLoan(loan));
+                }
 
-        } catch (MemberIdMustBeANumberException e) {
-            IO.println(e.getMessage());
+            } catch (MemberIdMustBeANumberException e) {
+                IO.println(e.getMessage());
+            }
+            return;
         }
     }
 }
