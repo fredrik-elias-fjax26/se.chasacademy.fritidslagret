@@ -1,6 +1,16 @@
 package se.chasacademy.fritidslagret.ui;
 
+import se.chasacademy.fritidslagret.exception.LoanDoesNotExistException;
+import se.chasacademy.fritidslagret.exception.LoanIdMustBeAnNumberException;
+import se.chasacademy.fritidslagret.exception.MemberIdMustBeANumberException;
+import se.chasacademy.fritidslagret.exception.NoLoanExistsForMemberSearchException;
+import se.chasacademy.fritidslagret.model.loan.Loan;
+import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.service.LoanService;
+
+import java.util.List;
+import java.util.Map;
+
 
 public class LoanMenuSearch {
     private final LoanService loanService;
@@ -9,9 +19,49 @@ public class LoanMenuSearch {
         this.loanService = loanService;
     }
 
-    void searchLoanByLoanId(){
+    void searchLoanByLoanId() {
+        IO.println("Sök lån efter lån-ID.\n");
+        String searchIdString = IO.readln("Låne-Id: ");
+        try {
+            Loan loan = loanService.searchLoanByIdString(searchIdString);
+            Member member = loan.getMember();
+            IO.println(loan + "\n\t- Lånad av: " + member + "\n\t\t" + "Lånet är: " + loanService.getStatusOfLoan(loan) + "\n");
+
+        } catch (LoanIdMustBeAnNumberException | LoanDoesNotExistException e) {
+            IO.println(e.getMessage());
+        }
+
+
     }
 
-    void searchLoansByMemberName(){
+    void searchLoansByMemberName() {
+        IO.println("Sök lån efter medlemsnamn");
+        String searchNameString = IO.readln("Medlems-namn: ");
+        try {
+            Map<Member, List<Loan>> searchResultMap = loanService.searchLoansByMemberName(searchNameString);
+
+            for (Member memberWithLoans : searchResultMap.keySet()) {
+                IO.println(memberWithLoans + "\n");
+                for (Loan loan : searchResultMap.get(memberWithLoans)) {
+                    IO.println(loan + "\n\t - Lånet är: " + loanService.getStatusOfLoan(loan));
+                }
+            }
+        } catch (NoLoanExistsForMemberSearchException e) {
+            IO.println(e.getMessage());
+        }
+    }
+
+    void searchLoansByMemberId() {
+        try {
+            IO.println("Sök lån genom Medlems-Id\n");
+            String searchIdString = IO.readln("Medlems-Id: ");
+            List<Loan> loans = loanService.searchLoansByMemberIdString(searchIdString);
+            for (Loan loan : loans) {
+                IO.println(loan + "\n\t - Lånet är: " + loanService.getStatusOfLoan(loan));
+            }
+
+        } catch (MemberIdMustBeANumberException e) {
+            IO.println(e.getMessage());
+        }
     }
 }

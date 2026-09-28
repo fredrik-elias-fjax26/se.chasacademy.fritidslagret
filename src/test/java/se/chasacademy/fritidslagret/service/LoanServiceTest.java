@@ -14,6 +14,7 @@ import se.chasacademy.fritidslagret.repository.LoanRepository;
 import se.chasacademy.fritidslagret.repository.MemberRepository;
 
 import java.time.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -275,6 +276,47 @@ public class LoanServiceTest {
         verify(memberService).removeFromActiveLoans(member);
 
     }
+
+    @Test
+    public void shouldReturnDelayedLoan() {
+        // Arrange
+        Clock clock = mock(Clock.class);
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        MemberService memberService = mock(MemberService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        WaitingListService waitingListService = mock(WaitingListService.class);
+
+        LocalDate fixedReturnDate = LocalDate.of(2021, 1, 10);
+
+        Equipment equipment = new SkiSet("fakeName", true, 3);
+        Member member = new Member("fakeName", MemberStatus.ACTIVE);
+
+        LoanService loanService = new LoanService(loanRepository,memberService,equipmentService, waitingListService, clock);
+
+        Loan loanDelayed = new Loan(member, equipment, fixedReturnDate.minusDays(7), fixedReturnDate, true);
+
+        Map<Integer, Loan> loans = new HashMap<>();
+
+        loans.put(loanDelayed.getLoanId(), loanDelayed);
+
+        when(clock.instant()).thenReturn(fixedReturnDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+
+        when(loanRepository.getLoanDatabase()).thenReturn(loans);
+
+        // Act
+        List<Loan> delayedLoansList = new ArrayList<>(loanService.getDelayedLoansSortedByDate());
+
+        Map<Integer, Loan> mapOfDelayedLoans = new HashMap<>();
+        for (Loan loan : delayedLoansList) {
+            mapOfDelayedLoans.put(loan.getLoanId(), loan);
+        }
+
+        // Assert
+        assertEquals(loans, mapOfDelayedLoans);
+        assertEquals(1, delayedLoansList.size());
+    }
+
 
     @Test
     public void shouldReturnBothDelayedLoansWhenOnSameDay() {

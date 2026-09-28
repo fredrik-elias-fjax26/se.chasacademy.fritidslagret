@@ -28,8 +28,9 @@ public class LoanMenu {
                         3. Lista Försenade Lån
                         4. Sök Lån efter Låne-Id
                         5. Sök Lån efter Medlemsnamn
-                        6. Återlämna Lån
-                        7. Tillbaka""");
+                        6. Sök Lån efter Medlems-Id
+                        7. Återlämna Lån
+                        8. Tillbaka""");
 
                     // Input main-menu-choice
                     int choice = Integer.parseInt(IO.readln(">"));
@@ -41,8 +42,9 @@ public class LoanMenu {
                         case 3 -> loanMenuList.listDelayedLoans();
                         case 4 -> loanMenuSearch.searchLoanByLoanId();
                         case 5 -> loanMenuSearch.searchLoansByMemberName();
-                        case 6 -> loanMenuReturn.returnLoan();
-                        case 7 -> {
+                        case 6 -> loanMenuSearch.searchLoansByMemberId();
+                        case 7 -> loanMenuReturn.returnLoan();
+                        case 8 -> {
                             return;
                         }
                     }
