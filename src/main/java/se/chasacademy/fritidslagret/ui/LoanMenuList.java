@@ -19,10 +19,7 @@ public class LoanMenuList {
             IO.println("Inga aktiva lån finns");
         } else {
             for (Loan loan : activeLoanList.values()) {
-                IO.println(String.format(
-                        "Lån-ID: %d, Medlem: %s, Artikel: %s, Lånedatum: %s, Senaste datum för återlämning: %s",
-                        loan.getLoanId(), loan.getMember().getName(), loan.getEquipment().getEquipmentName(),
-                        loan.getDateOfLoan().toString(), loan.getDateOfReturn().toString()));
+                IO.println(loan);
             }
         }
     }
@@ -34,7 +31,12 @@ public class LoanMenuList {
         } else {
             IO.println("Försenad:\n");
             for (Loan loan : delayedLoans) {
-                IO.println(String.format("Antal dagar försenad: %d, Återlämningsdatum: %s, Lån-ID: %d, Medlem: %s", loanService.getDelayedDays(loan), loan.getDateOfReturn(), loan.getLoanId(), loan.getMember().getName()));
+                IO.println(String.format("Antal dagar försenad: %d, Återlämningsdatum: %s, Lån-ID: %d, Medlem: %s",
+                        loanService.getDelayedDays(loan),
+                        loan.getDateOfReturn(),
+                        loan.getLoanId(),
+                        loan.getMember().getName()
+                ));
             }
         }
     }

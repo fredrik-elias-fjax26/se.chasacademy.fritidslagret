@@ -81,7 +81,7 @@ public class LoanMenuAdd {
             IO.println(String.format("Ditt Lån av %s skapades, artikeln skall återlämnas senast %s",
                     createdLoan.getEquipment().getEquipmentName(), createdLoan.getDateOfReturn().toString()));
 
-        } catch (LoanMaximumLimitException | UserRevokedException e) {
+        } catch (LoanMaximumLimitException | UserRevokedException | UserHasDelayedLoansException e) {
             IO.println(e.getMessage());
 
         } catch (EquipmentNotAvailableException e) {

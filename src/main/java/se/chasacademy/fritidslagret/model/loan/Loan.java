@@ -61,6 +61,12 @@ public class Loan {
         return dateOfReturn;
     }
 
+    @Override
+    public String toString(){
+        return String.format("Lån-ID: %d, Medlem: %s, Artikel: %s, Lånedatum: %s, Senaste datum för återlämning: %s",
+                getLoanId(), getMember().getName(), getEquipment().getEquipmentName(),
+                getDateOfLoan().toString(), getDateOfReturn().toString());
+    }
 }
 
 

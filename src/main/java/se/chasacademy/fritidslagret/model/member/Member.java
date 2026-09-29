@@ -48,4 +48,9 @@ public class Member {
     public void removeOneActiveLoan() {
         this.activeLoans--;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Medlems-Id: %d, Namn: %s, Status: %s",  memberId, memberName, memberStatus.getFriendlyName());
+    }
 }

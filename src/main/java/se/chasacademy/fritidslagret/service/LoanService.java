@@ -1,9 +1,6 @@
 package se.chasacademy.fritidslagret.service;
 
-import se.chasacademy.fritidslagret.exception.EquipmentNotAvailableException;
-import se.chasacademy.fritidslagret.exception.LoanAlreadyReturned;
-import se.chasacademy.fritidslagret.exception.LoanMaximumLimitException;
-import se.chasacademy.fritidslagret.exception.UserRevokedException;
+import se.chasacademy.fritidslagret.exception.*;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.loan.Loan;
 import se.chasacademy.fritidslagret.model.loan.LoanPolicy;
@@ -28,6 +25,7 @@ public class LoanService {
     public int getActiveLoanCount() {
         return loanRepository.getLoanDatabase().size();
     }
+
     public Equipment getMostBorrowedEquipment() {
         Map<Equipment, Integer> loanCounts = new HashMap<>();
 
@@ -47,18 +45,19 @@ public class LoanService {
 
         return mostBorrowed;
     }
-    public LoanService(LoanRepository loanRepository ,MemberService memberService, EquipmentService equipmentService, WaitingListService waitingListService, Clock clock) {
+
+    public LoanService(LoanRepository loanRepository, MemberService memberService, EquipmentService equipmentService, WaitingListService waitingListService, Clock clock) {
         this.clock = clock;
         this.memberService = memberService;
         this.equipmentService = equipmentService;
         this.waitingListService = waitingListService;
         this.loanRepository = loanRepository;
-        loanPolicy = new LoanPolicy();
+        loanPolicy = new LoanPolicy(this);
         loanRules = new LoanRules(memberService, equipmentService);
     }
 
     public Loan startLoan(int equipmentId, Member member)
-            throws EquipmentNotAvailableException, LoanMaximumLimitException, UserRevokedException {
+            throws EquipmentNotAvailableException, LoanMaximumLimitException, UserRevokedException, UserHasDelayedLoansException {
 
         loanPolicy.checkLoanPolicy(member);
         loanRules.checkLoanRules(equipmentId, member);
@@ -100,7 +99,7 @@ public class LoanService {
                 try {
                     newLoan = startLoan(equipmentId, nextMemberInQueue);
                 } catch (UserRevokedException | LoanMaximumLimitException e) {
-                    //Don't do anything if thrown as we are iterating through members in quuee until a member can loan
+                    //Don't do anything if thrown as we are iterating through members in queue until a member can loan
                     continue;
                 }
                 return newLoan;
@@ -119,7 +118,7 @@ public class LoanService {
                 .filter(this::isDelayed)
                 .sorted(Comparator.comparing(Loan::getDateOfReturn))
                 .toList();
-        }
+    }
 
     public SortedMap<Integer, Loan> getAllActiveLoansSortedById() {
         SortedMap<Integer, Loan> allActiveLoans = new TreeMap<>();
@@ -142,8 +141,104 @@ public class LoanService {
         return waitingListService.addToWaitingList(equipment, member);
     }
 
-    public long getDelayedDays(Loan loan) {
-        LocalDate runDate = LocalDate.now(clock);
-        return ChronoUnit.DAYS.between(loan.getDateOfReturn() , runDate);
+    public int getDelayedDays(Loan loan) {
+        try {
+            LocalDate runDate = LocalDate.now(clock);
+            return (int) ChronoUnit.DAYS.between(loan.getDateOfReturn(), runDate);
+        } catch (NullPointerException e) {
+            throw new LoanDoesNotExistException();
+        }
+    }
+
+    public String getStatusOfLoan(Loan loan) {
+        try {
+            if (loan.isLoanActive()) {
+                if (isDelayed(loan)) {
+                    String delayedString;
+
+                    int delayedDays = getDelayedDays(loan);
+
+                    if (delayedDays == 1) {
+                        delayedString = "dag";
+                    } else {
+                        delayedString = "dagar";
+                    }
+
+                    return String.format("Försenat med %d %s", delayedDays, delayedString);
+                }
+                return "Aktivt";
+
+            }
+            return "Avslutat";
+        } catch (NullPointerException e) {
+            throw new LoanDoesNotExistException();
+        }
+    }
+
+    public Loan searchLoanByIdString(String searchIdTerm) {
+        try {
+            Loan requestedLoan = loanRepository.getLoanDatabase().get(Integer.parseInt(searchIdTerm));
+            if (requestedLoan == null) {
+                throw new LoanDoesNotExistException();
+            }
+            return requestedLoan;
+        } catch (NumberFormatException e) {
+            throw new LoanIdMustBeAnNumberException();
+        }
+    }
+
+    public Map<Member, List<Loan>> searchLoansByMemberName(String memberName) {
+        if (memberName.length() < 2) {
+            throw new SearchStringMustBeAtleastTwoCharactersLongException();
+        }
+
+        Map<Member, List<Loan>> loansForMembersByName = new HashMap<>();
+        List<Loan> loans;
+        for (Loan loan : loanRepository.getLoanDatabase().values()) {
+            if (loan.getMember().getName().toLowerCase().contains(memberName)) {
+                if (!loansForMembersByName.containsKey(loan.getMember())) {
+                    loans = new ArrayList<>();
+                    loans.add(loan);
+                    loansForMembersByName.put(loan.getMember(), loans);
+                } else {
+                    loansForMembersByName.get(loan.getMember()).add(loan);
+                }
+            }
+        }
+        if (loansForMembersByName.isEmpty()) {
+            throw new NoLoanExistsForMemberSearchException();
+        }
+        return loansForMembersByName;
+    }
+
+    public List<Loan> searchLoansByMemberIdString(String memberId) {
+        try {
+            List<Loan> loans = new ArrayList<>();
+            Member member = memberService.getMember(Integer.parseInt(memberId));
+
+            if (member == null) {
+                throw new MemberIsNullException();
+            }
+
+            for (Loan loan : loanRepository.getLoanDatabase().values()) {
+                if (loan.getMember().getName().equals(memberId)) {
+                    loans.add(loan);
+                }
+            }
+            return loans;
+
+        } catch (NumberFormatException e) {
+            throw new MemberIdMustBeANumberException();
+        }
+    }
+
+    public boolean memberHasDelayedLoansById(int memberId) {
+        List<Loan> loans = getDelayedLoansSortedByDate();
+        for (Loan loan : loans) {
+            if (loan.getMember().getMemberId() == memberId ) {
+                return true;
+            }
+        }
+        return false;
     }
 }
