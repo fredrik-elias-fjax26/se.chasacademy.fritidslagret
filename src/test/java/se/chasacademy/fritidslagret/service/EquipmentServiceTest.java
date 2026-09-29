@@ -2,6 +2,8 @@ package se.chasacademy.fritidslagret.service;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+import se.chasacademy.fritidslagret.exception.EquipmentIsNullException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
 import se.chasacademy.fritidslagret.model.equipment.SkiSet;
@@ -12,8 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class EquipmentServiceTest {
@@ -86,6 +87,22 @@ public class EquipmentServiceTest {
         assertTrue(fakeEquipmentExists);
         assertTrue(fakeEquipmentMapRepo.isEmpty());
     }
+
+    @Test
+    public void shouldThrowEquipmentIsNullExceptionWhenEquipmentIsNull() {
+        // Arrange
+        EquipmentRepository equipmentRepository = mock(EquipmentRepository.class);
+        EquipmentService equipmentService = new EquipmentService(equipmentRepository);
+        Equipment equipment1 = null;
+
+        // Act
+        Executable throwAct = () -> equipmentService.deleteEquipment(equipment1);
+
+        // Assert
+        assertThrows(EquipmentIsNullException.class,  throwAct);
+
+    }
+
 
 
 

@@ -1,5 +1,6 @@
 package se.chasacademy.fritidslagret.service;
 
+import se.chasacademy.fritidslagret.exception.EquipmentIsNullException;
 import se.chasacademy.fritidslagret.exception.SearchTermDontExistsAnyEquipmentException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
@@ -48,7 +49,11 @@ public class EquipmentService {
         return foundEquipmentMap;
     }
 
-    public void deleteEquipment(Equipment equipmentToDelete) {
+    public void deleteEquipment(Equipment equipmentToDelete) throws EquipmentIsNullException {
+        if (equipmentToDelete == null) {
+            throw new EquipmentIsNullException();
+        }
+
         equipmentRepository.removeEquipment(equipmentToDelete);
     }
 }
