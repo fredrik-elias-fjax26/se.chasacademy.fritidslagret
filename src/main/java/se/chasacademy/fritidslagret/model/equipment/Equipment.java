@@ -18,9 +18,16 @@ public abstract class Equipment {
         uniqueEquipmentId++;
     }
 
-    @Override
+    String isAvailableInFriendlySwedish() {
+        if (available) {
+            return "Tillgänglig";
+        } else {
+            return "Utlånad";
+        }
+    }
+
     public String toString() {
-        return "Equipment{" + "name=" + name + ",type=" + type.getSimpleName() + ",available=" + available + ",maxLoanDays=" + maxLoanDays + "}";
+        return "Utrustning: Id= "+ equipmentId + ", Namn= " + name + ", Typ= " + type.getSimpleName() + ", Tillgänglig= " + isAvailableInFriendlySwedish() + ", Max lånetid i dagar=" + maxLoanDays;
     }
 
     //Getters
