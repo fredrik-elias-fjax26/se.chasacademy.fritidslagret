@@ -1,5 +1,6 @@
 package se.chasacademy.fritidslagret.service;
 
+import se.chasacademy.fritidslagret.exception.SearchTermDontExistsAnyEquipmentException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
 import se.chasacademy.fritidslagret.repository.EquipmentRepository;
@@ -19,10 +20,6 @@ public class EquipmentService {
 
 
     // Getters
-    public int getUniqueEquipmentId() {
-        return Equipment.getUniqueEquipmentId();
-    }
-
     public Equipment getEquipmentById(int id) {
         return getAllEquipment().get(id);
     }
@@ -35,37 +32,20 @@ public class EquipmentService {
         return new TreeMap<>(getAllEquipment());
     }
 
-    public Equipment getEquipmentByName(String name) {
+    public List<Equipment> searchForEquipmentByName(String searchTerm) throws SearchTermDontExistsAnyEquipmentException {
+        List<Equipment> foundEquipmentMap = new ArrayList<>();
         Map <Integer, Equipment> equipmentMap = getAllEquipment();
         for (Integer id : equipmentMap.keySet()) {
-            if (equipmentMap.get(id).getEquipmentName().contains(name)) {
-                return equipmentMap.get(id);
-            }
-        } return null;
-    }
-
-    public int getEquipmentByNameToId(String name) {
-        Map <Integer, Equipment> equipmentMap = getAllEquipment();
-        for (Integer id : equipmentMap.keySet()) {
-            if (equipmentMap.get(id).getEquipmentName().contains(name)) {
-                return id;
-            }
-        } return 0;
-    }
-
-    public boolean getEquipmentLoanableStatus(int id) {
-        Equipment equipment = getEquipmentById(id);
-        return equipment.isAvailable();
-    }
-
-    public Map<Integer, Equipment> searchForEquipmentByName(String srcStr) {
-        SortedMap<Integer, Equipment> equipmentMap = new TreeMap<>();
-
-        for (Equipment equipment : getAllEquipment().values()) {
-            if (equipment.getEquipmentName().toLowerCase().contains(srcStr.toLowerCase())) {
-                equipmentMap.put(equipment.getEquipmentId(), equipment);
+            if (equipmentMap.get(id).getEquipmentName().contains(searchTerm)) {
+                foundEquipmentMap.add(equipmentMap.get(id));
             }
         }
-        return equipmentMap;
+
+        if (foundEquipmentMap.isEmpty()) {
+            throw new SearchTermDontExistsAnyEquipmentException(searchTerm);
+        }
+
+        return foundEquipmentMap;
     }
+
 }

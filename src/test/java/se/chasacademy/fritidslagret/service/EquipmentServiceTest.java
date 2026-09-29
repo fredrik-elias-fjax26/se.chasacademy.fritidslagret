@@ -3,28 +3,59 @@ package se.chasacademy.fritidslagret.service;
 import org.junit.jupiter.api.Test;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
+import se.chasacademy.fritidslagret.model.equipment.SkiSet;
+import se.chasacademy.fritidslagret.model.equipment.Tent;
 import se.chasacademy.fritidslagret.repository.EquipmentRepository;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class EquipmentServiceTest {
-        @Test
-        public void verifyEquipmentCreation() {
-            EquipmentService equipmentService = new EquipmentService(EquipmentRepository.getInstance());
-            // Arrange
-            String equipmentName = "Hjälm";
-            boolean available = true;
-            int maxLoanDays = 3;
-            EquipmentTypes equipmentType = EquipmentTypes.SKISET;
+    @Test
+    public void verifyEquipmentCreation() {
+        // Arrange
+        EquipmentService equipmentService = new EquipmentService(EquipmentRepository.getInstance());
 
-            // Act
-            Equipment equipment = equipmentService.addEquipment(equipmentName, available, maxLoanDays, equipmentType);
+        String equipmentName = "Hjälm";
+        boolean available = true;
+        int maxLoanDays = 3;
+        EquipmentTypes equipmentType = EquipmentTypes.SKISET;
 
-            // Assert
-            assertEquals(equipmentName, equipment.getEquipmentName());
-            assertEquals(available, equipment.isAvailable());
-            assertEquals(maxLoanDays, equipment.getMaxLoanDays());
-            assertEquals(equipmentType.getDisplayName(), equipment.getType());
+        // Act
+        Equipment equipment = equipmentService.addEquipment(equipmentName, available, maxLoanDays, equipmentType);
 
-        }
+        // Assert
+        assertEquals(equipmentName, equipment.getEquipmentName());
+        assertEquals(available, equipment.isAvailable());
+        assertEquals(maxLoanDays, equipment.getMaxLoanDays());
+        assertEquals(equipmentType.getDisplayName(), equipment.getType());
+
+    }
+
+    @Test
+    public void shouldReturnListOfEquipmentBySearchTerm() {
+        // Arrange
+        EquipmentRepository equipmentRepository = mock(EquipmentRepository.class);
+        EquipmentService equipmentService = new EquipmentService(equipmentRepository);
+
+        Equipment equipment1 = new SkiSet("fakeSkies", true, 3);
+        Equipment equipment2 = new Tent("fakeTent", false, 4);
+
+        Map<Integer, Equipment> fakeEquipmentList = Map.of(1, equipment1, 2, equipment2);
+
+        when(equipmentRepository.getEquipmentDatabase()).thenReturn(fakeEquipmentList);
+
+        // Act
+        List<Equipment> searchedEquipmentList = equipmentService.searchForEquipmentByName("fake");
+
+
+        // Assert
+        assertEquals(List.copyOf(fakeEquipmentList.values()), searchedEquipmentList);
+
+    }
+
+
 }
