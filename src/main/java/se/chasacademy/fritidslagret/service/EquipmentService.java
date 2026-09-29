@@ -48,7 +48,7 @@ public class EquipmentService {
         return foundEquipmentMap;
     }
 
-    public void deleteEquipmentById(int id) {
     public void deleteEquipment(Equipment equipmentToDelete) {
+        equipmentRepository.removeEquipment(equipmentToDelete);
     }
 }

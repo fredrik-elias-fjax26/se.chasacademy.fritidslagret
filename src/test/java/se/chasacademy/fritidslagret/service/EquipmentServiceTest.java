@@ -80,7 +80,7 @@ public class EquipmentServiceTest {
         }).when(equipmentRepository).removeEquipment(equipment1);
 
         // Act
-        equipmentService.deleteEquipmentById(equipment1.getEquipmentId());
+        equipmentService.deleteEquipment(equipment1);
 
         // Assert
         assertTrue(fakeEquipmentExists);
