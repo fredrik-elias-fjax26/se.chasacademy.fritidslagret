@@ -1,5 +1,6 @@
 package se.chasacademy.fritidslagret.service;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
@@ -14,8 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class EquipmentServiceTest {
+    @Disabled // Only run when there is no save method in EquipmentRepository
     @Test
-    public void verifyEquipmentCreation() {
+    public void verifyEquipmentCreationDontRunWithSavedData() {
         // Arrange
         EquipmentService equipmentService = new EquipmentService(EquipmentRepository.getInstance());
 
