@@ -6,7 +6,7 @@ import se.chasacademy.fritidslagret.service.WaitingListService;
 import java.util.List;
 
 public class WaitingListMenuList {
-    private WaitingListService waitingListService;
+    private final WaitingListService waitingListService;
 
     public WaitingListMenuList(WaitingListService waitingListService) {
         this.waitingListService = waitingListService;

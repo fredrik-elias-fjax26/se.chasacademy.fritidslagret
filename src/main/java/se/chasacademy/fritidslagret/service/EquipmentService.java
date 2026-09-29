@@ -22,6 +22,7 @@ public class EquipmentService {
     public int getUniqueEquipmentId() {
         return Equipment.getUniqueEquipmentId();
     }
+
     public Equipment getEquipmentById(int id) {
         return getAllEquipment().get(id);
     }

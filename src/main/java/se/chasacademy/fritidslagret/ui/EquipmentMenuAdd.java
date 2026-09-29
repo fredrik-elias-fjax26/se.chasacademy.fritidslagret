@@ -11,7 +11,7 @@ public class EquipmentMenuAdd {
     }
 
      void addEquipment() {
-        IO.println("\nNu lägger vi till inventarie:");
+        IO.println("\nNu lägger vi till en artikel:");
         for (int i = 0; i < EquipmentTypes.values().length; i++) {
             IO.println("\t" + (i + 1) +". " + EquipmentTypes.values()[i].getDisplayName());
         }

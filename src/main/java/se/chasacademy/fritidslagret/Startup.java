@@ -34,9 +34,9 @@ public class Startup {
         memberService.addMember("NoLoanInitMember", ACTIVE);
 
         // Loans start
-        //loanService.startLoan(4, memberService.getMember(1000));
-        loanService.startLoan(2, memberService.getMember(1000));
+        //loanService.startLoan(2, memberService.getMember(1000));
         loanService.startLoan(3, memberService.getMember(1000));
-        //LoanService.startLoan(0, MemberService.getMember(1000));
+        loanService.startLoan(4, memberService.getMember(1000));
+        //LoanService.startLoan(1, MemberService.getMember(1000));
     }
 }

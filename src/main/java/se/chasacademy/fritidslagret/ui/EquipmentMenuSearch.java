@@ -12,7 +12,7 @@ public class EquipmentMenuSearch {
         this.equipmentService = equipmentService;
     }
     protected void searchEquipment() {
-        IO.println("\nVilken inventarie vill du söka efter?:");
+        IO.println("\nVilken artikel vill du söka efter?:");
         String srcStr = IO.readln("(namn)>");
 
         Map<Integer, Equipment> foundEquipment = equipmentService.searchForEquipmentByName(srcStr);
