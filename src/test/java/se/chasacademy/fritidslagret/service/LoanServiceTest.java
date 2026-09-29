@@ -299,8 +299,8 @@ public class LoanServiceTest {
         Loan secondLoanDelayed = new Loan(member2, equipment2, fixedReturnDate.minusDays(7), fixedReturnDate, true);
 
         Map<Integer, Loan> loans = new HashMap<>();
-        loans.put(0, firstLoanDelayed);
-        loans.put(1, secondLoanDelayed);
+        loans.put(firstLoanDelayed.getLoanId(), firstLoanDelayed);
+        loans.put(secondLoanDelayed.getLoanId(), secondLoanDelayed);
 
         when(clock.instant()).thenReturn(fixedReturnDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
