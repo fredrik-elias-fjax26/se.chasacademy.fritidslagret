@@ -1,9 +1,6 @@
 package se.chasacademy.fritidslagret.ui;
 
-import se.chasacademy.fritidslagret.exception.LoanDoesNotExistException;
-import se.chasacademy.fritidslagret.exception.LoanIdMustBeAnNumberException;
-import se.chasacademy.fritidslagret.exception.MemberIdMustBeANumberException;
-import se.chasacademy.fritidslagret.exception.NoLoanExistsForMemberSearchException;
+import se.chasacademy.fritidslagret.exception.*;
 import se.chasacademy.fritidslagret.model.loan.Loan;
 import se.chasacademy.fritidslagret.model.member.Member;
 import se.chasacademy.fritidslagret.service.LoanService;
@@ -27,31 +24,34 @@ public class LoanMenuSearch {
                 Loan loan = loanService.searchLoanByIdString(searchIdString);
                 Member member = loan.getMember();
                 IO.println(loan + "\n\t- Lånad av: " + member + "\n\t\t" + "Lånet är: " + loanService.getStatusOfLoan(loan) + "\n");
-
+                IO.println("");
+                return;
             } catch (LoanIdMustBeAnNumberException | LoanDoesNotExistException e) {
                 IO.println(e.getMessage());
             }
-            return;
         }
     }
 
     void searchLoansByMemberName() {
         IO.println("Sök lån efter medlemsnamn");
         while (true) {
-            String searchNameString = IO.readln("Medlems-namn: ");
+            String searchNameString = IO.readln("Medlems-namn: ").toLowerCase();
             try {
                 Map<Member, List<Loan>> searchResultMap = loanService.searchLoansByMemberName(searchNameString);
-
                 for (Member memberWithLoans : searchResultMap.keySet()) {
-                    IO.println(memberWithLoans + "\n");
+                    IO.println("\n" + "*".repeat(memberWithLoans.toString().length()));
+                    IO.println(memberWithLoans);
+                    IO.println("*".repeat(memberWithLoans.toString().length()) + "\n");
                     for (Loan loan : searchResultMap.get(memberWithLoans)) {
                         IO.println(loan + "\n\t - Lånet är: " + loanService.getStatusOfLoan(loan));
                     }
                 }
-            } catch (NoLoanExistsForMemberSearchException e) {
+                IO.println("");
+                return;
+
+            } catch (NoLoanExistsForMemberSearchException | SearchStringMustBeAtleastTwoCharactersLongException e) {
                 IO.println(e.getMessage());
             }
-            return;
         }
     }
 
@@ -64,11 +64,12 @@ public class LoanMenuSearch {
                 for (Loan loan : loans) {
                     IO.println(loan + "\n\t - Lånet är: " + loanService.getStatusOfLoan(loan));
                 }
+                IO.println("");
+                return;
 
             } catch (MemberIdMustBeANumberException e) {
                 IO.println(e.getMessage());
             }
-            return;
         }
     }
 }

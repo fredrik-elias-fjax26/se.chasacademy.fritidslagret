@@ -188,10 +188,14 @@ public class LoanService {
     }
 
     public Map<Member, List<Loan>> searchLoansByMemberName(String memberName) {
+        if (memberName.length() < 2) {
+            throw new SearchStringMustBeAtleastTwoCharactersLongException();
+        }
+
         Map<Member, List<Loan>> loansForMembersByName = new HashMap<>();
         List<Loan> loans;
         for (Loan loan : loanRepository.getLoanDatabase().values()) {
-            if (loan.getMember().getName().contains(memberName)) {
+            if (loan.getMember().getName().toLowerCase().contains(memberName)) {
                 if (!loansForMembersByName.containsKey(loan.getMember())) {
                     loans = new ArrayList<>();
                     loans.add(loan);
