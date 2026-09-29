@@ -7,11 +7,13 @@ public class EquipmentMenu {
     private final EquipmentMenuAdd equipmentMenuAdd;
     private final EquipmentMenuSearch equipmentMenuSearch;
     private final EquipmentMenuList equipmentMenuList;
+    private final EquipmentMenuDelete equipmentMenuDelete;
 
     public EquipmentMenu(EquipmentService equipmentService) {
         this.equipmentMenuAdd = new EquipmentMenuAdd(equipmentService);
         this.equipmentMenuSearch = new EquipmentMenuSearch(equipmentService);
         this.equipmentMenuList = new EquipmentMenuList(equipmentService);
+        this.equipmentMenuDelete = new EquipmentMenuDelete(equipmentService);
     }
     //Main-EquipmentMenu-loop
     void equipmentMenu() {
@@ -23,7 +25,8 @@ public class EquipmentMenu {
                         1. Lägg till utrustning
                         2. Lista utrusning
                         3. Sök utrustning
-                        4. Tillbaka""");
+                        4. Radera utrustning
+                        5. Tillbaka""");
 
                 // Input main-menu-choice
                 int choice = Integer.parseInt(IO.readln(">"));
@@ -33,7 +36,8 @@ public class EquipmentMenu {
                     case 1 -> equipmentMenuAdd.addEquipment();
                     case 2 -> equipmentMenuList.listEquipment();
                     case 3 -> equipmentMenuSearch.searchEquipment();
-                    case 4 -> {
+                    case 4 -> equipmentMenuDelete.deleteEquipment();
+                    case 5-> {
                         return;
                     }
                 }

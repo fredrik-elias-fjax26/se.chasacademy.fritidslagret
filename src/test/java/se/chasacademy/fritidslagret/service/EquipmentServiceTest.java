@@ -8,10 +8,12 @@ import se.chasacademy.fritidslagret.model.equipment.SkiSet;
 import se.chasacademy.fritidslagret.model.equipment.Tent;
 import se.chasacademy.fritidslagret.repository.EquipmentRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class EquipmentServiceTest {
@@ -58,6 +60,33 @@ public class EquipmentServiceTest {
         assertEquals(List.copyOf(fakeEquipmentList.values()), searchedEquipmentList);
 
     }
+
+    @Test
+    public void shouldRemoveEquipmentFromRepository() {
+        // Arrange
+        EquipmentRepository equipmentRepository = mock(EquipmentRepository.class);
+        EquipmentService equipmentService = new EquipmentService(equipmentRepository);
+
+        Equipment equipment1 = new SkiSet("fakeSkies", true, 3);
+
+        Map<Integer, Equipment> fakeEquipmentMapRepo = new HashMap<>(Map.of(1, equipment1));
+
+        boolean fakeEquipmentExists = false;
+        fakeEquipmentExists = fakeEquipmentMapRepo.containsValue(equipment1);
+
+        doAnswer(catcherSnippet -> {
+            fakeEquipmentMapRepo.remove(equipment1.getEquipmentId());
+            return null;
+        }).when(equipmentRepository).removeEquipment(equipment1);
+
+        // Act
+        equipmentService.deleteEquipmentById(equipment1.getEquipmentId());
+
+        // Assert
+        assertTrue(fakeEquipmentExists);
+        assertTrue(fakeEquipmentMapRepo.isEmpty());
+    }
+
 
 
 }
