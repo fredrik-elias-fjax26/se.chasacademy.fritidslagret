@@ -3,9 +3,9 @@
 Fritidslagret
 
 * Kvar innan inlämning
-  * Komlplettra menyer med metoder och implementera saknade metoder enl kravspec.
+  * Komplettera menyer med metoder och implementera saknade metoder enl kravspec.
     * [ ] Medlem saknar i princip hela menyn
-    * [ ] Lån saknar Sök funktion
+    * [x] Lån saknar Sök funktion - PR skickad
     * [ ] Artiklar saknar funktion för att ta bort artikel
     * [ ] Rapporter är inte skapat än, kommer vecka 7
 
