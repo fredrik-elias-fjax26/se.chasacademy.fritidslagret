@@ -49,7 +49,7 @@ public class EquipmentServiceTest {
         Equipment equipment1 = new SkiSet("fakeSkies", true, 3);
         Equipment equipment2 = new Tent("fakeTent", false, 4);
 
-        Map<Integer, Equipment> fakeEquipmentList = Map.of(1, equipment1, 2, equipment2);
+        Map<Integer, Equipment> fakeEquipmentList = Map.of(equipment1.getEquipmentId(), equipment1, equipment2.getEquipmentId(), equipment2);
 
         when(equipmentRepository.getEquipmentDatabase()).thenReturn(fakeEquipmentList);
 
@@ -70,7 +70,7 @@ public class EquipmentServiceTest {
 
         Equipment equipment1 = new SkiSet("fakeSkies", true, 3);
 
-        Map<Integer, Equipment> fakeEquipmentMapRepo = new HashMap<>(Map.of(1, equipment1));
+        Map<Integer, Equipment> fakeEquipmentMapRepo = new HashMap<>(Map.of(equipment1.getEquipmentId(), equipment1));
 
         boolean fakeEquipmentExists = false;
         fakeEquipmentExists = fakeEquipmentMapRepo.containsValue(equipment1);
