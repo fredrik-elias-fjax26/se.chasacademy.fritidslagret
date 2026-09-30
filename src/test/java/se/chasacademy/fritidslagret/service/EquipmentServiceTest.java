@@ -76,7 +76,7 @@ public class EquipmentServiceTest {
         boolean fakeEquipmentExists;
         fakeEquipmentExists = fakeEquipmentMapRepo.containsValue(equipment1);
 
-        doAnswer(catcherSnippet -> {
+        doAnswer(_ -> {
             fakeEquipmentMapRepo.remove(equipment1.getEquipmentId());
             return null;
         }).when(equipmentRepository).removeEquipment(equipment1);
