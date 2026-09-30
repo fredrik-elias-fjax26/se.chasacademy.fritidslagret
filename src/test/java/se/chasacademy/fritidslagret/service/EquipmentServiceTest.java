@@ -73,7 +73,7 @@ public class EquipmentServiceTest {
 
         Map<Integer, Equipment> fakeEquipmentMapRepo = new HashMap<>(Map.of(equipment1.getEquipmentId(), equipment1));
 
-        boolean fakeEquipmentExists = false;
+        boolean fakeEquipmentExists;
         fakeEquipmentExists = fakeEquipmentMapRepo.containsValue(equipment1);
 
         doAnswer(catcherSnippet -> {
