@@ -14,7 +14,7 @@ public class StatisticsService {
     }
 
     public void showActiveLoanCount() {
-        IO.println("Aktiva lån: " + loanService.getActiveLoanCount());
+        IO.println("Aktiva lån: " + loanService.getAllActiveLoansSortedById().size());
     }
 
     public void showMemberCount(){

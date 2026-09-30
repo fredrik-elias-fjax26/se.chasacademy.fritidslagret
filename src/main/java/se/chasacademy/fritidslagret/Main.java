@@ -26,12 +26,13 @@ public class Main {
 
         LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
         StatisticsService statisticsService = new StatisticsService(equipmentService, loanService, memberService);
+        ReportService reportService = new ReportService(loanService, equipmentService);
 
         // Startup
         Startup startup = new Startup(equipmentService, memberService, loanService);
         startup.startUp();
         //fritidslagret.se.chasacademy.fritidslagret.se.chasacademy.fritidslagret.Main-Menu-loop
-        MainMenu mainMenu = new MainMenu(loanService, memberService, equipmentService, statisticsService, waitingListService);
+        MainMenu mainMenu = new MainMenu(loanService, memberService, equipmentService, statisticsService, waitingListService, reportService);
         mainMenu.mainMenu();
     }
 }

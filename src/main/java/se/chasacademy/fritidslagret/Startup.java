@@ -22,21 +22,34 @@ public class Startup {
 
         // Equipment start
         equipmentService.addEquipment("Bicycle", true, 30, BIKE);
-        equipmentService.addEquipment("8-people-tent", false, 90, TENT);
+        equipmentService.addEquipment("8-people-tent", true, 90, TENT);
         equipmentService.addEquipment("SkiSet-for-Children", true, 3, SKISET);
         equipmentService.addEquipment("SkiSet-for-Small-Children", true, 10, SKISET);
         equipmentService.addEquipment("Motorcycle", true, 180, BIKE);
+        equipmentService.addEquipment("Motorcycle2", true, 20, BIKE);
+        equipmentService.addEquipment("Motorcycle3", true, 20, BIKE);
+        equipmentService.addEquipment("Motorcycle4", true, 20, BIKE);
+        equipmentService.addEquipment("Motorcycle5", true, 20, BIKE);
+
         // Users start
 
         memberService.addMember("Ylva", ACTIVE);
         memberService.addMember("Nisse", REVOKED);
         memberService.addMember("Bosse", INACTIVE);
-        memberService.addMember("NoLoanInitMember", ACTIVE);
+        memberService.addMember("NoLoanMember", ACTIVE);
+        memberService.addMember("NoLoanMember2", ACTIVE);
+        memberService.addMember("NoLoanMember3", ACTIVE);
+        memberService.addMember("NoLoanMember4", ACTIVE);
+
 
         // Loans start
-        //loanService.startLoan(2, memberService.getMember(1000));
-        loanService.startLoan(3, memberService.getMember(1000));
-        loanService.startLoan(4, memberService.getMember(1000));
-        //LoanService.startLoan(1, MemberService.getMember(1000));
+        loanService.startLoan(2, memberService.getMember(1000));
+        loanService.startLoan(3, memberService.getMember(1003));
+        loanService.startLoan(4, memberService.getMember(1004));
+        loanService.startLoan(1, memberService.getMember(1005));
+
+        loanService.returnLoan(loanService.getLoanById(1000));
+        loanService.startLoan(2, memberService.getMember(1000));
+
     }
 }

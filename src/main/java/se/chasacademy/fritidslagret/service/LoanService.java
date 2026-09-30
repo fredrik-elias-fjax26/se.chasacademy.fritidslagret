@@ -22,10 +22,6 @@ public class LoanService {
     private final LoanRules loanRules;
     private final LoanPolicy loanPolicy;
 
-    public int getActiveLoanCount() {
-        return loanRepository.getLoanDatabase().size();
-    }
-
     public Equipment getMostBorrowedEquipment() {
         Map<Equipment, Integer> loanCounts = new HashMap<>();
 
@@ -118,6 +114,10 @@ public class LoanService {
                 .filter(this::isDelayed)
                 .sorted(Comparator.comparing(Loan::getDateOfReturn))
                 .toList();
+    }
+
+    public List<Loan> getAllLoans() {
+        return List.copyOf(loanRepository.getLoanDatabase().values());
     }
 
     public SortedMap<Integer, Loan> getAllActiveLoansSortedById() {

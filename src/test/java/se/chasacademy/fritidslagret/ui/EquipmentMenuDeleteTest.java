@@ -41,7 +41,7 @@ public class EquipmentMenuDeleteTest {
                     "1\n" +         // Choose Equipment
                     "abcdefgh\n" +    // Now standing at confirmationDialog
                     "5\n" +         // Going out of menu
-                    "6\n"           // Exit Program
+                    "7\n"           // Exit Program
                     ;
 
             ByteArrayOutputStream consoleOutput = new ByteArrayOutputStream();

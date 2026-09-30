@@ -62,7 +62,7 @@ tasks.named("jar") {
     dependsOn "test"
     dependsOn "ui-test"
     manifest {
-        attributes "Main-Class": "Main"
+        attributes "Main-Class": "se.chasacademy.fritidslagret.Main"
     }
     doFirst { println("Tester Godkända, Bygger jar")}
 }
