@@ -47,4 +47,15 @@ public class MemberService {
             return member.getActiveLoans();
     }
 
+    public boolean changeMemberStatus(int memberId, MemberStatus newStatus){
+        Member member = getMember(memberId);
+        if (member == null){
+            return false;
+        }
+        member.setMemberStatus(newStatus);
+        return true;
+    }
+
 }
+
+
