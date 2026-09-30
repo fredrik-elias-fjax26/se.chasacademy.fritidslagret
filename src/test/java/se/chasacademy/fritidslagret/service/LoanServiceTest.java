@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -410,5 +411,62 @@ public class LoanServiceTest {
 
         // Assert
         assertEquals(5, delayedDays);
+    }
+
+    @Test
+    public void shouldIncludeReturnedLoansWhenGettingAllLoans() {
+        // Arrange
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        MemberService memberService = mock(MemberService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        WaitingListService waitingListService = mock(WaitingListService.class);
+        Clock clock = Clock.systemUTC();
+
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
+
+        Member member = new Member("fakeName", MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet("fakeName", true, 3);
+        Loan activeLoan = new Loan(member, equipment, LocalDate.now(), LocalDate.now().plusDays(3), true);
+        Loan returnedLoan = new Loan(member, equipment, LocalDate.now(), LocalDate.now().plusDays(3), false);
+
+        when(loanRepository.getLoanDatabase()).thenReturn(Map.of(
+                activeLoan.getLoanId(), activeLoan,
+                returnedLoan.getLoanId(), returnedLoan));
+
+        // Act
+        List<Loan> allLoans = loanService.getAllLoans();
+
+        // Assert
+        assertEquals(2, allLoans.size());
+        assertTrue(allLoans.contains(returnedLoan));
+    }
+
+    @Test
+    public void shouldNotListReturnedLoansAsActiveLoans() {
+        // Arrange
+        LoanRepository loanRepository = mock(LoanRepository.class);
+        MemberService memberService = mock(MemberService.class);
+        EquipmentService equipmentService = mock(EquipmentService.class);
+        WaitingListService waitingListService = mock(WaitingListService.class);
+        Clock clock = Clock.systemUTC();
+
+        LoanService loanService = new LoanService(loanRepository, memberService, equipmentService, waitingListService, clock);
+
+        Member member = new Member("fakeName", MemberStatus.ACTIVE);
+        Equipment equipment = new SkiSet("fakeName", true, 3);
+        Loan firstActiveLoan = new Loan(member, equipment, LocalDate.now(), LocalDate.now().plusDays(3), true);
+        Loan returnedLoan = new Loan(member, equipment, LocalDate.now(), LocalDate.now().plusDays(3), false);
+        Loan secondActiveLoan = new Loan(member, equipment, LocalDate.now(), LocalDate.now().plusDays(3), true);
+
+        when(loanRepository.getLoanDatabase()).thenReturn(Map.of(
+                firstActiveLoan.getLoanId(), firstActiveLoan,
+                returnedLoan.getLoanId(), returnedLoan,
+                secondActiveLoan.getLoanId(), secondActiveLoan));
+
+        // Act
+        SortedMap<Integer, Loan> activeLoans = loanService.getAllActiveLoansSortedById();
+
+        // Assert
+        assertEquals(List.of(firstActiveLoan, secondActiveLoan), List.copyOf(activeLoans.values()));
     }
 }
