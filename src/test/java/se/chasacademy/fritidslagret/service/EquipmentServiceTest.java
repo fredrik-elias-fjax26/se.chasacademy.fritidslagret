@@ -3,6 +3,7 @@ package se.chasacademy.fritidslagret.service;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import se.chasacademy.fritidslagret.exception.CantDeleteEquipmentWithActiveLoanException;
 import se.chasacademy.fritidslagret.exception.EquipmentIsNullException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
 import se.chasacademy.fritidslagret.model.equipment.EquipmentTypes;
@@ -100,6 +101,25 @@ public class EquipmentServiceTest {
 
         // Assert
         assertThrows(EquipmentIsNullException.class,  throwAct);
+
+    }
+
+    @Test
+    public void shouldThrowCantDeleteEquipmentWithActiveLoanException() {
+        // Arrange
+        EquipmentRepository equipmentRepository = mock(EquipmentRepository.class);
+
+        EquipmentService equipmentService = new EquipmentService(equipmentRepository);
+        Equipment equipment1 = new SkiSet("fakeSkies", false, 3);
+        Map<Integer, Equipment>  fakeEquipmentMapRepo = new HashMap<>(Map.of(equipment1.getEquipmentId(), equipment1));
+
+        when(equipmentRepository.getEquipmentDatabase()).thenReturn(fakeEquipmentMapRepo);
+
+        // Act
+        Executable throwAct = () -> equipmentService.deleteEquipment(equipment1);
+
+        // Assert
+        assertThrows(CantDeleteEquipmentWithActiveLoanException.class, throwAct);
 
     }
 
