@@ -1,5 +1,6 @@
 package se.chasacademy.fritidslagret.service;
 
+import se.chasacademy.fritidslagret.exception.CantDeleteEquipmentWithActiveLoanException;
 import se.chasacademy.fritidslagret.exception.EquipmentIsNullException;
 import se.chasacademy.fritidslagret.exception.SearchTermDontExistsAnyEquipmentException;
 import se.chasacademy.fritidslagret.model.equipment.Equipment;
@@ -49,9 +50,13 @@ public class EquipmentService {
         return foundEquipmentMap;
     }
 
-    public void deleteEquipment(Equipment equipmentToDelete) throws EquipmentIsNullException {
+    public void deleteEquipment(Equipment equipmentToDelete) throws EquipmentIsNullException, CantDeleteEquipmentWithActiveLoanException {
         if (equipmentToDelete == null) {
             throw new EquipmentIsNullException();
+        }
+
+        if (!equipmentToDelete.isAvailable()) {
+            throw new CantDeleteEquipmentWithActiveLoanException();
         }
 
         equipmentRepository.removeEquipment(equipmentToDelete);
