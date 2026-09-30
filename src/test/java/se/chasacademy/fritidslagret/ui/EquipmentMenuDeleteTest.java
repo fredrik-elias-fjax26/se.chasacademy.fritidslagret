@@ -1,6 +1,5 @@
 package se.chasacademy.fritidslagret.ui;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.chasacademy.fritidslagret.Main;
 import se.chasacademy.fritidslagret.exception.ConfirmationFailedException;
@@ -11,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class EquipmentMenuDeleteTest {
     @Test
-    public void UIshouldThrowConfirmationFailedExceptionWhenWrongConfirmationNameIsInput() throws Exception {
+    public void UIshouldThrowConfirmationFailedExceptionWhenWrongConfirmationNameIsInput() {
         /*
         Test implemented with help of AI
 
@@ -32,6 +31,7 @@ public class EquipmentMenuDeleteTest {
         // Save Default Input/Output Stream !!!! IMPORTANT !!!! (Must have Default Input stream saved for restore)
         InputStream stdIn = System.in;
         PrintStream stdOut = System.out;
+
         try {
             // Arrange
 
