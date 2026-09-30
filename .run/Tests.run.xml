@@ -11,6 +11,7 @@
       <option name="taskNames">
         <list>
           <option value="test" />
+          <option value="ui-test" />
         </list>
       </option>
       <option name="vmOptions" />

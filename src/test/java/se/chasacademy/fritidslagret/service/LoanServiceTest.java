@@ -73,7 +73,7 @@ public class LoanServiceTest {
         Member memberRevoked = mock(Member.class);
 
         int startTestUniqueLoanId = Loan.getUniqueLoanId();
-        int startTestUniqueEquipmentId = equipmentService.getUniqueEquipmentId();
+        int startTestUniqueEquipmentId = Equipment.getUniqueEquipmentId();
 
         equipmentService.addEquipment("Sko", true, 30, EquipmentTypes.SKISET);
         equipmentService.addEquipment("Sko", true, 30, EquipmentTypes.SKISET);
