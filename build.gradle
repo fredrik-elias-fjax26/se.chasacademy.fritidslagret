@@ -24,15 +24,43 @@ dependencies {
 }
 
 application {
-    mainClass = "Main"
+    mainClass = "se.chasacademy.fritidslagret.Main"
 }
+
 tasks.test {
     useJUnitPlatform()
     jvmArgs("-javaagent:${configurations.mockitoAgent.asPath}")
+
+    filter {
+        // Kör inte UI-testerna här
+        excludeTestsMatching "*UI*"
+    }
+
+    outputs.upToDateWhen { false }
+
+}
+
+tasks.register("ui-test", Test) {
+    description = "UI tests need separated runtime"
+    group = "verification"
+
+    testClassesDirs = tasks.test.testClassesDirs
+    classpath = tasks.test.classpath
+
+    useJUnitPlatform()
+    jvmArgs("-javaagent:${configurations.mockitoAgent.asPath}")
+
+    filter {
+        includeTestsMatching "*UI*"
+    }
+
+    outputs.upToDateWhen { false }
+
 }
 
 tasks.named("jar") {
     dependsOn "test"
+    dependsOn "ui-test"
     manifest {
         attributes "Main-Class": "Main"
     }
@@ -41,6 +69,7 @@ tasks.named("jar") {
 
 tasks.named("run") {
     dependsOn("test")
+    dependsOn "ui-test"
     standardInput = System.in
     doFirst {println("\nTester Godkända, Startar Main\n")}
 }
